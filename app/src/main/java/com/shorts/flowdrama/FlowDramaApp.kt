@@ -31,11 +31,18 @@ import com.shorts.flowdrama.playback.*
 import com.shorts.flowdrama.reels.*
 import com.shorts.flowdrama.search.*
 import com.shorts.flowdrama.settings.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun FlowDramaApp(container: AppContainer) {
     val vm: AppViewModel = viewModel { AppViewModel(container) }
+    val onboardingVm: OnboardingViewModel = viewModel {
+        OnboardingViewModel(container.preferences, container.reminders)
+    }
+    val reminderWindows by onboardingVm.selectedReminderWindows.collectAsStateWithLifecycle()
+    val onboardingSaveError by onboardingVm.saveError.collectAsStateWithLifecycle()
+
     val state by vm.state.collectAsStateWithLifecycle()
     val preferences by vm.preferences.collectAsStateWithLifecycle()
     val saved by vm.saved.collectAsStateWithLifecycle()
@@ -62,14 +69,16 @@ fun FlowDramaApp(container: AppContainer) {
     }
     val permission =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            onboardingVm.setRemindersEnabled(granted)
             finish()
-            notice =
-                if (granted)
-                    "Notifications are enabled. Scheduled reminders are not configured yet."
-                else "You can enable notifications in Android settings."
         }
-    LaunchedEffect(state.ready) {
-        if (state.ready && backStack.lastOrNull() == Route(Destination.Splash) && !state.error) {
+    var splashMinimumElapsed by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(3_000L)
+        splashMinimumElapsed = true
+    }
+    LaunchedEffect(state.ready, state.error, splashMinimumElapsed) {
+        if (splashMinimumElapsed && state.ready && backStack.lastOrNull() == Route(Destination.Splash) && !state.error) {
             backStack.clear()
             backStack.add(
                 Route(
@@ -109,48 +118,66 @@ fun FlowDramaApp(container: AppContainer) {
                                 val show = catalog.shows.find { it.id == route.id }
                                 when (route.screen) {
                                     Destination.Splash -> SplashScreen()
-                                    Destination.LanguageOnboard,
-                                    Destination.Language ->
-                                        Box(Modifier.safeDrawingPadding()) {
-                                            LanguageScreen(
-                                                preferences.language,
-                                                preferences.followDevice,
-                                                route.screen == Destination.LanguageOnboard,
-                                                { lang, device ->
-                                                    vm.update {
-                                                        it.copy(
-                                                            language =
-                                                                if (device)
-                                                                    DataStorePreferences
-                                                                        .deviceLanguage()
-                                                                else lang,
-                                                            followDevice = device,
-                                                        )
-                                                    }
-                                                },
-                                                { back() },
-                                                { push(Route(Destination.Intro, number = 0)) },
-                                                poster = catalog.shows.firstOrNull()?.posterUrl,
-                                            )
-                                        }
-                                    Destination.Intro ->
-                                        CinemaOnboarding(
-                                            route.number,
-                                            catalog.shows.firstOrNull()?.posterUrl,
-                                            preferences.tasteIds,
-                                            { tags ->
+                                    Destination.LanguageOnboard ->
+                                        OnboardingScreen1Language(
+                                            language = preferences.language,
+                                            followDevice = preferences.followDevice,
+                                            onSelect = { lang, device ->
                                                 vm.update {
                                                     it.copy(
-                                                        tasteIds =
-                                                            tags.intersect(
-                                                                catalog.categories
-                                                                    .map { it.id }
-                                                                    .toSet()
-                                                            )
+                                                        language =
+                                                            if (device)
+                                                                DataStorePreferences
+                                                                    .deviceLanguage()
+                                                            else lang,
+                                                        followDevice = device,
                                                     )
                                                 }
                                             },
-                                            {
+                                            onContinue = {
+                                                push(Route(Destination.Intro, number = 0))
+                                            },
+                                        )
+                                    Destination.Language ->
+                                        SettingsLanguageScreen(
+                                            language = preferences.language,
+                                            followDevice = preferences.followDevice,
+                                            onSelect = { lang, device ->
+                                                vm.update {
+                                                    it.copy(
+                                                        language =
+                                                            if (device)
+                                                                DataStorePreferences
+                                                                    .deviceLanguage()
+                                                            else lang,
+                                                        followDevice = device,
+                                                    )
+                                                }
+                                            },
+                                            onBack = { back() },
+                                        )
+                                    Destination.Intro ->
+                                        OnboardingFlow(
+                                            step = route.number,
+                                            selectedMoodIds = preferences.moodIds,
+                                            selectedTagIds = preferences.tasteIds,
+                                            categories = catalog.categories,
+                                            selectedReminderWindows = reminderWindows,
+                                            saveError = onboardingSaveError,
+                                            onToggleMood = {
+                                                onboardingVm.toggleMood(it)
+                                            },
+                                            onToggleGenre = onboardingVm::toggleGenre,
+                                            onToggleReminder = onboardingVm::toggleReminder,
+                                            onNext = {
+                                                push(
+                                                    Route(
+                                                        Destination.Intro,
+                                                        number = route.number + 1,
+                                                    )
+                                                )
+                                            },
+                                            onSkip = {
                                                 if (route.number < 2)
                                                     push(
                                                         Route(
@@ -158,24 +185,27 @@ fun FlowDramaApp(container: AppContainer) {
                                                             number = route.number + 1,
                                                         )
                                                     )
-                                                else finish()
+                                                else {
+                                                    onboardingVm.setRemindersEnabled(false)
+                                                    finish()
+                                                }
                                             },
-                                            {
-                                                if (route.number < 2)
-                                                    push(
-                                                        Route(
-                                                            Destination.Intro,
-                                                            number = route.number + 1,
-                                                        )
-                                                    )
-                                                else finish()
-                                            },
-                                            {
+                                            onNotification = {
                                                 if (Build.VERSION.SDK_INT >= 33)
                                                     permission.launch(
                                                         Manifest.permission.POST_NOTIFICATIONS
                                                     )
-                                                else finish()
+                                                else {
+                                                    val manager =
+                                                        activity.getSystemService(
+                                                            android.content.Context
+                                                                .NOTIFICATION_SERVICE
+                                                        ) as android.app.NotificationManager
+                                                    onboardingVm.setRemindersEnabled(
+                                                        manager.areNotificationsEnabled()
+                                                    )
+                                                    finish()
+                                                }
                                             },
                                         )
                                     Destination.Main ->

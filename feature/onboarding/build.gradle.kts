@@ -24,7 +24,5 @@ dependencies {
     implementation(libs.lifecycle.compose)
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.activity.compose)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network)
     implementation(project(":core:designsystem"))
 }

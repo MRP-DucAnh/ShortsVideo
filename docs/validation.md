@@ -4,7 +4,7 @@
 |---|---|
 | `:app:assembleDebug` | PASS — APK debug cài/mở được |
 | `:app:assembleRelease` | PASS — R8 + resource shrinking, APK unsigned |
-| `:core:domain:test` | PASS — 18 tests, 0 failures/errors |
+| `:core:domain:test` | PASS — 22 tests, 0 failures/errors |
 | `:app:lintDebug` | PASS — không có error; còn warning dependency/unused resources |
 | `FlowDramaJourneyTest` | PASS — 2 tests trên emulator API 37, chế độ máy bay |
 | `PlaybackJourneyTest` | PASS — 1 test trên emulator API 37, nguồn MP4 thật |
@@ -44,3 +44,17 @@ adb shell am instrument -w -e class com.shorts.flowdrama.PlaybackJourneyTest com
 ```
 
 Screenshots: `/sdcard/Android/data/com.shorts.flowdrama/files/screenshots/`. Việc khôi phục sau process kill đột ngột có thể mất tối đa khoảng chu kỳ checkpoint 5 giây; pause/thoát màn ghi checkpoint ngay. Chưa có test tự động kill process ở mọi thời điểm.
+
+## Lượt sửa onboarding
+
+Debug build và Android Lint pass. Domain suite gồm 18 test cũ và 4 test TasteSelectionPolicy. OnboardingUiTest pass 2 tests: toggle mood/genre/reminder, disable nút khi chưa chọn thời gian, callback Continue/Skip/Enable, chuyển English -> Arabic/RTL -> English, và đọc lại SharedPreferences qua repository mới kể cả selection rỗng. 10 file locale có cùng 58 keys.
+
+Đã kiểm tra ảnh render Splash, Language, Value, Taste, Notifications và Arabic Language từ Compose captureToImage. Preview riêng từng màn ở OnboardingPreviews.kt. Release/R8 và player là kết quả lượt trước, chưa chạy lại trong lượt chỉnh UI này.
+
+Chạy focused tests trên emulator đã cài app/test APK:
+
+```powershell
+adb -s emulator-5554 shell am instrument -w -e class com.shorts.flowdrama.OnboardingUiTest com.shorts.flowdrama.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+Sau chỉnh cuối phần glow Splash và bổ sung Preview, debug build/lint/domain tests tiếp tục pass; chạy riêng screenSelectionsLocalizationAndActions pass (20,321 giây).

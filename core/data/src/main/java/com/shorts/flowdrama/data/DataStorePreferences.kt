@@ -37,6 +37,7 @@ class DataStorePreferences(context: Context, scope: CoroutineScope) : Preference
                             p[floatPreferencesKey("speed")] ?: 1f,
                             p[stringPreferencesKey("quality")] ?: "Auto",
                             p[stringPreferencesKey("audio")],
+                            p[stringSetPreferencesKey("moods")] ?: emptySet(),
                         )
                     ready.complete(Unit)
                 }
@@ -56,6 +57,7 @@ class DataStorePreferences(context: Context, scope: CoroutineScope) : Preference
                 p[booleanPreferencesKey("device")] = next.followDevice
                 p[booleanPreferencesKey("onboarded")] = next.onboardingDone
                 p[stringSetPreferencesKey("tastes")] = next.tasteIds
+                p[stringSetPreferencesKey("moods")] = next.moodIds
                 p[booleanPreferencesKey("light")] = next.lightTheme
                 p[booleanPreferencesKey("wifi")] = next.wifiPreviewOnly
                 p[floatPreferencesKey("speed")] = next.speed

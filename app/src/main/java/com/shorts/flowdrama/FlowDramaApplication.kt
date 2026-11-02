@@ -23,5 +23,6 @@ class AppContainer(application: Application, val scope: CoroutineScope) {
     val catalog = DefaultCatalogRepository(application, scope)
     val library = LocalLibraryRepository(application, scope)
     val preferences = DataStorePreferences(application, scope)
+    val reminders = SharedPreferencesReminders(application, scope)
     val ads = AdsController(application, BuildConfig.VERSION_NAME, BuildConfig.DEBUG, scope)
 }

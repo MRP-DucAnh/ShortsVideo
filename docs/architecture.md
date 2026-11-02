@@ -54,3 +54,13 @@ Finished trong History chỉ đúng khi tập cuối của mảng actual episode
 ## Decoder trên emulator
 
 Log thực tế trên emulator API 37 ghi lỗi queueInputBuffer của c2.goldfish.h264.decoder khi đọc H.264. Player ưu tiên codec software khi Build.HARDWARE là goldfish/ranchu; thiết bị thật giữ lựa chọn hardware-first của Media3. Decoder fallback được bật. Đây là tương thích môi trường kiểm thử, không phải kết quả benchmark hiệu năng.
+
+## Refactor onboarding
+
+Mỗi màn là một file: SplashScreen, OnboardingScreen1Language, OnboardingScreen2ValueProposition, OnboardingScreen3TastePicker và OnboardingScreen4Notifications. OnboardingFlow chỉ dispatch màn; OnboardingPage/OnboardingHeadline/OnboardingFooter/SelectableOption ở components chứa visual chung. OnboardingPreviews cho phép xem từng màn độc lập trong Android Studio.
+
+OnboardingViewModel xử lý event. TasteSelectionPolicy ở domain giữ moodIds tách khỏi tagIds để không đánh dấu mood khác chỉ vì trùng genre. Mood bật/tắt được; FINE-TUNE cho phép override từng tag, chỉ lưu ID có trong catalogue. DataStore lưu moodIds và tasteIds.
+
+ReminderPreferencesRepository có adapter SharedPreferencesReminders. File onboarding_reminders lưu selected_window_ids (StringSet: morning/lunch/night) và reminders_enabled (Boolean). Lựa chọn mặc định rỗng, enabled mặc định false. Ghi commit ở Dispatchers.IO, có mutex để không mất thao tác khi bấm nhanh. Chọn khung giờ không tự xin quyền; chỉ nút chính mới yêu cầu POST_NOTIFICATIONS. Deny/Not now giữ enabled=false; future scheduler phải kiểm tra cả enabled và quyền hệ thống. Chưa tạo scheduler trong lần sửa này.
+
+Toàn bộ text onboarding nằm ở 58 string resources cho 10 locale. onboardingString tạo configuration context theo LocalLanguage nên đổi ngôn ngữ có hiệu lực tức thì, không thay locale toàn cục. Brand FLOWDRAMA giữ hướng LTR trong cả giao diện Arabic. Các giá trị thời gian, ID và tên thương hiệu không phải text marketing hardcode.

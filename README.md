@@ -30,7 +30,7 @@ Các luồng chính đã có code và build được; không tuyên bố 23 mụ
 
 API đúng base URL của đề. Parser giữ localization/source maps mở, Long counters và status lạ. Tag rail/category tách biệt, hero lookup theo ID. Grid tin danh sách tập thực tế, giữ thứ tự mảng, khóa theo isFree. Tập title rỗng vẫn hiển thị số. Cache metadata có refresh background giới hạn; tránh poll host. Chi tiết fallback ở tài liệu kiến trúc.
 
-History/Saved/progress lưu SQLite; preferences lưu DataStore. Progress checkpoint định kỳ và khi lifecycle dừng. Arabic có RTL và bản dịch các nhãn chính; các chuỗi mô tả dài/metadata còn fallback English. 10 lựa chọn locale theo thiết kế; tám locale ngoài en/ar hiện dùng nhãn UI English, trong khi nội dung dùng bản dịch API nếu có. Cần hoàn thiện LQA/bản dịch trước khi coi đa ngôn ngữ là hoàn tất.
+History/Saved/progress lưu SQLite; preferences lưu DataStore. Riêng lựa chọn khung giờ nhắc xem và cờ cho phép nhắc xem lưu SharedPreferences. Progress checkpoint định kỳ và khi lifecycle dừng. Arabic có RTL và bản dịch các nhãn chính; các chuỗi mô tả dài/metadata còn fallback English. Onboarding đã có đầy đủ 58 resources ở cả 10 locale theo thiết kế, có Arabic RTL. Ngoài onboarding, tám locale ngoài en/ar vẫn còn nhãn UI fallback English; nội dung dùng bản dịch API nếu có. Cần hoàn thiện LQA/bản dịch trước khi coi đa ngôn ngữ là hoàn tất.
 
 Luồng khóa chỉ hiển thị trạng thái và dialog giải thích, không có coin, paywall hoặc cơ chế mở khóa.
 

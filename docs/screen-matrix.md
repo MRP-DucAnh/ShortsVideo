@@ -4,11 +4,11 @@
 
 | Mã | Implementation | Mức hiện tại / giới hạn |
 |---|---|---|
-| SCR-0001 | SplashScreen | Branding, thoát khi metadata/preferences sẵn sàng; logo Compose |
-| SCR-0002 | LanguageScreen | 10 lựa chọn, đang chọn ghim đầu, lưu DataStore; nền poster/fallback |
-| SCR-0003 | CinemaOnboarding step 0 | Key art từ API, headline/pills/CTA; chưa có licensed video loop |
-| SCR-0004 | CinemaOnboarding step 1 | 4 mood, map/intersect tagIds thật, Skip; chưa có fine-tune genre |
-| SCR-0005 | CinemaOnboarding step 2 | Pre-prompt và quyền Android 13+ sau tap; chưa có lịch push/reminder |
+| SCR-0001 | SplashScreen | Logo trên wordmark, tracking 6sp, glow cam 14%, badge bo tròn; thoát khi metadata/preferences sẵn sàng |
+| SCR-0002 | OnboardingScreen1Language | 10 lựa chọn, item 48dp bo tròn/viền, selected cam/chữ đen, gradient dọc, lưu DataStore |
+| SCR-0003 | OnboardingScreen2ValueProposition | Text/pills thu gọn, progress trên CTA; ảnh nền tạm ẩn theo yêu cầu |
+| SCR-0004 | OnboardingScreen3TastePicker | Emoji đúng mockup, press/selection animation, multi-select và de-select, FINE-TUNE đủ genre, Skip dưới Continue |
+| SCR-0005 | OnboardingScreen4Notifications | Chọn/bỏ chọn độc lập 3 khung giờ; SharedPreferences lưu lựa chọn và cờ enabled; chưa có lịch push/reminder |
 | SCR-0101 | HomeScreen | Day Cycle, hero theo ID, hai daypart cards, rails và Continue watching |
 | SCR-0201 | SearchScreen | Debounce 300 ms; rỗng, gợi ý genre, kết quả và không kết quả |
 | SCR-0202 | BrowseScreen | Dock preview muted, grid 4 cột, filter không mất selected preview, Wi-Fi toggle |
@@ -21,7 +21,7 @@
 | SCR-0402 | HistoryScreen | Watching/Finished, xóa một/xóa hết có confirm, persistence |
 | SCR-0403 | SavedScreen | Bookmark cấp show, lọc status, bỏ lưu; API chưa cung cấp dấu fresh episode |
 | SCR-0501 | SettingsScreen | Language, Dark/Light, Wi-Fi preview, policies/version; Light tự xây |
-| SCR-0502 | LanguageScreen | Theo máy hoặc chọn, cập nhật tức thì, Arabic RTL |
+| SCR-0502 | SettingsLanguageScreen | Theo máy hoặc chọn, cập nhật tức thì, Arabic RTL |
 | SCR-0601 | LoadingState | Skeleton tĩnh, chưa shimmer; metadata local-first thường chuyển rất nhanh |
 | SCR-0602 | SavedScreen empty | Empty state và CTA sang Browse |
 | SCR-0603 | BlankState network error | Retry khi metadata không đọc được; bundled fixtures cho phép dùng offline |

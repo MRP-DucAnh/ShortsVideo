@@ -65,6 +65,7 @@ data class Preferences(
     val speed: Float = 1f,
     val quality: String = "Auto",
     val audioLanguage: String? = null,
+    val moodIds: Set<String> = emptySet(),
 )
 
 interface CatalogRepository {
