@@ -1,0 +1,1 @@
+<resources><style name="Theme.FlowDrama" parent="android:Theme.Material.NoActionBar"><item name="android:windowBackground">#160F0A</item><item name="android:windowLightStatusBar">false</item><item name="android:colorAccent">#FF7A3C</item></style></resources>
