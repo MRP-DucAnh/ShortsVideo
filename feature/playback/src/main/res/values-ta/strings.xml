@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="player_episodes">பகுதிகள்</string>
+  <string name="player_episode_position">பகுதி %1$s / %2$d</string>
+  <string name="player_episode_summary">%1$d பகுதிகள்</string>
+  <string name="player_load_error">பகுதிகளை ஏற்ற முடியவில்லை</string>
+  <string name="player_no_source">இயக்கக்கூடிய மூலம் இல்லை</string>
+  <string name="player_speed">வேகம்</string>
+  <string name="player_save">சேமி</string>
+  <string name="player_saved">சேமிக்கப்பட்டது</string>
+  <string name="player_options">இயக்க விருப்பங்கள்</string>
+  <string name="player_quality">தரம்</string>
+  <string name="player_audio">ஒலி மொழி</string>
+  <string name="player_auto">தானியங்கு</string>
+  <string name="player_play">இயக்கு</string>
+  <string name="player_pause">இடைநிறுத்து</string>
+  <string name="player_watched_count">%1$d பார்த்தவை</string>
+</resources>

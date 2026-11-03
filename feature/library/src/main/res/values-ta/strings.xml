@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">நூலகம்</string>
+  <string name="library_watched">பார்த்தவை</string>
+  <string name="library_saved">சேமித்தவை</string>
+  <string name="library_history">வரலாறு</string>
+  <string name="library_recent">சமீபத்தியவை</string>
+  <string name="library_see_all">அனைத்தும்</string>
+  <string name="library_watch_history">பார்த்த வரலாறு</string>
+  <string name="library_edit">திருத்து</string>
+  <string name="library_done">முடிந்தது</string>
+  <string name="library_watching">பார்க்கிறீர்கள்</string>
+  <string name="library_finished">முடித்தவை</string>
+  <string name="library_clear_history">வரலாற்றை அழி</string>
+  <string name="library_clear_confirmation">வரலாறும் சேமித்த இடங்களும் அழிக்கப்படுமா?</string>
+  <string name="library_clear">அழி</string>
+  <string name="library_cancel">ரத்துசெய்</string>
+  <string name="library_remove">அகற்று</string>
+  <string name="library_more">மேலும் விருப்பங்கள்</string>
+  <string name="library_all">அனைத்தும்</string>
+  <string name="library_airing">ஒளிபரப்பாகிறது</string>
+  <string name="library_complete">முடிந்தது</string>
+  <string name="library_episode_count">%1$d பகுதிகள்</string>
+  <string name="library_episode_position">பகுதி %1$d / %2$d</string>
+  <string name="library_minutes_left">%1$d நிமிடம் மீதம்</string>
+  <string name="library_history_empty">வரலாறு இல்லை</string>
+  <string name="library_history_empty_message">கதையைத் தொடங்கி விட்ட இடத்திலிருந்து தொடருங்கள்.</string>
+  <string name="library_finished_empty">முடித்த பகுதிகள் இல்லை.</string>
+  <string name="library_saved_empty">பட்டியல் காலியாக உள்ளது</string>
+  <string name="library_saved_empty_message">பின்னர் காண தொடரைச் சேமிக்கவும்.</string>
+  <string name="library_browse">உலாவு</string>
+  <string name="library_no_results">முடிவுகள் இல்லை</string>
+  <string name="library_back">பின்</string>
+  <string name="library_watching_empty">பார்த்துக்கொண்டிருக்கும் பகுதிகள் இல்லை.</string>
+</resources>

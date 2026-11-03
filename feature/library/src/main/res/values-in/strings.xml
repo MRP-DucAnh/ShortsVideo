@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">Koleksi</string>
+  <string name="library_watched">Ditonton</string>
+  <string name="library_saved">Tersimpan</string>
+  <string name="library_history">Riwayat</string>
+  <string name="library_recent">Terbaru</string>
+  <string name="library_see_all">Lihat semua</string>
+  <string name="library_watch_history">Riwayat tontonan</string>
+  <string name="library_edit">Edit</string>
+  <string name="library_done">Selesai</string>
+  <string name="library_watching">Ditonton</string>
+  <string name="library_finished">Tamat</string>
+  <string name="library_clear_history">Hapus riwayat</string>
+  <string name="library_clear_confirmation">Hapus riwayat dan posisi pemutaran tersimpan?</string>
+  <string name="library_clear">Hapus</string>
+  <string name="library_cancel">Batal</string>
+  <string name="library_remove">Hapus</string>
+  <string name="library_more">Opsi lainnya</string>
+  <string name="library_all">Semua</string>
+  <string name="library_airing">Tayang</string>
+  <string name="library_complete">Tamat</string>
+  <string name="library_episode_count">%1$d episode</string>
+  <string name="library_episode_position">Ep. %1$d / %2$d</string>
+  <string name="library_minutes_left">Sisa %1$d menit</string>
+  <string name="library_history_empty">Belum ada riwayat</string>
+  <string name="library_history_empty_message">Mulai drama dan lanjutkan dari bagian terakhir.</string>
+  <string name="library_finished_empty">Belum ada episode yang selesai.</string>
+  <string name="library_saved_empty">Daftar tontonan kosong</string>
+  <string name="library_saved_empty_message">Simpan serial untuk menemukannya di sini.</string>
+  <string name="library_browse">Jelajahi</string>
+  <string name="library_no_results">Tidak ada hasil</string>
+  <string name="library_back">Kembali</string>
+  <string name="library_watching_empty">Tidak ada episode yang sedang ditonton.</string>
+</resources>

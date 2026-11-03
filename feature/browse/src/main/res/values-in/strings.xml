@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Jelajahi</string>
+  <string name="browse_preview_auto">PRATINJAU · otomatis</string>
+  <string name="browse_preview_wifi">PRATINJAU · Wi-Fi saja</string>
+  <string name="browse_poster_hint">Ketuk poster · pratinjau di atas berubah</string>
+  <string name="browse_play">Putar Ep 1</string>
+  <string name="browse_save">Simpan</string>
+  <string name="browse_remove_saved">Hapus dari tersimpan</string>
+  <string name="browse_all">Semua</string>
+  <string name="browse_episode_count">%1$d episode</string>
+  <string name="browse_complete">tamat</string>
+  <string name="browse_ongoing">berlangsung</string>
+</resources>

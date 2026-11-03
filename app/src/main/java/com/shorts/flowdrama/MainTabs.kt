@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shorts.flowdrama.browse.*
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.detail.*
@@ -47,6 +48,7 @@ internal fun MainTabs(
     push: (Route) -> Unit,
     onNotifications: () -> Unit,
 ) {
+    val likedShows by vm.likedShows.collectAsStateWithLifecycle()
     var selected by rememberSaveable { mutableIntStateOf(initialTab) }
     val holder = rememberSaveableStateHolder()
     Scaffold(
@@ -106,6 +108,10 @@ internal fun MainTabs(
                                     )
                                 }
                             },
+                            saved = saved,
+                            onSave = vm::save,
+                            likedShows = likedShows,
+                            onLike = vm::toggleShowLike,
                         )
                     2 ->
                         BrowseScreen(

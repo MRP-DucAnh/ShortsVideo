@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Parcourir</string>
+  <string name="browse_preview_auto">APERÇU · auto</string>
+  <string name="browse_preview_wifi">APERÇU · Wi-Fi uniquement</string>
+  <string name="browse_poster_hint">Touchez une affiche · l’aperçu change au-dessus</string>
+  <string name="browse_play">Voir l’ép. 1</string>
+  <string name="browse_save">Enregistrer</string>
+  <string name="browse_remove_saved">Retirer des favoris</string>
+  <string name="browse_all">Tout</string>
+  <string name="browse_episode_count">%1$d épisodes</string>
+  <string name="browse_complete">terminé</string>
+  <string name="browse_ongoing">en cours</string>
+</resources>

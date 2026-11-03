@@ -65,6 +65,14 @@ class PoliciesTest {
     }
 
     @Test
+    fun episodeTitleFallsBackToShowTitleWhenBlank() {
+        val episode = episode(emptyMap())
+        assertEquals("Show name", episode.displayTitle("Show name"))
+        assertEquals("Show name", episode.copy(title = "  ").displayTitle("Show name"))
+        assertEquals("Episode name", episode.copy(title = "  Episode name  ").displayTitle("Show name"))
+    }
+
+    @Test
     fun longCountersArePreserved() {
         assertEquals(4_000_000_000L, episode(emptyMap()).likeCount)
     }
@@ -90,7 +98,14 @@ class PoliciesTest {
 
     @Test
     fun completedFinalEpisodeCompletesSeries() {
-        assertTrue(Progress("a", 50, 99000, 100000, 1, true).finished)
+        assertFalse(Progress("a", 50, 99000, 100000, 1, true).finished)
+        assertTrue(Progress("a", 50, 100000, 100000, 1, true, watched = true).finished)
+    }
+
+    @Test
+    fun replayingCompletedFinalEpisodeKeepsSeriesFinished() {
+        assertTrue(Progress("a", 50, 5000, 100000, 1, true, watched = true).finished)
+        assertFalse(Progress("a", 49, 5000, 100000, 1, false, watched = true).finished)
     }
 
     @Test

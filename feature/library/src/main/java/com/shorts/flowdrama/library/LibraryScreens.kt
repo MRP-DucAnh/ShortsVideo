@@ -3,14 +3,14 @@ package com.shorts.flowdrama.library
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import com.shorts.flowdrama.ads.*
@@ -18,218 +18,63 @@ import com.shorts.flowdrama.ads.config.AdPlacements
 import com.shorts.flowdrama.ads.compose.*
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
+import com.shorts.flowdrama.feature.library.R
 
 @Composable
-fun LibraryScreen(
-    catalog: Catalog,
-    history: List<Progress>,
-    saved: Set<String>,
-    ads: AdsController,
-    onHistory: () -> Unit,
-    onSaved: () -> Unit,
-    onShow: (String) -> Unit,
-) {
+fun LibraryScreen(catalog: Catalog, history: List<Progress>, saved: Set<String>, ads: AdsController,
+    onHistory: () -> Unit, onSaved: () -> Unit, onShow: (String) -> Unit) {
     val bottomAd = rememberInlineAdState(ads, AdPlacements.LibraryBottom)
-    LazyColumn {
+    val recent = remember(catalog, history) {
+        val shows = catalog.shows.associateBy { it.id }
+        history.sortedByDescending { it.updatedAt }.mapNotNull { p -> shows[p.showId]?.let { p to it } }.take(10)
+    }
+    LazyColumn(Modifier.fillMaxSize()) {
         item {
-            Heading("Library")
-            Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                LibraryCard(
-                    "Watch history",
-                    history.size,
-                    Icons.Outlined.History,
-                    Modifier.weight(1f),
-                    onHistory,
-                )
-                LibraryCard(
-                    "Saved",
-                    saved.size,
-                    Icons.Outlined.BookmarkBorder,
-                    Modifier.weight(1f),
-                    onSaved,
-                )
+            Text(libraryString(R.string.library_title), Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                fontSize = 19.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
+                .clip(RoundedCornerShape(12.dp)).background(Sunset.Surface),
+                horizontalArrangement = Arrangement.SpaceEvenly) {
+                Statistic(history.size, libraryString(R.string.library_watched), Modifier.weight(1f))
+                Box(Modifier.height(36.dp).width(1.dp).background(Sunset.Border).align(Alignment.CenterVertically))
+                Statistic(saved.size, libraryString(R.string.library_saved), Modifier.weight(1f))
             }
-            SectionTitle("Recently watched", "See all", onHistory)
-        }
-        items(history.take(6), key = { it.showId }, contentType = { "recent" }) { progress ->
-            catalog.shows
-                .find { it.id == progress.showId }
-                ?.let {
-                    ShowRow(
-                        it,
-                        "Ep. ${progress.episodeNumber} · ${if(progress.finished) tr("Finished") else tr("Watching")}",
-                        { onShow(it.id) },
-                    )
-                }
-        }
-        if (history.isEmpty())
-            item {
-                Text(
-                    tr("Start a drama and pick up where you left off."),
-                    Modifier.padding(16.dp),
-                    color = Sunset.Text3,
-                )
+            Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                .clip(RoundedCornerShape(12.dp)).background(Sunset.Surface)) {
+                NavigationRow(Icons.Outlined.History, libraryString(R.string.library_history), history.size, onHistory)
+                HorizontalDivider(color = Sunset.Border, thickness = 1.dp)
+                NavigationRow(Icons.Outlined.BookmarkBorder, libraryString(R.string.library_saved), saved.size, onSaved)
             }
+            Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 10.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(libraryString(R.string.library_recent), Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(libraryString(R.string.library_see_all) + " ›", Modifier.clickable(onClick = onHistory), color = Sunset.Text3, fontSize = 13.sp)
+            }
+        }
+        items(recent, key = { it.first.showId }) { (progress, show) ->
+            LibraryShowRow(show, progressSubtitle(progress, show), { onShow(show.id) }, progress)
+        }
+        if (recent.isEmpty()) item { Text(libraryString(R.string.library_history_empty_message),
+            Modifier.padding(16.dp), color = Sunset.Text3) }
         item { InlineAdSlot(bottomAd, adAttribution(LocalLanguage.current)) }
     }
 }
 
 @Composable
-private fun LibraryCard(
-    title: String,
-    count: Int,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    modifier: Modifier,
-    onClick: () -> Unit,
-) {
-    Column(
-        modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable(onClick = onClick)
-            .padding(18.dp)
-    ) {
-        Icon(icon, null, tint = Sunset.Accent)
-        Text(
-            count.toString(),
-            Modifier.padding(top = 20.dp),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(tr(title), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+private fun Statistic(value: Int, label: String, modifier: Modifier) {
+    Column(modifier.padding(vertical = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value.toString(), color = MaterialTheme.colorScheme.onBackground, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = Sunset.Text3, fontSize = 11.sp)
     }
 }
 
 @Composable
-fun HistoryScreen(
-    catalog: Catalog,
-    history: List<Progress>,
-    onBack: () -> Unit,
-    onShow: (String) -> Unit,
-    onRemove: (String) -> Unit,
-    onClear: () -> Unit,
-    onBrowse: () -> Unit,
-) {
-    var filter by rememberSaveable { mutableStateOf(false) }
-    var confirm by rememberSaveable { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize()) {
-        Heading("Watch history", onBack) {
-            Glyph(Icons.Outlined.DeleteOutline, "Clear history", { confirm = true })
-        }
-        Row(
-            Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            TagChip("Watching", !filter) { filter = false }
-            TagChip("Finished", filter) { filter = true }
-        }
-        val filtered = history.filter { it.finished == filter }
-        if (filtered.isEmpty())
-            BlankState(
-                "No watch history yet",
-                "Start a drama and pick up where you left off.",
-                "Browse",
-                Icons.Outlined.History,
-                onBrowse,
-            )
-        else
-            LazyColumn {
-                items(filtered, key = { it.showId }, contentType = { "history" }) { progress ->
-                    catalog.shows
-                        .find { it.id == progress.showId }
-                        ?.let { show ->
-                            Column {
-                                ShowRow(
-                                    show,
-                                    "Ep. ${progress.episodeNumber} / ${show.episodeCount}",
-                                    { onShow(show.id) },
-                                ) {
-                                    Glyph(Icons.Outlined.Close, "Remove", { onRemove(show.id) })
-                                }
-                                LinearProgressIndicator(
-                                    progress = {
-                                        if (progress.durationMs > 0)
-                                            (progress.positionMs.toFloat() / progress.durationMs)
-                                                .coerceIn(0f, 1f)
-                                        else 0f
-                                    },
-                                    modifier =
-                                        Modifier.fillMaxWidth()
-                                            .padding(start = 126.dp, end = 64.dp),
-                                    color = Sunset.Accent,
-                                )
-                            }
-                        }
-                }
-            }
-    }
-    if (confirm)
-        AlertDialog(
-            onDismissRequest = { confirm = false },
-            title = { Text(tr("Clear history")) },
-            text = { Text("Remove your watch history and saved playback positions?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onClear()
-                        confirm = false
-                    }
-                ) {
-                    Text(tr("Clear"))
-                }
-            },
-            dismissButton = { TextButton(onClick = { confirm = false }) { Text(tr("Cancel")) } },
-        )
-}
-
-@Composable
-fun SavedScreen(
-    catalog: Catalog,
-    saved: Set<String>,
-    onBack: () -> Unit,
-    onShow: (String) -> Unit,
-    onRemove: (String) -> Unit,
-    onBrowse: () -> Unit,
-) {
-    var filter by rememberSaveable { mutableStateOf("all") }
-    Column(Modifier.fillMaxSize()) {
-        Heading("Saved", onBack)
-        if (saved.isEmpty())
-            BlankState(
-                "Your watchlist is empty",
-                "Found something you'll want back? Tap ＋ and it'll wait right here, out of the current.",
-                "Find your next flow",
-                onClick = onBrowse,
-            )
-        else {
-            Row(
-                Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                listOf("all", "completed", "airing").forEach { status ->
-                    TagChip(
-                        if (status == "all") "All" else status.replaceFirstChar(Char::uppercase),
-                        filter == status,
-                    ) {
-                        filter = status
-                    }
-                }
-            }
-            val shows =
-                catalog.shows.filter { it.id in saved && (filter == "all" || it.status == filter) }
-            if (shows.isEmpty())
-                Text(tr("No results"), Modifier.padding(16.dp), color = Sunset.Text3)
-            LazyColumn {
-                items(shows, key = { it.id }, contentType = { "saved" }) { show ->
-                    ShowRow(
-                        show,
-                        "${show.episodeCount} eps · ${show.status}",
-                        { onShow(show.id) },
-                    ) {
-                        Glyph(Icons.Outlined.BookmarkRemove, "Remove", { onRemove(show.id) })
-                    }
-                }
-            }
-        }
+private fun NavigationRow(icon: ImageVector, label: String, count: Int, onClick: () -> Unit) {
+    Row(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 15.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Icon(icon, null, Modifier.size(20.dp), tint = Sunset.Text2)
+        Text(label, Modifier.weight(1f), fontSize = 14.sp, maxLines = 1)
+        Text(count.toString(), color = Sunset.Text3, fontSize = 13.sp)
+        Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp), tint = Sunset.Text4)
     }
 }

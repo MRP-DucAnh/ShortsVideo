@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">लाइब्रेरी</string>
+  <string name="library_watched">देखे गए</string>
+  <string name="library_saved">सहेजे गए</string>
+  <string name="library_history">इतिहास</string>
+  <string name="library_recent">हाल के</string>
+  <string name="library_see_all">सभी देखें</string>
+  <string name="library_watch_history">देखने का इतिहास</string>
+  <string name="library_edit">संपादित करें</string>
+  <string name="library_done">हो गया</string>
+  <string name="library_watching">देख रहे हैं</string>
+  <string name="library_finished">पूरा हुआ</string>
+  <string name="library_clear_history">इतिहास साफ़ करें</string>
+  <string name="library_clear_confirmation">देखने का इतिहास और सहेजी गई स्थिति हटाएँ?</string>
+  <string name="library_clear">साफ़ करें</string>
+  <string name="library_cancel">रद्द करें</string>
+  <string name="library_remove">हटाएँ</string>
+  <string name="library_more">अन्य विकल्प</string>
+  <string name="library_all">सभी</string>
+  <string name="library_airing">जारी</string>
+  <string name="library_complete">पूर्ण</string>
+  <string name="library_episode_count">%1$d एपिसोड</string>
+  <string name="library_episode_position">एपिसोड %1$d / %2$d</string>
+  <string name="library_minutes_left">%1$d मिनट शेष</string>
+  <string name="library_history_empty">अभी कोई इतिहास नहीं</string>
+  <string name="library_history_empty_message">ड्रामा शुरू करें और वहीं से आगे देखें।</string>
+  <string name="library_finished_empty">अभी कोई एपिसोड पूरा नहीं हुआ।</string>
+  <string name="library_saved_empty">आपकी सूची खाली है</string>
+  <string name="library_saved_empty_message">बाद में देखने के लिए सीरीज़ सहेजें।</string>
+  <string name="library_browse">ब्राउज़ करें</string>
+  <string name="library_no_results">कोई परिणाम नहीं</string>
+  <string name="library_back">वापस</string>
+  <string name="library_watching_empty">अभी कोई एपिसोड जारी नहीं है।</string>
+</resources>

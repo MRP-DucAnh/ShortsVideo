@@ -1,119 +1,162 @@
 package com.shorts.flowdrama.data
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-import com.shorts.flowdrama.domain.*
-import kotlinx.coroutines.*
+import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.shorts.flowdrama.domain.LibraryRepository
+import com.shorts.flowdrama.domain.EpisodeKey
+import com.shorts.flowdrama.domain.Progress
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** SQLite is isolated here; changing persistence never changes a feature or domain contract. */
+@Entity(tableName = "saved")
+internal data class SavedShow(@PrimaryKey val showId: String)
+
+@Entity(tableName = "liked_shows")
+internal data class LikedShow(@PrimaryKey val showId: String)
+
+@Entity(tableName = "liked_episodes", primaryKeys = ["showId", "episodeNumber"])
+internal data class LikedEpisode(val showId: String, val episodeNumber: Int)
+
+@Entity(tableName = "episode_progress", primaryKeys = ["showId", "episodeNumber"])
+internal data class EpisodeProgressEntity(
+    val showId: String,
+    val episodeNumber: Int,
+    val positionMs: Long,
+    val durationMs: Long,
+    val updatedAt: Long,
+    val isLastEpisode: Boolean,
+    val watched: Boolean,
+) {
+    fun toDomain() = Progress(showId, episodeNumber, positionMs, durationMs, updatedAt, isLastEpisode, watched)
+}
+
+@Dao
+internal interface LibraryDao {
+    @Query("SELECT showId FROM saved")
+    fun observeSaved(): Flow<List<String>>
+
+    @Query("SELECT showId FROM liked_shows")
+    fun observeLikedShows(): Flow<List<String>>
+
+    @Query("SELECT * FROM liked_episodes")
+    fun observeLikedEpisodes(): Flow<List<LikedEpisode>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertLikedShow(show: LikedShow): Long
+
+    @Query("DELETE FROM liked_shows WHERE showId = :showId")
+    suspend fun deleteLikedShow(showId: String)
+
+    @Transaction
+    suspend fun toggleShowLike(showId: String) {
+        if (insertLikedShow(LikedShow(showId)) == -1L) deleteLikedShow(showId)
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertLikedEpisode(episode: LikedEpisode): Long
+
+    @Query("DELETE FROM liked_episodes WHERE showId = :showId AND episodeNumber = :number")
+    suspend fun deleteLikedEpisode(showId: String, number: Int)
+
+    @Transaction
+    suspend fun toggleEpisodeLike(showId: String, number: Int) {
+        if (insertLikedEpisode(LikedEpisode(showId, number)) == -1L) deleteLikedEpisode(showId, number)
+    }
+
+    @Query("SELECT * FROM episode_progress ORDER BY updatedAt DESC, episodeNumber DESC")
+    fun observeProgress(): Flow<List<EpisodeProgressEntity>>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM saved WHERE showId = :showId)")
+    suspend fun isSaved(showId: String): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSaved(show: SavedShow)
+
+    @Query("DELETE FROM saved WHERE showId = :showId")
+    suspend fun deleteSaved(showId: String)
+
+    @Transaction
+    suspend fun toggleSaved(showId: String) {
+        if (isSaved(showId)) deleteSaved(showId) else insertSaved(SavedShow(showId))
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertProgress(progress: EpisodeProgressEntity): Long
+
+    @Query("""
+        UPDATE episode_progress SET
+            positionMs = CASE WHEN :updated >= updatedAt THEN :position ELSE positionMs END,
+            durationMs = CASE WHEN :updated >= updatedAt THEN :duration ELSE durationMs END,
+            isLastEpisode = CASE WHEN :updated >= updatedAt THEN :last ELSE isLastEpisode END,
+            watched = MAX(watched, :watched),
+            updatedAt = MAX(updatedAt, :updated)
+        WHERE showId = :showId AND episodeNumber = :episode
+    """)
+    suspend fun updateProgress(showId: String, episode: Int, position: Long, duration: Long,
+        updated: Long, last: Boolean, watched: Boolean)
+
+    @Transaction
+    suspend fun saveProgress(progress: EpisodeProgressEntity) {
+        if (insertProgress(progress) == -1L) {
+            updateProgress(progress.showId, progress.episodeNumber, progress.positionMs,
+                progress.durationMs, progress.updatedAt, progress.isLastEpisode, progress.watched)
+        }
+    }
+
+    @Query("DELETE FROM episode_progress")
+    suspend fun clearHistory()
+
+    @Query("DELETE FROM episode_progress WHERE showId = :showId")
+    suspend fun removeHistory(showId: String)
+
+    @Query("DELETE FROM episode_progress WHERE showId = :showId AND episodeNumber = :episodeNumber")
+    suspend fun removeEpisodeHistory(showId: String, episodeNumber: Int)
+}
+
+@Database(entities = [SavedShow::class, EpisodeProgressEntity::class, LikedShow::class, LikedEpisode::class], version = 2, exportSchema = false)
+internal abstract class LibraryDatabase : RoomDatabase() {
+    abstract fun libraryDao(): LibraryDao
+}
+
+internal val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS liked_shows (showId TEXT NOT NULL, PRIMARY KEY(showId))")
+        db.execSQL("CREATE TABLE IF NOT EXISTS liked_episodes (showId TEXT NOT NULL, episodeNumber INTEGER NOT NULL, PRIMARY KEY(showId, episodeNumber))")
+    }
+}
+
+/** Stores watch progress per episode; history exposes only the latest episode per show. */
 class LocalLibraryRepository(context: Context, scope: CoroutineScope) : LibraryRepository {
-    private val db =
-        object : SQLiteOpenHelper(context.applicationContext, "library.db", null, 2) {
-            override fun onCreate(db: SQLiteDatabase) {
-                db.execSQL("CREATE TABLE saved (show_id TEXT PRIMARY KEY)")
-                db.execSQL(
-                    "CREATE TABLE progress (show_id TEXT PRIMARY KEY, episode INTEGER NOT NULL, position INTEGER NOT NULL, duration INTEGER NOT NULL, updated INTEGER NOT NULL, is_last_episode INTEGER NOT NULL DEFAULT 0)"
-                )
-            }
+    // A new database intentionally starts with an empty library; the legacy library.db is untouched.
+    private val database = Room.databaseBuilder(context.applicationContext, LibraryDatabase::class.java, "library_room.db").addMigrations(MIGRATION_1_2).build()
+    private val dao = database.libraryDao()
+    private val toggleMutex = Mutex()
+    override val savedIds: StateFlow<Set<String>> = dao.observeSaved().map { it.toSet() }
+        .stateIn(scope, SharingStarted.Eagerly, emptySet())
+    override val likedShowIds: StateFlow<Set<String>> = dao.observeLikedShows().map { it.toSet() }
+        .stateIn(scope, SharingStarted.Eagerly, emptySet())
+    override val likedEpisodes: StateFlow<Set<EpisodeKey>> = dao.observeLikedEpisodes()
+        .map { items -> items.map { EpisodeKey(it.showId, it.episodeNumber) }.toSet() }
+        .stateIn(scope, SharingStarted.Eagerly, emptySet())
+    override val episodeProgress: StateFlow<List<Progress>?> = dao.observeProgress().map { rows -> rows.map { it.toDomain() } }
+        .stateIn(scope, SharingStarted.Eagerly, null)
+    override val history: StateFlow<List<Progress>> = episodeProgress.filterNotNull().map { entries -> entries.distinctBy { it.showId } }
+        .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-            override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-                if (oldVersion < 2) {
-                    db.execSQL(
-                        "ALTER TABLE progress ADD COLUMN is_last_episode INTEGER NOT NULL DEFAULT 0"
-                    )
-                }
-            }
-        }
-    private val mutex = Mutex()
-    private val saved = MutableStateFlow<Set<String>>(emptySet())
-    private val progress = MutableStateFlow<List<Progress>>(emptyList())
-    override val savedIds = saved.asStateFlow()
-    override val history = progress.asStateFlow()
-
-    init {
-        scope.launch(Dispatchers.IO) { mutex.withLock { read() } }
-    }
-
-    private fun read() {
-        saved.value = buildSet {
-            db.readableDatabase.rawQuery("SELECT show_id FROM saved", null).use {
-                while (it.moveToNext()) add(it.getString(0))
-            }
-        }
-        progress.value = buildList {
-            db.readableDatabase
-                .rawQuery(
-                    "SELECT show_id,episode,position,duration,updated,is_last_episode FROM progress ORDER BY updated DESC",
-                    null,
-                )
-                .use {
-                    while (it.moveToNext()) add(
-                        Progress(
-                            it.getString(0),
-                            it.getInt(1),
-                            it.getLong(2),
-                            it.getLong(3),
-                            it.getLong(4),
-                            it.getInt(5) == 1,
-                        )
-                    )
-                }
-        }
-    }
-
-    override suspend fun toggleSaved(showId: String) =
-        withContext(Dispatchers.IO) {
-            mutex.withLock {
-                if (showId in saved.value)
-                    db.writableDatabase.delete("saved", "show_id=?", arrayOf(showId))
-                else
-                    db.writableDatabase.insertOrThrow(
-                        "saved",
-                        null,
-                        ContentValues().apply { put("show_id", showId) },
-                    )
-                read()
-            }
-        }
-
-    override suspend fun saveProgress(progress: Progress) =
-        withContext(Dispatchers.IO) {
-            mutex.withLock {
-                db.writableDatabase.insertWithOnConflict(
-                    "progress",
-                    null,
-                    ContentValues().apply {
-                        put("show_id", progress.showId)
-                        put("episode", progress.episodeNumber)
-                        put("position", progress.positionMs)
-                        put("duration", progress.durationMs)
-                        put("updated", progress.updatedAt)
-                        put("is_last_episode", if (progress.isLastEpisode) 1 else 0)
-                    },
-                    SQLiteDatabase.CONFLICT_REPLACE,
-                )
-                read()
-            }
-        }
-
-    override suspend fun clearHistory() =
-        withContext(Dispatchers.IO) {
-            mutex.withLock {
-                db.writableDatabase.delete("progress", null, null)
-                read()
-            }
-        }
-
-    override suspend fun removeHistory(showId: String) =
-        withContext(Dispatchers.IO) {
-            mutex.withLock {
-                db.writableDatabase.delete("progress", "show_id=?", arrayOf(showId))
-                read()
-            }
-        }
+    override suspend fun toggleSaved(showId: String) = toggleMutex.withLock { dao.toggleSaved(showId) }
+    override suspend fun toggleShowLike(showId: String) = dao.toggleShowLike(showId)
+    override suspend fun toggleEpisodeLike(showId: String, episodeNumber: Int) = dao.toggleEpisodeLike(showId, episodeNumber)
+    override suspend fun saveProgress(progress: Progress) = dao.saveProgress(EpisodeProgressEntity(
+        progress.showId, progress.episodeNumber, progress.positionMs, progress.durationMs,
+        progress.updatedAt, progress.isLastEpisode,
+        progress.watched,
+    ))
+    override suspend fun clearHistory() = dao.clearHistory()
+    override suspend fun removeHistory(showId: String) = dao.removeHistory(showId)
+    override suspend fun removeEpisodeHistory(showId: String, episodeNumber: Int) =
+        dao.removeEpisodeHistory(showId, episodeNumber)
 }

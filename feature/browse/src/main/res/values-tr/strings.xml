@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Keşfet</string>
+  <string name="browse_preview_auto">ÖN İZLEME · otomatik</string>
+  <string name="browse_preview_wifi">ÖN İZLEME · yalnızca Wi-Fi</string>
+  <string name="browse_poster_hint">Bir postere dokun · yukarıdaki ön izleme değişir</string>
+  <string name="browse_play">1. bölümü oynat</string>
+  <string name="browse_save">Kaydet</string>
+  <string name="browse_remove_saved">Kaydedilenlerden kaldır</string>
+  <string name="browse_all">Tümü</string>
+  <string name="browse_episode_count">%1$d bölüm</string>
+  <string name="browse_complete">tamamlandı</string>
+  <string name="browse_ongoing">devam ediyor</string>
+</resources>

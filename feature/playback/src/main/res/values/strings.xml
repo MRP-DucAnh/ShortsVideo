@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="player_episodes">Episodes</string>
+  <string name="player_episode_position">Ep. %1$s / %2$d</string>
+  <string name="player_episode_summary">%1$d eps</string>
+  <string name="player_load_error">Unable to load episodes</string>
+  <string name="player_no_source">No playable source</string>
+  <string name="player_speed">Speed</string>
+  <string name="player_save">Save</string>
+  <string name="player_saved">Saved</string>
+  <string name="player_options">Playback options</string>
+  <string name="player_quality">Quality</string>
+  <string name="player_audio">Audio language</string>
+  <string name="player_auto">Auto</string>
+  <string name="player_play">Play</string>
+  <string name="player_pause">Pause</string>
+  <string name="player_watched_count">%1$d watched</string>
+</resources>

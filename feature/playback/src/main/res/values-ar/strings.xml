@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="player_episodes">الحلقات</string>
+  <string name="player_episode_position">الحلقة %1$s / %2$d</string>
+  <string name="player_episode_summary">%1$d حلقة</string>
+  <string name="player_load_error">تعذّر تحميل الحلقات</string>
+  <string name="player_no_source">لا يوجد مصدر متاح</string>
+  <string name="player_speed">السرعة</string>
+  <string name="player_save">حفظ</string>
+  <string name="player_saved">المحفوظات</string>
+  <string name="player_options">خيارات التشغيل</string>
+  <string name="player_quality">الجودة</string>
+  <string name="player_audio">لغة الصوت</string>
+  <string name="player_auto">تلقائي</string>
+  <string name="player_play">تشغيل</string>
+  <string name="player_pause">إيقاف مؤقت</string>
+  <string name="player_watched_count">تمت مشاهدة %1$d</string>
+</resources>

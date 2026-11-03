@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Explorar</string>
+  <string name="browse_preview_auto">PRÉVIA · auto</string>
+  <string name="browse_preview_wifi">PRÉVIA · só Wi-Fi</string>
+  <string name="browse_poster_hint">Toque no pôster · a prévia muda acima</string>
+  <string name="browse_play">Assistir ep. 1</string>
+  <string name="browse_save">Salvar</string>
+  <string name="browse_remove_saved">Remover dos salvos</string>
+  <string name="browse_all">Todos</string>
+  <string name="browse_episode_count">%1$d episódios</string>
+  <string name="browse_complete">concluída</string>
+  <string name="browse_ongoing">em andamento</string>
+</resources>

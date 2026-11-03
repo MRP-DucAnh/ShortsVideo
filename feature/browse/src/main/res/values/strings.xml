@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Browse</string>
+  <string name="browse_preview_auto">PREVIEW · auto</string>
+  <string name="browse_preview_wifi">PREVIEW · Wi-Fi only</string>
+  <string name="browse_poster_hint">Tap a poster · preview changes above</string>
+  <string name="browse_play">Play Ep 1</string>
+  <string name="browse_save">Save</string>
+  <string name="browse_remove_saved">Remove from saved</string>
+  <string name="browse_all">All</string>
+  <string name="browse_episode_count">%1$d eps</string>
+  <string name="browse_complete">complete</string>
+  <string name="browse_ongoing">ongoing</string>
+</resources>

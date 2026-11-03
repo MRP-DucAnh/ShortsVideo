@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="player_episodes">Episode</string>
+  <string name="player_episode_position">Ep. %1$s / %2$d</string>
+  <string name="player_episode_summary">%1$d episode</string>
+  <string name="player_load_error">Episode tidak dapat dimuat</string>
+  <string name="player_no_source">Tidak ada sumber yang dapat diputar</string>
+  <string name="player_speed">Kecepatan</string>
+  <string name="player_save">Simpan</string>
+  <string name="player_saved">Tersimpan</string>
+  <string name="player_options">Opsi pemutaran</string>
+  <string name="player_quality">Kualitas</string>
+  <string name="player_audio">Bahasa audio</string>
+  <string name="player_auto">Otomatis</string>
+  <string name="player_play">Putar</string>
+  <string name="player_pause">Jeda</string>
+  <string name="player_watched_count">%1$d ditonton</string>
+</resources>

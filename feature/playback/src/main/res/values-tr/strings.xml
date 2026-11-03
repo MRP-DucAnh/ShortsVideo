@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="player_episodes">Bölümler</string>
+  <string name="player_episode_position">Bölüm %1$s / %2$d</string>
+  <string name="player_episode_summary">%1$d bölüm</string>
+  <string name="player_load_error">Bölümler yüklenemedi</string>
+  <string name="player_no_source">Oynatılabilir kaynak yok</string>
+  <string name="player_speed">Hız</string>
+  <string name="player_save">Kaydet</string>
+  <string name="player_saved">Kaydedildi</string>
+  <string name="player_options">Oynatma seçenekleri</string>
+  <string name="player_quality">Kalite</string>
+  <string name="player_audio">Ses dili</string>
+  <string name="player_auto">Otomatik</string>
+  <string name="player_play">Oynat</string>
+  <string name="player_pause">Duraklat</string>
+  <string name="player_watched_count">%1$d izlendi</string>
+</resources>

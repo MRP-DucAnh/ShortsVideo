@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">استكشاف</string>
+  <string name="browse_preview_auto">معاينة · تلقائي</string>
+  <string name="browse_preview_wifi">معاينة · Wi-Fi فقط</string>
+  <string name="browse_poster_hint">اضغط على الملصق · تتغير المعاينة أعلاه</string>
+  <string name="browse_play">شغّل الحلقة الأولى</string>
+  <string name="browse_save">حفظ</string>
+  <string name="browse_remove_saved">إزالة من المحفوظات</string>
+  <string name="browse_all">الكل</string>
+  <string name="browse_episode_count">%1$d حلقة</string>
+  <string name="browse_complete">مكتمل</string>
+  <string name="browse_ongoing">مستمر</string>
+</resources>

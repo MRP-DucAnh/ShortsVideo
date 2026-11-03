@@ -20,6 +20,9 @@ class AppViewModel(private val container: AppContainer) : ViewModel() {
     val preferences = container.preferences.preferences
     val saved = container.library.savedIds
     val history = container.library.history
+    val episodeProgress = container.library.episodeProgress
+    val likedShows = container.library.likedShowIds
+    val likedEpisodes = container.library.likedEpisodes
     private val messageFlow = MutableSharedFlow<String>(extraBufferCapacity = 8)
     val messages = messageFlow.asSharedFlow()
 
@@ -62,8 +65,26 @@ class AppViewModel(private val container: AppContainer) : ViewModel() {
         }
     }
 
+    fun toggleShowLike(showId: String) {
+        viewModelScope.launch {
+            runCatching { container.library.toggleShowLike(showId) }
+                .onFailure { messageFlow.tryEmit("Unable to save. Try again.") }
+        }
+    }
+
+    fun toggleEpisodeLike(showId: String, number: Int) {
+        viewModelScope.launch {
+            runCatching { container.library.toggleEpisodeLike(showId, number) }
+                .onFailure { messageFlow.tryEmit("Unable to save. Try again.") }
+        }
+    }
+
     fun removeHistory(id: String) {
         viewModelScope.launch { container.library.removeHistory(id) }
+    }
+
+    fun removeEpisodeHistory(showId: String, episodeNumber: Int) {
+        viewModelScope.launch { container.library.removeEpisodeHistory(showId, episodeNumber) }
     }
 
     fun clearHistory() {

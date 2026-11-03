@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Explorar</string>
+  <string name="browse_preview_auto">VISTA PREVIA · auto</string>
+  <string name="browse_preview_wifi">VISTA PREVIA · solo Wi-Fi</string>
+  <string name="browse_poster_hint">Toca un póster · la vista previa cambia arriba</string>
+  <string name="browse_play">Ver ep. 1</string>
+  <string name="browse_save">Guardar</string>
+  <string name="browse_remove_saved">Quitar de guardados</string>
+  <string name="browse_all">Todo</string>
+  <string name="browse_episode_count">%1$d episodios</string>
+  <string name="browse_complete">completa</string>
+  <string name="browse_ongoing">en emisión</string>
+</resources>

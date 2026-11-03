@@ -19,6 +19,7 @@ data class Show(
     val status: String,
     val viewCount: Long,
     val tagIds: List<String>,
+    val likeCount: Long? = null,
 )
 
 data class Catalog(
@@ -41,7 +42,10 @@ data class Episode(
     val durationSeconds: Long,
     val likeCount: Long,
     val sources: Map<String, Map<String, String>>,
-)
+    val title: String = "",
+) {
+    fun displayTitle(showTitle: String): String = title.trim().ifEmpty { showTitle }
+}
 
 data class Progress(
     val showId: String,
@@ -50,9 +54,10 @@ data class Progress(
     val durationMs: Long,
     val updatedAt: Long,
     val isLastEpisode: Boolean = false,
+    val watched: Boolean = false,
 ) {
     val finished
-        get() = isLastEpisode && durationMs > 0 && positionMs >= durationMs * .95
+        get() = isLastEpisode && watched
 }
 
 data class Preferences(
@@ -75,17 +80,28 @@ interface CatalogRepository {
     suspend fun episodes(showId: String): List<Episode>
 }
 
+data class EpisodeKey(val showId: String, val episodeNumber: Int)
+
 interface LibraryRepository {
     val savedIds: StateFlow<Set<String>>
     val history: StateFlow<List<Progress>>
+    val episodeProgress: StateFlow<List<Progress>?>
+    val likedShowIds: StateFlow<Set<String>>
+    val likedEpisodes: StateFlow<Set<EpisodeKey>>
 
     suspend fun toggleSaved(showId: String)
+
+    suspend fun toggleShowLike(showId: String)
+
+    suspend fun toggleEpisodeLike(showId: String, episodeNumber: Int)
 
     suspend fun saveProgress(progress: Progress)
 
     suspend fun clearHistory()
 
     suspend fun removeHistory(showId: String)
+
+    suspend fun removeEpisodeHistory(showId: String, episodeNumber: Int)
 }
 
 interface PreferencesRepository {

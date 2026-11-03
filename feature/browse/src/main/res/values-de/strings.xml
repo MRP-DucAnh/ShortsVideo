@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">Entdecken</string>
+  <string name="browse_preview_auto">VORSCHAU · automatisch</string>
+  <string name="browse_preview_wifi">VORSCHAU · nur WLAN</string>
+  <string name="browse_poster_hint">Poster antippen · Vorschau oben ändert sich</string>
+  <string name="browse_play">Folge 1 abspielen</string>
+  <string name="browse_save">Speichern</string>
+  <string name="browse_remove_saved">Aus Gespeichert entfernen</string>
+  <string name="browse_all">Alle</string>
+  <string name="browse_episode_count">%1$d Folgen</string>
+  <string name="browse_complete">abgeschlossen</string>
+  <string name="browse_ongoing">laufend</string>
+</resources>

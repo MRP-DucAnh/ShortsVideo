@@ -49,6 +49,8 @@ fun VideoSurface(
     onCheckpoint: (Long, Long) -> Unit = onProgress,
     onEnd: () -> Unit = {},
     onPlayer: (ExoPlayer?) -> Unit = {},
+    loop: Boolean = false,
+    onLoop: (Long) -> Unit = {},
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current
@@ -56,6 +58,7 @@ fun VideoSurface(
     val currentCheckpoint by rememberUpdatedState(onCheckpoint)
     val currentProgress by rememberUpdatedState(onProgress)
     val currentEnd by rememberUpdatedState(onEnd)
+    val currentLoop by rememberUpdatedState(onLoop)
     val currentPlayer by rememberUpdatedState(onPlayer)
     var checkpoint by rememberSaveable(url) { mutableLongStateOf(startPosition) }
     val player =
@@ -126,6 +129,9 @@ fun VideoSurface(
                 }
 
                 override fun onMediaItemTransition(item: MediaItem?, reason: Int) {
+                    if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) {
+                        currentLoop(player.duration.coerceAtLeast(0))
+                    }
                     if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
                         player.pause()
                         currentEnd()
@@ -153,6 +159,7 @@ fun VideoSurface(
         }
     }
     SideEffect {
+        player.repeatMode = if (loop) Player.REPEAT_MODE_ONE else Player.REPEAT_MODE_OFF
         player.setPlaybackSpeed(speed)
         player.volume = if (muted) 0f else 1f
         player.playWhenReady =

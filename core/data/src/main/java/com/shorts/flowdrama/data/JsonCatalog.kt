@@ -39,6 +39,7 @@ class JsonCatalog {
                             it.optString("status"),
                             it.optLong("viewCount"),
                             it.getJSONArray("tagIds").strings(),
+                            it.optLong("likeCount").takeIf { count -> count > 0 },
                         )
                     }
                 }
@@ -65,6 +66,7 @@ class JsonCatalog {
                     sources.keys().asSequence().associateWith {
                         sources.getJSONObject(it).textMap()
                     },
+                    title = item.opt("title") as? String ?: "",
                 )
             }
         }

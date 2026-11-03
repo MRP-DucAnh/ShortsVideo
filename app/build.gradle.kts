@@ -16,6 +16,10 @@ android {
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    // Language is selected in-app, so every installation needs all translations.
+    bundle {
+        language { enableSplit = false }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true

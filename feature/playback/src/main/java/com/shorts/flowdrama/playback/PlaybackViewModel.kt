@@ -62,6 +62,19 @@ class PlaybackViewModel(
         persist(number, position, duration)
     }
 
+    fun completeEpisode(number: Int, duration: Long) {
+        val id = showId
+        if (id.isEmpty()) return
+        val now = System.currentTimeMillis()
+        val isLast = state.value.episodes.lastOrNull()?.number == number
+        lastPersistedAt = now
+        lastPersistedEpisode = number
+        lastPosition = duration.coerceAtLeast(0)
+        persistenceScope.launch {
+            library.saveProgress(Progress(id, number, duration.coerceAtLeast(0), duration.coerceAtLeast(0), now, isLast, watched = true))
+        }
+    }
+
     fun persist(number: Int, position: Long, duration: Long) {
         val id = showId
         if (position < 0 || id.isEmpty()) return
@@ -77,17 +90,9 @@ class PlaybackViewModel(
         lastPersistedAt = now
         lastPersistedEpisode = number
         lastPosition = position
+        val isLast = state.value.episodes.lastOrNull()?.number == number
         persistenceScope.launch {
-            library.saveProgress(
-                Progress(
-                    id,
-                    number,
-                    position,
-                    duration,
-                    System.currentTimeMillis(),
-                    state.value.episodes.lastOrNull()?.number == number,
-                )
-            )
+            library.saveProgress(Progress(id, number, position, duration, now, isLast))
         }
     }
 }

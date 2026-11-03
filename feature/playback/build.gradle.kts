@@ -6,7 +6,10 @@ plugins {
 android {
     namespace = "com.shorts.flowdrama.feature.playback"
     compileSdk = 37
-    defaultConfig { minSdk = 24 }
+    defaultConfig {
+        minSdk = 24
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -28,4 +31,9 @@ dependencies {
     implementation(libs.coil.network)
     implementation(project(":core:designsystem"))
     implementation(project(":core:player"))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.test.runner.api37)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

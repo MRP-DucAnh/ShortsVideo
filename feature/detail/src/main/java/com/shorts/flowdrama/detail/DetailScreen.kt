@@ -26,6 +26,7 @@ fun DetailScreen(
     onSave: () -> Unit,
     onPlay: (Int) -> Unit,
     onLocked: (Episode) -> Unit,
+    watched: Set<Int> = emptySet(),
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize()) {
@@ -104,7 +105,7 @@ fun DetailScreen(
             error -> TextButton(onClick = onRetry) { Text(tr("Try again")) }
             episodes == null -> LinearProgressIndicator(Modifier.fillMaxWidth())
             else ->
-                EpisodeGrid(episodes, progress?.episodeNumber, emptySet(), Modifier.weight(1f)) {
+                EpisodeGrid(episodes, progress?.episodeNumber, watched, Modifier.weight(1f)) {
                     if (it.isFree) onPlay(it.number) else onLocked(it)
                 }
         }

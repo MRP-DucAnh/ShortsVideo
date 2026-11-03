@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">المكتبة</string>
+  <string name="library_watched">شوهد</string>
+  <string name="library_saved">المحفوظات</string>
+  <string name="library_history">السجل</string>
+  <string name="library_recent">الأحدث</string>
+  <string name="library_see_all">عرض الكل</string>
+  <string name="library_watch_history">سجل المشاهدة</string>
+  <string name="library_edit">تعديل</string>
+  <string name="library_done">تم</string>
+  <string name="library_watching">قيد المشاهدة</string>
+  <string name="library_finished">مكتمل</string>
+  <string name="library_clear_history">مسح السجل</string>
+  <string name="library_clear_confirmation">هل تريد حذف السجل ومواضع التشغيل المحفوظة؟</string>
+  <string name="library_clear">مسح</string>
+  <string name="library_cancel">إلغاء</string>
+  <string name="library_remove">إزالة</string>
+  <string name="library_more">المزيد من الخيارات</string>
+  <string name="library_all">الكل</string>
+  <string name="library_airing">يُعرض</string>
+  <string name="library_complete">مكتمل</string>
+  <string name="library_episode_count">%1$d حلقة</string>
+  <string name="library_episode_position">الحلقة %1$d / %2$d</string>
+  <string name="library_minutes_left">متبقٍ %1$d دقيقة</string>
+  <string name="library_history_empty">لا يوجد سجل مشاهدة</string>
+  <string name="library_history_empty_message">ابدأ مسلسلًا وتابع من حيث توقفت.</string>
+  <string name="library_finished_empty">لا توجد حلقات مكتملة بعد.</string>
+  <string name="library_saved_empty">قائمة المشاهدة فارغة</string>
+  <string name="library_saved_empty_message">احفظ مسلسلًا لتجده هنا لاحقًا.</string>
+  <string name="library_browse">استكشاف</string>
+  <string name="library_no_results">لا توجد نتائج</string>
+  <string name="library_back">رجوع</string>
+  <string name="library_watching_empty">لا توجد حلقات قيد المشاهدة.</string>
+</resources>

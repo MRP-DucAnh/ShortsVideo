@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">Biblioteca</string>
+  <string name="library_watched">Vistos</string>
+  <string name="library_saved">Guardados</string>
+  <string name="library_history">Historial</string>
+  <string name="library_recent">Recientes</string>
+  <string name="library_see_all">Ver todo</string>
+  <string name="library_watch_history">Historial</string>
+  <string name="library_edit">Editar</string>
+  <string name="library_done">Listo</string>
+  <string name="library_watching">En curso</string>
+  <string name="library_finished">Finalizados</string>
+  <string name="library_clear_history">Borrar historial</string>
+  <string name="library_clear_confirmation">¿Borrar el historial y las posiciones guardadas?</string>
+  <string name="library_clear">Borrar</string>
+  <string name="library_cancel">Cancelar</string>
+  <string name="library_remove">Eliminar</string>
+  <string name="library_more">Más opciones</string>
+  <string name="library_all">Todo</string>
+  <string name="library_airing">En emisión</string>
+  <string name="library_complete">Completa</string>
+  <string name="library_episode_count">%1$d episodios</string>
+  <string name="library_episode_position">Ep. %1$d / %2$d</string>
+  <string name="library_minutes_left">Quedan %1$d min</string>
+  <string name="library_history_empty">Sin historial</string>
+  <string name="library_history_empty_message">Empieza una serie y continúa donde la dejaste.</string>
+  <string name="library_finished_empty">Aún no hay episodios finalizados.</string>
+  <string name="library_saved_empty">Tu lista está vacía</string>
+  <string name="library_saved_empty_message">Guarda una serie para encontrarla aquí.</string>
+  <string name="library_browse">Explorar</string>
+  <string name="library_no_results">Sin resultados</string>
+  <string name="library_back">Volver</string>
+  <string name="library_watching_empty">No hay episodios en curso.</string>
+</resources>

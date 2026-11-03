@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">ब्राउज़ करें</string>
+  <string name="browse_preview_auto">प्रीव्यू · ऑटो</string>
+  <string name="browse_preview_wifi">प्रीव्यू · केवल Wi-Fi</string>
+  <string name="browse_poster_hint">पोस्टर पर टैप करें · ऊपर प्रीव्यू बदलेगा</string>
+  <string name="browse_play">एपिसोड 1 चलाएँ</string>
+  <string name="browse_save">सहेजें</string>
+  <string name="browse_remove_saved">सहेजे गए से हटाएँ</string>
+  <string name="browse_all">सभी</string>
+  <string name="browse_episode_count">%1$d एपिसोड</string>
+  <string name="browse_complete">पूर्ण</string>
+  <string name="browse_ongoing">जारी</string>
+</resources>

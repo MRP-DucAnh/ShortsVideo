@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="browse_title">உலாவு</string>
+  <string name="browse_preview_auto">முன்னோட்டம் · தானியங்கு</string>
+  <string name="browse_preview_wifi">முன்னோட்டம் · Wi-Fi மட்டும்</string>
+  <string name="browse_poster_hint">போஸ்டரைத் தட்டவும் · மேலே முன்னோட்டம் மாறும்</string>
+  <string name="browse_play">பகுதி 1 ஐ இயக்கு</string>
+  <string name="browse_save">சேமி</string>
+  <string name="browse_remove_saved">சேமித்ததிலிருந்து அகற்று</string>
+  <string name="browse_all">அனைத்தும்</string>
+  <string name="browse_episode_count">%1$d பகுதிகள்</string>
+  <string name="browse_complete">நிறைவடைந்தது</string>
+  <string name="browse_ongoing">தொடர்கிறது</string>
+</resources>

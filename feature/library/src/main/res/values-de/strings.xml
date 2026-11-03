@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="library_title">Mediathek</string>
+  <string name="library_watched">Gesehen</string>
+  <string name="library_saved">Gespeichert</string>
+  <string name="library_history">Verlauf</string>
+  <string name="library_recent">Zuletzt</string>
+  <string name="library_see_all">Alle ansehen</string>
+  <string name="library_watch_history">Wiedergabeverlauf</string>
+  <string name="library_edit">Bearbeiten</string>
+  <string name="library_done">Fertig</string>
+  <string name="library_watching">Aktuell</string>
+  <string name="library_finished">Abgeschlossen</string>
+  <string name="library_clear_history">Verlauf löschen</string>
+  <string name="library_clear_confirmation">Verlauf und gespeicherte Positionen löschen?</string>
+  <string name="library_clear">Löschen</string>
+  <string name="library_cancel">Abbrechen</string>
+  <string name="library_remove">Entfernen</string>
+  <string name="library_more">Weitere Optionen</string>
+  <string name="library_all">Alle</string>
+  <string name="library_airing">Laufend</string>
+  <string name="library_complete">Abgeschlossen</string>
+  <string name="library_episode_count">%1$d Folgen</string>
+  <string name="library_episode_position">Folge %1$d / %2$d</string>
+  <string name="library_minutes_left">Noch %1$d Min.</string>
+  <string name="library_history_empty">Noch kein Verlauf</string>
+  <string name="library_history_empty_message">Starte eine Serie und setze sie später fort.</string>
+  <string name="library_finished_empty">Noch keine abgeschlossenen Folgen.</string>
+  <string name="library_saved_empty">Deine Liste ist leer</string>
+  <string name="library_saved_empty_message">Speichere eine Serie, um sie hier zu finden.</string>
+  <string name="library_browse">Entdecken</string>
+  <string name="library_no_results">Keine Ergebnisse</string>
+  <string name="library_back">Zurück</string>
+  <string name="library_watching_empty">Keine laufenden Folgen.</string>
+</resources>

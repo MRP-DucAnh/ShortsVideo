@@ -50,6 +50,8 @@ fun FlowDramaApp(container: AppContainer) {
     val preferences by vm.preferences.collectAsStateWithLifecycle()
     val saved by vm.saved.collectAsStateWithLifecycle()
     val history by vm.history.collectAsStateWithLifecycle()
+    val episodeProgress by vm.episodeProgress.collectAsStateWithLifecycle()
+    val likedEpisodes by vm.likedEpisodes.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(Route(Destination.Splash))
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -315,6 +317,7 @@ fun FlowDramaApp(container: AppContainer) {
                                                             )
                                                         },
                                                         { episode -> vm.episodeUnlock.request(show.id, episode.number) },
+                                                        watched = episodeProgress.orEmpty().filter { it.showId == show.id && it.watched }.map { it.episodeNumber }.toSet(),
                                                     )
                                                 }
                                             else
@@ -330,17 +333,24 @@ fun FlowDramaApp(container: AppContainer) {
                                                     playbackVm::persist,
                                                     { episode -> vm.episodeUnlock.request(show.id, episode.number, AdPlacements.PlayerEpisodeUnlockRewarded) },
                                                     onCheckpoint = playbackVm::checkpoint,
+                                                    onEpisodeComplete = playbackVm::completeEpisode,
                                                     blockedByAd = unlockState.target != null || fullscreenShowing,
+                                                    saved = show.id in saved,
+                                                    onSave = { vm.save(show.id) },
+                                                    episodeProgress = episodeProgress.orEmpty().filter { it.showId == show.id },
+                                                    progressReady = episodeProgress != null,
+                                                    likedEpisodes = likedEpisodes,
+                                                    onLikeEpisode = vm::toggleEpisodeLike,
                                                 )
                                         }
                                     Destination.History ->
                                         Box(Modifier.safeDrawingPadding()) {
                                             HistoryScreen(
                                                 catalog,
-                                                history,
+                                                episodeProgress,
                                                 { back() },
-                                                { push(Route(Destination.Detail, it)) },
-                                                vm::removeHistory,
+                                                { showId, episodeNumber -> push(Route(Destination.Player, showId, episodeNumber)) },
+                                                vm::removeEpisodeHistory,
                                                 vm::clearHistory,
                                                 {
                                                     backStack.clear()
