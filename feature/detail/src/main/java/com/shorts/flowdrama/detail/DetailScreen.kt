@@ -25,7 +25,7 @@ fun DetailScreen(
     onBack: () -> Unit,
     onSave: () -> Unit,
     onPlay: (Int) -> Unit,
-    onLocked: () -> Unit,
+    onLocked: (Episode) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize()) {
@@ -105,7 +105,7 @@ fun DetailScreen(
             episodes == null -> LinearProgressIndicator(Modifier.fillMaxWidth())
             else ->
                 EpisodeGrid(episodes, progress?.episodeNumber, emptySet(), Modifier.weight(1f)) {
-                    if (it.isFree) onPlay(it.number) else onLocked()
+                    if (it.isFree) onPlay(it.number) else onLocked(it)
                 }
         }
     }

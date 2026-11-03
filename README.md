@@ -36,7 +36,7 @@ Luồng khóa chỉ hiển thị trạng thái và dialog giải thích, không 
 
 ## Quảng cáo / Firebase
 
-Remote Config String parameter: **ads_config**. Ba placement test: **interstitial_onboarding**, **native_home**, **banner_library**. Kill switch global và exact-version thắng placement. Defaults nhúng sẵn, debug fetch interval 0 giây, release 3600 giây, fetch timeout 8 giây. Không chờ SDK/Remote Config ở splash. Xem JSON và từng bước kiểm tra trong tài liệu ads.
+Module ads Compose hỗ trợ banner, native (19 templates), interstitial, rewarded, rewarded-interstitial và app-open. ID fallback nằm ở `core/ads/src/main/assets/ads/ads_ids_default.json`; các parameter Firebase mặc định ở `app/src/main/res/xml/remote_config_defaults.xml`. Remote Config `ad_unit_ids` ghi đè ID; các nhóm placement chọn template/style/enable. Kill switch global và exact-version thắng placement. Xem [hướng dẫn gắn ads và cấu hình](core/ads/README.md).
 
 Firebase Console chưa được chỉnh/publish bởi assistant. Round-trip đổi cấu hình thật vẫn cần xác minh, dù policy đã có unit tests.
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">அத்தியாயம் %1$d திறக்கவும்</string>
+    <string name="ad_unlock_description">இந்தச் சாதனத்தில் %2$s தொடரின் அத்தியாயம் %1$d திறக்க வெகுமதி விளம்பரத்தைப் பாருங்கள்.</string>
+    <string name="ad_unlock_watch">விளம்பரம் பார்த்துத் திறக்கவும்</string>
+    <string name="ad_unlock_not_now">இப்போது வேண்டாம்</string>
+    <string name="ad_unlock_loading">விளம்பரம் ஏற்றப்படுகிறது…</string>
+    <string name="ad_unlock_unavailable">இப்போது வெகுமதி விளம்பரம் இல்லை. சிறிது நேரத்தில் முயலவும்.</string>
+    <string name="ad_unlock_not_earned">வெகுமதி கிடைக்கவில்லை. அத்தியாயத்தைத் திறக்க விளம்பரத்தை முழுவதும் பாருங்கள்.</string>
+    <string name="ad_unlock_save_failed">வெகுமதி கிடைத்தது, ஆனால் சேமிக்க முடியவில்லை. மற்றொரு விளம்பரம் பார்க்காமல் மீண்டும் முயலவும்.</string>
+    <string name="ad_unlock_retry">மீண்டும் முயலவும்</string>
+    <string name="ad_unlock_saving">வெகுமதி சேமிக்கப்படுகிறது…</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">Search</string>
+    <string name="home_notifications">Notifications</string>
+    <string name="home_morning">Morning sip</string>
+    <string name="home_lunch">Lunch splash</string>
+    <string name="home_night">Night flow</string>
+    <string name="home_morning_detail">a little drama to start your day</string>
+    <string name="home_lunch_detail">one short arc, a perfect little break</string>
+    <string name="home_night_detail">long episodes, lights off</string>
+    <string name="home_morning_pick">MORNING PICK</string>
+    <string name="home_lunch_pick">LUNCH PICK</string>
+    <string name="home_night_pick">TONIGHT’S PICK</string>
+    <string name="home_morning_card">07:00 · MORNING SIP</string>
+    <string name="home_morning_card_detail">2-min recaps of what you watched</string>
+    <string name="home_lunch_card">12:30 · LUNCH SPLASH</string>
+    <string name="home_lunch_card_detail">One short arc · fits in 20 min</string>
+    <string name="home_also_flowing">Also flowing tonight</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_continue_watching">Continue watching</string>
+    <string name="home_episode_count">%1$d eps</string>
+    <string name="home_completed">Completed</string>
+    <string name="home_ongoing">Ongoing</string>
+    <string name="home_ad_attribution">Ad · Sponsored</string>
+</resources>

@@ -19,6 +19,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
+import com.shorts.flowdrama.ads.compose.PreloadAdEffect
+import com.shorts.flowdrama.ads.config.AdPlacements
 import com.shorts.flowdrama.browse.*
 import com.shorts.flowdrama.data.DataStorePreferences
 import com.shorts.flowdrama.designsystem.*
@@ -36,6 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FlowDramaApp(container: AppContainer) {
+    PreloadAdEffect(container.ads, AdPlacements.OnboardingComplete)
     val vm: AppViewModel = viewModel { AppViewModel(container) }
     val onboardingVm: OnboardingViewModel = viewModel {
         OnboardingViewModel(container.preferences, container.reminders)
@@ -50,19 +53,54 @@ fun FlowDramaApp(container: AppContainer) {
     val backStack = rememberNavBackStack(Route(Destination.Splash))
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    var locked by rememberSaveable { mutableStateOf(false) }
+    val unlockState by vm.episodeUnlock.state.collectAsStateWithLifecycle()
+    val fullscreenShowing by container.ads.isFullscreenShowing.collectAsStateWithLifecycle()
+    var enteredPlayerAt by remember { mutableLongStateOf(0L) }
+    var pendingPlayerExitAd by remember { mutableStateOf(false) }
+    LaunchedEffect(backStack.lastOrNull()) {
+        if ((backStack.lastOrNull() as? Route)?.screen == Destination.Player)
+            enteredPlayerAt = android.os.SystemClock.elapsedRealtime()
+    }
+    LaunchedEffect(unlockState.target, fullscreenShowing) {
+        if (unlockState.target == null && !fullscreenShowing &&
+            (backStack.lastOrNull() as? Route)?.screen == Destination.Player)
+            enteredPlayerAt = android.os.SystemClock.elapsedRealtime()
+    }
     var notice by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
+    LaunchedEffect(state.catalog) {
+        state.catalog?.let { preloadHomeHero(context.applicationContext, it) }
+    }
     val activity = context as Activity
+    LaunchedEffect(pendingPlayerExitAd) {
+        if (pendingPlayerExitAd) {
+            pendingPlayerExitAd = false
+            // Navigate first; lifecycle and blockedByAd pause any Player retained during transition.
+            container.ads.showInterstitial(activity, AdPlacements.PlayerExit)
+        }
+    }
+
     fun push(route: Route) {
         backStack.add(route)
     }
     fun back() {
-        if (backStack.size > 1) backStack.removeLastOrNull()
+        val leavingPlayer = (backStack.lastOrNull() as? Route)?.screen == Destination.Player
+        if (backStack.size > 1) {
+            backStack.removeLastOrNull()
+            if (leavingPlayer && playerExitAdEligible(enteredPlayerAt, android.os.SystemClock.elapsedRealtime()))
+                pendingPlayerExitAd = true
+        }
+    }
+    LaunchedEffect(unlockState.completed) {
+        unlockState.completed?.let { target ->
+            if ((backStack.lastOrNull() as? Route)?.screen == Destination.Player) backStack.removeLastOrNull()
+            push(Route(Destination.Player, target.showId, target.number))
+            vm.episodeUnlock.consumeCompletion()
+        }
     }
     fun finish() {
         vm.update { it.copy(onboardingDone = true) }
-        container.ads.finishOnboarding(activity) {
+        container.ads.showFullscreenAd(activity, AdPlacements.OnboardingComplete) {
             backStack.clear()
             backStack.add(Route(Destination.Main))
         }
@@ -240,6 +278,7 @@ fun FlowDramaApp(container: AppContainer) {
                                                         container.catalog,
                                                         container.library,
                                                         container.scope,
+                                                        container.preferences,
                                                     )
                                                 }
                                             val playback by
@@ -247,6 +286,11 @@ fun FlowDramaApp(container: AppContainer) {
                                             LaunchedEffect(route) {
                                                 playbackVm.load(show.id, route.number)
                                             }
+                                            PreloadAdEffect(container.ads,
+                                                if (route.screen == Destination.Detail) AdPlacements.DetailEpisodeUnlockRewarded
+                                                else AdPlacements.PlayerEpisodeUnlockRewarded)
+                                            if (route.screen == Destination.Player)
+                                                PreloadAdEffect(container.ads, AdPlacements.PlayerExit)
                                             val progress = history.find { it.showId == show.id }
                                             if (route.screen == Destination.Detail)
                                                 Box(Modifier.safeDrawingPadding()) {
@@ -270,7 +314,7 @@ fun FlowDramaApp(container: AppContainer) {
                                                                 )
                                                             )
                                                         },
-                                                        { locked = true },
+                                                        { episode -> vm.episodeUnlock.request(show.id, episode.number) },
                                                     )
                                                 }
                                             else
@@ -284,8 +328,9 @@ fun FlowDramaApp(container: AppContainer) {
                                                     playbackVm::select,
                                                     vm::update,
                                                     playbackVm::persist,
-                                                    { locked = true },
+                                                    { episode -> vm.episodeUnlock.request(show.id, episode.number, AdPlacements.PlayerEpisodeUnlockRewarded) },
                                                     onCheckpoint = playbackVm::checkpoint,
+                                                    blockedByAd = unlockState.target != null || fullscreenShowing,
                                                 )
                                         }
                                     Destination.History ->
@@ -354,19 +399,11 @@ fun FlowDramaApp(container: AppContainer) {
                 )
             }
         }
-        if (locked)
-            AlertDialog(
-                onDismissRequest = { locked = false },
-                title = { Text(tr("Episode locked")) },
-                text = {
-                    Text(
-                        tr(
-                            "This episode is currently locked. Unlocking is not available in this version."
-                        )
-                    )
-                },
-                confirmButton = { TextButton(onClick = { locked = false }) { Text(tr("OK")) } },
-            )
+        unlockState.target?.let { target ->
+            val targetShow = state.catalog?.shows?.find { it.id == target.showId }
+            EpisodeUnlockDialog(container.ads, vm.episodeUnlock, unlockState, activity,
+                targetShow?.let { showTitle(it) }.orEmpty())
+        }
         if (notice.isNotEmpty())
             AlertDialog(
                 onDismissRequest = { notice = "" },

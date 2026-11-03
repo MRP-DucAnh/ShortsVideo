@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">فتح الحلقة %1$d</string>
+    <string name="ad_unlock_description">شاهد إعلانًا بمكافأة لفتح الحلقة %1$d من %2$s على هذا الجهاز.</string>
+    <string name="ad_unlock_watch">شاهد الإعلان وافتح الحلقة</string>
+    <string name="ad_unlock_not_now">ليس الآن</string>
+    <string name="ad_unlock_loading">جارٍ تحميل الإعلان…</string>
+    <string name="ad_unlock_unavailable">لا يتوفر إعلان بمكافأة الآن. حاول قريبًا.</string>
+    <string name="ad_unlock_not_earned">لم تُمنح مكافأة. أكمل مشاهدة الإعلان لفتح الحلقة.</string>
+    <string name="ad_unlock_save_failed">حصلت على المكافأة لكن تعذر حفظها. أعد المحاولة دون مشاهدة إعلان آخر.</string>
+    <string name="ad_unlock_retry">إعادة المحاولة</string>
+    <string name="ad_unlock_saving">جارٍ حفظ المكافأة…</string>
+</resources>

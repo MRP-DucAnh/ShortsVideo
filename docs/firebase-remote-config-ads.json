@@ -1,0 +1,77 @@
+{
+  "parameters": {
+    "ads_config": {
+      "defaultValue": {
+        "value": "{\n  \"enable\": true,\n  \"disabled_versions\": [],\n  \"placements\": {}\n}"
+      },
+      "valueType": "STRING"
+    },
+    "ad_unit_ids": {
+      "defaultValue": {
+        "value": "{\n  \"banner\": \"ca-app-pub-3940256099942544/9214589741\",\n  \"interstitial\": \"ca-app-pub-3940256099942544/1033173712\",\n  \"native\": \"ca-app-pub-3940256099942544/2247696110\",\n  \"rewarded\": \"ca-app-pub-3940256099942544/5224354917\",\n  \"rewarded_interstitial\": \"ca-app-pub-3940256099942544/5354046379\",\n  \"app_open\": \"ca-app-pub-3940256099942544/9257395921\",\n  \"home_feed_after_continue_watching\": \"ca-app-pub-3940256099942544/2247696110\",\n  \"library_recently_watched_bottom\": \"ca-app-pub-3940256099942544/9214589741\",\n  \"onboarding_step4_notifications_complete\": \"ca-app-pub-3940256099942544/1033173712\"\n}"
+      },
+      "valueType": "STRING"
+    },
+    "banner_native_ad_places": {
+      "defaultValue": {
+        "value": "[\n  {\n    \"place_name\": \"home_feed_after_continue_watching\",\n    \"ad_type\": \"native\",\n    \"is_enable\": true,\n    \"native_template_size\": \"small_cta_bottom\",\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"banner_size\": \"anchored\",\n    \"is_collapsible\": false,\n    \"background_color\": \"#241812\",\n    \"background_full_color\": \"#160F0A\",\n    \"primary_text_color\": \"#FFFFFF\",\n    \"body_text_color\": \"#C9BCAE\",\n    \"background_cta\": \"#FF7A3C\",\n    \"cta_text_color\": \"#1A0E05\",\n    \"cta_border_color\": \"#FF7A3C\",\n    \"border_color\": \"#4A3325\",\n    \"media_background_color\": \"#160F0A\",\n    \"background_radius\": 16,\n    \"cta_radius_dp\": 24,\n    \"ad_id\": \"ca-app-pub-3940256099942544/2247696110\"\n  },\n  {\n    \"place_name\": \"library_recently_watched_bottom\",\n    \"ad_type\": \"banner\",\n    \"is_enable\": true,\n    \"banner_size\": \"anchored\",\n    \"is_collapsible\": false,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"native_template_size\": \"small_cta_bottom\",\n    \"background_color\": \"#241812\",\n    \"background_full_color\": \"#160F0A\",\n    \"primary_text_color\": \"#FFFFFF\",\n    \"body_text_color\": \"#C9BCAE\",\n    \"background_cta\": \"#FF7A3C\",\n    \"cta_text_color\": \"#1A0E05\",\n    \"cta_border_color\": \"#FF7A3C\",\n    \"border_color\": \"#4A3325\",\n    \"media_background_color\": \"#160F0A\",\n    \"background_radius\": 16,\n    \"cta_radius_dp\": 24,\n    \"ad_id\": \"ca-app-pub-3940256099942544/9214589741\"\n  }\n]"
+      },
+      "valueType": "STRING"
+    },
+    "banner_native_ad_places_2": {
+      "defaultValue": {
+        "value": "[]"
+      },
+      "valueType": "STRING"
+    },
+    "rewarded_and_inter_ad_places": {
+      "defaultValue": {
+        "value": "[\n  {\n    \"place_name\": \"onboarding_step4_notifications_complete\",\n    \"ad_type\": \"interstitial\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"is_auto_load_after_dismiss\": false,\n    \"is_ignore_interval\": false,\n    \"ad_id\": \"ca-app-pub-3940256099942544/1033173712\"\n  },\n  {\n    \"place_name\": \"detail_episode_unlock_rewarded\",\n    \"ad_type\": \"rewarded\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"is_auto_load_after_dismiss\": false,\n    \"is_ignore_interval\": false,\n    \"ad_id\": \"ca-app-pub-3940256099942544/5224354917\"\n  },\n  {\n    \"place_name\": \"detail_episode_unlock_rewarded_interstitial\",\n    \"ad_type\": \"rewarded_interstitial\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"is_auto_load_after_dismiss\": false,\n    \"is_ignore_interval\": false,\n    \"ad_id\": \"ca-app-pub-3940256099942544/5354046379\"\n  },\n  {\n    \"place_name\": \"player_exit_to_previous_screen\",\n    \"ad_type\": \"interstitial\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"is_auto_load_after_dismiss\": true,\n    \"is_ignore_interval\": false,\n    \"ad_id\": \"ca-app-pub-3940256099942544/1033173712\"\n  },\n  {\n    \"place_name\": \"player_episode_picker_unlock_rewarded\",\n    \"ad_type\": \"rewarded\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"is_auto_load_after_dismiss\": true,\n    \"is_ignore_interval\": false,\n    \"ad_id\": \"ca-app-pub-3940256099942544/5224354917\"\n  }\n]"
+      },
+      "valueType": "STRING"
+    },
+    "app_open_ad_places": {
+      "defaultValue": {
+        "value": "[\n  {\n    \"place_name\": \"splash_app_open\",\n    \"ad_type\": \"app_open\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"ad_id\": \"ca-app-pub-3940256099942544/9257395921\"\n  }\n]"
+      },
+      "valueType": "STRING"
+    },
+    "banner_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ]\n}"
+      },
+      "valueType": "STRING"
+    },
+    "native_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ]\n}"
+      },
+      "valueType": "STRING"
+    },
+    "interstitial_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ],\n  \"time_interval\": 15,\n  \"ads_per_session\": 5,\n  \"time_per_session\": 600\n}"
+      },
+      "valueType": "STRING"
+    },
+    "rewarded_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ]\n}"
+      },
+      "valueType": "STRING"
+    },
+    "rewarded_interstitial_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ]\n}"
+      },
+      "valueType": "STRING"
+    },
+    "app_open_ad_config": {
+      "defaultValue": {
+        "value": "{\n  \"is_enable_retry\": true,\n  \"max_retry_count\": 2,\n  \"retry_interval_second_list\": [\n    1,\n    2,\n    3\n  ],\n  \"time_interval\": 15\n}"
+      },
+      "valueType": "STRING"
+    }
+  },
+  "conditions": []
+}

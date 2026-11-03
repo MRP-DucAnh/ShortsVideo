@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">Folge %1$d freischalten</string>
+    <string name="ad_unlock_description">Sieh dir eine belohnte Anzeige an, um Folge %1$d von %2$s auf diesem Gerät freizuschalten.</string>
+    <string name="ad_unlock_watch">Anzeige ansehen und freischalten</string>
+    <string name="ad_unlock_not_now">Jetzt nicht</string>
+    <string name="ad_unlock_loading">Anzeige wird geladen…</string>
+    <string name="ad_unlock_unavailable">Derzeit ist keine belohnte Anzeige verfügbar. Versuche es gleich erneut.</string>
+    <string name="ad_unlock_not_earned">Keine Belohnung erhalten. Sieh die Anzeige zu Ende, um diese Folge freizuschalten.</string>
+    <string name="ad_unlock_save_failed">Belohnung erhalten, aber Speichern fehlgeschlagen. Erneut versuchen, ohne weitere Anzeige.</string>
+    <string name="ad_unlock_retry">Erneut versuchen</string>
+    <string name="ad_unlock_saving">Belohnung wird gespeichert…</string>
+</resources>

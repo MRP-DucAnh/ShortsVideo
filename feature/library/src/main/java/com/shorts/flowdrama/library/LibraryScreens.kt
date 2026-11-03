@@ -14,6 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import com.shorts.flowdrama.ads.*
+import com.shorts.flowdrama.ads.config.AdPlacements
+import com.shorts.flowdrama.ads.compose.*
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
 
@@ -27,6 +29,7 @@ fun LibraryScreen(
     onSaved: () -> Unit,
     onShow: (String) -> Unit,
 ) {
+    val bottomAd = rememberInlineAdState(ads, AdPlacements.LibraryBottom)
     LazyColumn {
         item {
             Heading("Library")
@@ -67,7 +70,7 @@ fun LibraryScreen(
                     color = Sunset.Text3,
                 )
             }
-        item { LibraryBanner(ads) }
+        item { InlineAdSlot(bottomAd, adAttribution(LocalLanguage.current)) }
     }
 }
 

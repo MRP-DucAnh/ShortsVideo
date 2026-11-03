@@ -15,7 +15,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:domain"))
     implementation(libs.coroutines.android)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
@@ -24,9 +23,9 @@ dependencies {
     implementation(libs.lifecycle.compose)
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.activity.compose)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network)
     implementation(libs.google.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.config)
+    testImplementation(libs.junit)
+    testImplementation("org.json:json:20240303")
 }

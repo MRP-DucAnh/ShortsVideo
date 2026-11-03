@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">खोजें</string>
+    <string name="home_notifications">सूचनाएँ</string>
+    <string name="home_morning">सुबह की चुस्की</string>
+    <string name="home_lunch">दोपहर का विराम</string>
+    <string name="home_night">रात का प्रवाह</string>
+    <string name="home_morning_detail">दिन की शुरुआत थोड़े ड्रामा से</string>
+    <string name="home_lunch_detail">छोटी कहानी, बेहतरीन विराम</string>
+    <string name="home_night_detail">लंबे एपिसोड, बत्तियाँ बंद</string>
+    <string name="home_morning_pick">सुबह की पसंद</string>
+    <string name="home_lunch_pick">दोपहर की पसंद</string>
+    <string name="home_night_pick">आज रात की पसंद</string>
+    <string name="home_morning_card">07:00 · सुबह की चुस्की</string>
+    <string name="home_morning_card_detail">देखी गई कहानी का 2 मिनट का सारांश</string>
+    <string name="home_lunch_card">12:30 · दोपहर का विराम</string>
+    <string name="home_lunch_card_detail">20 मिनट में एक छोटी कहानी</string>
+    <string name="home_also_flowing">आज रात और भी कहानियाँ</string>
+    <string name="home_see_all">सभी देखें</string>
+    <string name="home_continue_watching">देखना जारी रखें</string>
+    <string name="home_episode_count">%1$d एपिसोड</string>
+    <string name="home_completed">पूर्ण</string>
+    <string name="home_ongoing">जारी</string>
+    <string name="home_ad_attribution">विज्ञापन · प्रायोजित</string>
+</resources>

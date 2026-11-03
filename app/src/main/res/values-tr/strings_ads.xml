@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">%1$d. bölümü aç</string>
+    <string name="ad_unlock_description">Bu cihazda %2$s dizisinin %1$d. bölümünü açmak için ödüllü reklam izle.</string>
+    <string name="ad_unlock_watch">Reklam izle ve aç</string>
+    <string name="ad_unlock_not_now">Şimdi değil</string>
+    <string name="ad_unlock_loading">Reklam yükleniyor…</string>
+    <string name="ad_unlock_unavailable">Şu anda ödüllü reklam yok. Biraz sonra tekrar dene.</string>
+    <string name="ad_unlock_not_earned">Ödül kazanılmadı. Bölümü açmak için reklamı tamamla.</string>
+    <string name="ad_unlock_save_failed">Ödül kazanıldı ancak kaydedilemedi. Başka reklam izlemeden tekrar dene.</string>
+    <string name="ad_unlock_retry">Tekrar dene</string>
+    <string name="ad_unlock_saving">Ödül kaydediliyor…</string>
+</resources>

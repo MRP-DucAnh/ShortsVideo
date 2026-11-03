@@ -6,7 +6,7 @@
 - `core:data`: parser API, OkHttp, metadata cache, SQLite và DataStore. Feature không biết DTO, SQL hoặc HTTP.
 - `core:designsystem`: palette Sunset Flow, gradient, typography, khoảng cách, các primitive và component dùng chung. Không biết Firebase hay Activity.
 - `core:player`: Media3, lifecycle, video cache 64 MiB, preload 1 MiB đầu video kế tiếp. Player được giải phóng khi rời composition; không giữ Activity trong ViewModel.
-- `core:ads`: Firebase Remote Config và các adapter AdMob; policy cho phép quảng cáo nằm ở domain.
+- `core:ads`: cấu hình ads độc lập, Firebase Remote Config, adapter 6 định dạng AdMob và native/banner component cho Compose. Policy và model ads nằm trong module này, không phụ thuộc domain.
 - `feature:*`: UI Compose theo luồng sản phẩm. `Route/Screen` nhận state và callback; lớp ViewModel điều phối tác vụ và persistence.
 - `app`: composition root tạo dependency bằng constructor injection, Navigation 3 và shell 5 tab.
 

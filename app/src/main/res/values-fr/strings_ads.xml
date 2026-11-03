@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">Débloquer l’épisode %1$d</string>
+    <string name="ad_unlock_description">Regardez une publicité avec récompense pour débloquer l’épisode %1$d de %2$s sur cet appareil.</string>
+    <string name="ad_unlock_watch">Voir la publicité et débloquer</string>
+    <string name="ad_unlock_not_now">Pas maintenant</string>
+    <string name="ad_unlock_loading">Chargement de la publicité…</string>
+    <string name="ad_unlock_unavailable">Aucune publicité avec récompense disponible. Réessayez dans un instant.</string>
+    <string name="ad_unlock_not_earned">Aucune récompense obtenue. Terminez la publicité pour débloquer cet épisode.</string>
+    <string name="ad_unlock_save_failed">Récompense obtenue, mais enregistrement impossible. Réessayez sans voir une autre publicité.</string>
+    <string name="ad_unlock_retry">Réessayer</string>
+    <string name="ad_unlock_saving">Enregistrement de la récompense…</string>
+</resources>

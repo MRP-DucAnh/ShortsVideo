@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">بحث</string>
+    <string name="home_notifications">الإشعارات</string>
+    <string name="home_morning">مشاهدة صباحية</string>
+    <string name="home_lunch">استراحة الظهيرة</string>
+    <string name="home_night">مشاهدة ليلية</string>
+    <string name="home_morning_detail">قليل من الدراما لبدء يومك</string>
+    <string name="home_lunch_detail">قصة قصيرة لاستراحة مثالية</string>
+    <string name="home_night_detail">حلقات طويلة وأضواء مطفأة</string>
+    <string name="home_morning_pick">اختيار الصباح</string>
+    <string name="home_lunch_pick">اختيار الظهيرة</string>
+    <string name="home_night_pick">اختيار الليلة</string>
+    <string name="home_morning_card">07:00 · مشاهدة صباحية</string>
+    <string name="home_morning_card_detail">ملخصات في دقيقتين لما شاهدته</string>
+    <string name="home_lunch_card">12:30 · استراحة الظهيرة</string>
+    <string name="home_lunch_card_detail">قصة قصيرة في 20 دقيقة</string>
+    <string name="home_also_flowing">مسلسلات أخرى الليلة</string>
+    <string name="home_see_all">عرض الكل</string>
+    <string name="home_continue_watching">متابعة المشاهدة</string>
+    <string name="home_episode_count">%1$d حلقة</string>
+    <string name="home_completed">مكتمل</string>
+    <string name="home_ongoing">مستمر</string>
+    <string name="home_ad_attribution">إعلان · برعاية</string>
+</resources>

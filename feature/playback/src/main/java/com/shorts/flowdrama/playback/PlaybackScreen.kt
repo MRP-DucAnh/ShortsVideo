@@ -32,8 +32,9 @@ fun PlaybackScreen(
     onEpisode: (Episode) -> Unit,
     onPreferences: ((Preferences) -> Preferences) -> Unit,
     onProgress: (Int, Long, Long) -> Unit,
-    onLocked: () -> Unit,
+    onLocked: (Episode) -> Unit,
     onCheckpoint: (Int, Long, Long) -> Unit = onProgress,
+    blockedByAd: Boolean = false,
 ) {
     var sheet by rememberSaveable { mutableStateOf("") }
     var playing by rememberSaveable { mutableStateOf(true) }
@@ -63,7 +64,7 @@ fun PlaybackScreen(
                 }
                 VideoSurface(
                     source.url,
-                    playing,
+                    playing && !blockedByAd,
                     Modifier.fillMaxSize(),
                     speed = preferences.speed,
                     nextUrl = nextUrl,
@@ -79,7 +80,7 @@ fun PlaybackScreen(
                         if (next != null && next.isFree) onEpisode(next)
                         else {
                             playing = false
-                            if (next != null) onLocked()
+                            if (next != null) onLocked(next)
                         }
                     },
                 )
@@ -228,7 +229,10 @@ fun PlaybackScreen(
                         onEpisode(it)
                         sheet = ""
                         playing = true
-                    } else onLocked()
+                    } else {
+                        sheet = ""
+                        onLocked(it)
+                    }
                 }
             } else
                 Column(Modifier.padding(horizontal = 20.dp).verticalScroll(rememberScrollState())) {

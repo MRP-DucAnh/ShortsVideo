@@ -4,44 +4,6 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class PoliciesTest {
-    private val policy = AdsPolicy()
-
-    @Test
-    fun globalKillOverridesPlacement() {
-        assertFalse(policy.allows(AdsConfig(enable = false), "1.0.0", "native_home"))
-    }
-
-    @Test
-    fun versionKillOverridesPlacement() {
-        assertFalse(
-            policy.allows(AdsConfig(disabledVersions = setOf("1.0.0")), "1.0.0", "native_home")
-        )
-    }
-
-    @Test
-    fun versionMatchingIsExact() {
-        assertTrue(
-            policy.allows(AdsConfig(disabledVersions = setOf("1.0")), "1.0.0", "native_home")
-        )
-    }
-
-    @Test
-    fun disabledPlacementDoesNotDisableOthers() {
-        val config = AdsConfig(placements = mapOf("native_home" to false, "banner_library" to true))
-        assertFalse(policy.allows(config, "1.0.0", "native_home"))
-        assertTrue(policy.allows(config, "1.0.0", "banner_library"))
-    }
-
-    @Test
-    fun unknownPlacementIsDisabled() {
-        assertFalse(policy.allows(AdsConfig(), "1.0.0", "unknown"))
-    }
-
-    @Test
-    fun defaultConfigHasDeterministicPlacements() {
-        assertTrue(policy.allows(AdsConfig(), "1.0.0", "interstitial_onboarding"))
-    }
-
     @Test
     fun missingTranslationUsesDefaultLanguage() {
         assertEquals("English", LocalizedTextResolver().resolve(mapOf("en" to "English"), "ar"))

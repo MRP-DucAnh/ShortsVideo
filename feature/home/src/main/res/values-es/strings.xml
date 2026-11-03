@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">Buscar</string>
+    <string name="home_notifications">Notificaciones</string>
+    <string name="home_morning">Pausa matutina</string>
+    <string name="home_lunch">Pausa del mediodía</string>
+    <string name="home_night">Noche de series</string>
+    <string name="home_morning_detail">un poco de drama para empezar el día</string>
+    <string name="home_lunch_detail">una historia corta para una pausa perfecta</string>
+    <string name="home_night_detail">episodios largos, luces apagadas</string>
+    <string name="home_morning_pick">SELECCIÓN MATUTINA</string>
+    <string name="home_lunch_pick">SELECCIÓN DEL MEDIODÍA</string>
+    <string name="home_night_pick">SELECCIÓN DE ESTA NOCHE</string>
+    <string name="home_morning_card">07:00 · PAUSA MATUTINA</string>
+    <string name="home_morning_card_detail">Resúmenes de lo que viste en 2 minutos</string>
+    <string name="home_lunch_card">12:30 · PAUSA DEL MEDIODÍA</string>
+    <string name="home_lunch_card_detail">Una historia corta en 20 minutos</string>
+    <string name="home_also_flowing">Más historias esta noche</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_continue_watching">Seguir viendo</string>
+    <string name="home_episode_count">%1$d episodios</string>
+    <string name="home_completed">Finalizado</string>
+    <string name="home_ongoing">En emisión</string>
+    <string name="home_ad_attribution">Anuncio · Patrocinado</string>
+</resources>

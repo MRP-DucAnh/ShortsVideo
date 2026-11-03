@@ -17,9 +17,15 @@ class PlaybackViewModel(
     private val catalog: CatalogRepository,
     private val library: LibraryRepository,
     private val persistenceScope: CoroutineScope,
+    private val preferences: PreferencesRepository,
 ) : ViewModel() {
     private val mutable = MutableStateFlow(PlaybackState())
-    val state = mutable.asStateFlow()
+    val state = combine(mutable, preferences.preferences) { raw, prefs ->
+        raw.copy(
+            episodes = raw.episodes.map { it.withLocalAccess(showId, prefs.unlockedEpisodeIds) },
+            current = raw.current?.withLocalAccess(showId, prefs.unlockedEpisodeIds),
+        )
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, PlaybackState())
     private var showId = ""
     private var job: Job? = null
     private var lastPersistedAt = 0L
@@ -35,7 +41,8 @@ class PlaybackViewModel(
             try {
                 val episodes = catalog.episodes(id)
                 val selected =
-                    episodes.find { it.number == number && it.isFree }
+                    episodes.map { it.withLocalAccess(id, preferences.preferences.value.unlockedEpisodeIds) }
+                        .find { it.number == number && it.isFree }
                         ?: episodes.firstOrNull { it.isFree }
                 mutable.value = PlaybackState(episodes, selected, loading = false)
             } catch (e: CancellationException) {

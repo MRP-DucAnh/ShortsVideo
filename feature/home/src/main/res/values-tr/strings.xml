@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">Ara</string>
+    <string name="home_notifications">Bildirimler</string>
+    <string name="home_morning">Sabah molası</string>
+    <string name="home_lunch">Öğle molası</string>
+    <string name="home_night">Gece akışı</string>
+    <string name="home_morning_detail">güne başlamak için biraz drama</string>
+    <string name="home_lunch_detail">harika bir mola için kısa bir hikâye</string>
+    <string name="home_night_detail">uzun bölümler, ışıklar kapalı</string>
+    <string name="home_morning_pick">SABAH SEÇİMİ</string>
+    <string name="home_lunch_pick">ÖĞLE SEÇİMİ</string>
+    <string name="home_night_pick">BU GECENİN SEÇİMİ</string>
+    <string name="home_morning_card">07:00 · SABAH MOLASI</string>
+    <string name="home_morning_card_detail">İzlediklerinin 2 dakikalık özeti</string>
+    <string name="home_lunch_card">12:30 · ÖĞLE MOLASI</string>
+    <string name="home_lunch_card_detail">20 dakikada kısa bir hikâye</string>
+    <string name="home_also_flowing">Bu gece başka neler var</string>
+    <string name="home_see_all">Tümünü gör</string>
+    <string name="home_continue_watching">İzlemeye devam et</string>
+    <string name="home_episode_count">%1$d bölüm</string>
+    <string name="home_completed">Tamamlandı</string>
+    <string name="home_ongoing">Devam ediyor</string>
+    <string name="home_ad_attribution">Reklam · Sponsorlu</string>
+</resources>

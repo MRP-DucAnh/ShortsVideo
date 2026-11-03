@@ -2,132 +2,73 @@ package com.shorts.flowdrama.ads
 
 import android.app.Activity
 import android.content.Context
-import com.google.android.gms.ads.*
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.shorts.flowdrama.domain.*
+import androidx.annotation.XmlRes
+import com.google.android.gms.ads.MobileAds
+import com.shorts.flowdrama.ads.config.*
+import com.shorts.flowdrama.ads.fullscreen.FullscreenAds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.json.JSONObject
 
-object TestAds {
-    const val Banner = "ca-app-pub-3940256099942544/9214589741"
-    const val Native = "ca-app-pub-3940256099942544/2247696110"
-    const val Interstitial = "ca-app-pub-3940256099942544/1033173712"
-}
-
+/** Shared SDK/configuration entry point. Screens only choose a placement and a reusable component. */
 class AdsController(
     context: Context,
     private val versionName: String,
     debug: Boolean,
     scope: CoroutineScope,
+    @XmlRes defaultsResource: Int,
+    configurationSource: AdConfigurationSource? = null,
 ) {
-    private val app = context.applicationContext
-    private val policy = AdsPolicy()
-    private val mutableConfig = MutableStateFlow(AdsConfig())
-    val config = mutableConfig.asStateFlow()
+    private val repository = configurationSource ?: RemoteAdConfiguration(context.applicationContext, defaultsResource, debug)
+    val config = repository.state
+    val invalidConfigParameters = repository.invalidParameters
     private val mutableReady = MutableStateFlow(false)
     val ready = mutableReady.asStateFlow()
-    private var interstitial: InterstitialAd? = null
-    private val remote = FirebaseRemoteConfig.getInstance()
+    private val fullscreen = FullscreenAds(context.applicationContext, scope, config, ready, versionName, ::track)
+    val isFullscreenShowing = fullscreen.showing
+    val fullscreenStatus = fullscreen.status
+    private val mutableEvents = MutableSharedFlow<AdPlacementEvent>(extraBufferCapacity = 64)
+    val events = mutableEvents.asSharedFlow()
+
+    internal fun track(placement: String, format: AdFormat, type: AdPlacementEventType) {
+        val place = config.value.placements[placement] ?: return
+        if (place.format != format || !allowed(placement)) return
+        if ((type == AdPlacementEventType.Click && place.trackingClick) ||
+            (type == AdPlacementEventType.Impression && place.trackingShow)) {
+            mutableEvents.tryEmit(AdPlacementEvent(placement, format, type))
+        }
+    }
 
     init {
-        remote.setConfigSettingsAsync(
-            FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(if (debug) 0 else 3600)
-                .setFetchTimeoutInSeconds(8)
-                .build()
-        )
-        remote.setDefaultsAsync(mapOf("ads_config" to DEFAULT)).addOnCompleteListener {
-            applyConfig()
-            refresh()
-        }
         scope.launch(Dispatchers.IO) {
-            runCatching {
-                MobileAds.initialize(app) {
-                    mutableReady.value = true
-                    loadInterstitial()
-                }
-            }
+            runCatching { MobileAds.initialize(context.applicationContext) { mutableReady.value = true } }
         }
     }
 
-    fun allowed(placement: String) = policy.allows(config.value, versionName, placement)
+    fun allowed(placement: String) = config.value.allows(placement, versionName)
+    fun refresh() = repository.refresh()
+    fun preload(placement: String) = fullscreen.preload(placement)
 
-    private fun applyConfig() {
-        mutableConfig.value =
-            runCatching { parse(remote.getString("ads_config")) }.getOrDefault(AdsConfig())
-        if (!allowed("interstitial_onboarding")) interstitial = null
-    }
+    /** Resolve the format and unit ID from the current placement at show time. */
+    fun showFullscreenAd(
+        activity: Activity, placement: String,
+        onReward: (AdReward) -> Unit = {}, onComplete: (AdShowResult) -> Unit = {},
+    ) = fullscreen.show(activity, placement, null, onReward, onComplete)
 
-    fun refresh() {
-        remote.fetchAndActivate().addOnCompleteListener { applyConfig() }
-    }
+    fun showInterstitial(activity: Activity, placement: String, onComplete: (AdShowResult) -> Unit = {}) =
+        fullscreen.show(activity, placement, AdFormat.Interstitial, {}, onComplete)
 
-    private fun loadInterstitial() {
-        android.os.Handler(android.os.Looper.getMainLooper()).post {
-            if (!allowed("interstitial_onboarding")) return@post
-            runCatching {
-                InterstitialAd.load(
-                    app,
-                    TestAds.Interstitial,
-                    AdRequest.Builder().build(),
-                    object : InterstitialAdLoadCallback() {
-                        override fun onAdLoaded(ad: InterstitialAd) {
-                            if (allowed("interstitial_onboarding")) interstitial = ad
-                        }
+    /** Reward is delivered only by the SDK earned-reward callback, never on dismissal. */
+    fun showRewarded(activity: Activity, placement: String, onReward: (AdReward) -> Unit,
+        onComplete: (AdShowResult) -> Unit = {}) =
+        fullscreen.show(activity, placement, AdFormat.Rewarded, onReward, onComplete)
 
-                        override fun onAdFailedToLoad(error: LoadAdError) {
-                            interstitial = null
-                        }
-                    },
-                )
-            }
-        }
-    }
+    /** Use RewardedInterstitialPrompt (or your own reward/skip intro) before calling this. */
+    fun showRewardedInterstitial(activity: Activity, placement: String, onReward: (AdReward) -> Unit,
+        onComplete: (AdShowResult) -> Unit = {}) =
+        fullscreen.show(activity, placement, AdFormat.RewardedInterstitial, onReward, onComplete)
 
-    /** Caller must be at a non-playback transition. Never wait for an unavailable ad. */
-    fun finishOnboarding(activity: Activity, proceed: () -> Unit) {
-        val ad = interstitial
-        interstitial = null
-        if (!allowed("interstitial_onboarding") || ad == null || activity.isFinishing) {
-            proceed()
-            return
-        }
-        var completed = false
-        fun complete() {
-            if (!completed) {
-                completed = true
-                proceed()
-            }
-        }
-        ad.fullScreenContentCallback =
-            object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() = complete()
-
-                override fun onAdFailedToShowFullScreenContent(error: AdError) = complete()
-            }
-        runCatching { ad.show(activity) }.onFailure { complete() }
-    }
-
-    companion object {
-        const val DEFAULT =
-            """{"enable":true,"disabled_versions":[],"placements":{"interstitial_onboarding":{"enable":true},"native_home":{"enable":true},"banner_library":{"enable":true}}}"""
-
-        fun parse(raw: String): AdsConfig {
-            val root = JSONObject(raw)
-            val disabled = root.optJSONArray("disabled_versions")
-            val placements = root.getJSONObject("placements")
-            return AdsConfig(
-                root.getBoolean("enable"),
-                if (disabled == null) emptySet()
-                else (0 until disabled.length()).map { disabled.getString(it) }.toSet(),
-                placements.keys().asSequence().associateWith {
-                    placements.getJSONObject(it).optBoolean("enable", false)
-                },
-            )
-        }
-    }
+    /** Explicit placement: the library never inserts app-open ads into navigation automatically. */
+    fun showAppOpen(activity: Activity, placement: String = AdPlacements.SplashAppOpen,
+        onComplete: (AdShowResult) -> Unit = {}) =
+        fullscreen.show(activity, placement, AdFormat.AppOpen, {}, onComplete)
 }

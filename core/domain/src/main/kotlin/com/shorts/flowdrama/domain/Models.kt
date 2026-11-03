@@ -66,6 +66,7 @@ data class Preferences(
     val quality: String = "Auto",
     val audioLanguage: String? = null,
     val moodIds: Set<String> = emptySet(),
+    val unlockedEpisodeIds: Set<String> = emptySet(),
 )
 
 interface CatalogRepository {
@@ -147,20 +148,6 @@ class DaypartResolver {
             in 11..16 -> Daypart.Lunch
             else -> Daypart.Night
         }
-}
-
-data class AdsConfig(
-    val enable: Boolean = true,
-    val disabledVersions: Set<String> = emptySet(),
-    val placements: Map<String, Boolean> =
-        mapOf("interstitial_onboarding" to true, "native_home" to true, "banner_library" to true),
-)
-
-class AdsPolicy {
-    fun allows(config: AdsConfig, versionName: String, placement: String) =
-        config.enable &&
-            versionName !in config.disabledVersions &&
-            config.placements[placement] == true
 }
 
 class SearchShows(private val resolver: LocalizedTextResolver = LocalizedTextResolver()) {

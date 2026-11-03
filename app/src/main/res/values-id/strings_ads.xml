@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">Buka episode %1$d</string>
+    <string name="ad_unlock_description">Tonton iklan berhadiah untuk membuka episode %1$d dari %2$s di perangkat ini.</string>
+    <string name="ad_unlock_watch">Tonton iklan &amp; buka</string>
+    <string name="ad_unlock_not_now">Nanti saja</string>
+    <string name="ad_unlock_loading">Memuat iklan…</string>
+    <string name="ad_unlock_unavailable">Iklan berhadiah belum tersedia. Coba lagi sebentar.</string>
+    <string name="ad_unlock_not_earned">Hadiah belum diperoleh. Selesaikan iklan untuk membuka episode.</string>
+    <string name="ad_unlock_save_failed">Hadiah diperoleh, tetapi gagal disimpan. Coba lagi tanpa menonton iklan lain.</string>
+    <string name="ad_unlock_retry">Coba lagi</string>
+    <string name="ad_unlock_saving">Menyimpan hadiah…</string>
+</resources>

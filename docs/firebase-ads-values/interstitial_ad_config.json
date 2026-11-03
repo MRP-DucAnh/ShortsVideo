@@ -1,0 +1,12 @@
+{
+  "is_enable_retry": true,
+  "max_retry_count": 2,
+  "retry_interval_second_list": [
+    1,
+    2,
+    3
+  ],
+  "time_interval": 15,
+  "ads_per_session": 5,
+  "time_per_session": 600
+}

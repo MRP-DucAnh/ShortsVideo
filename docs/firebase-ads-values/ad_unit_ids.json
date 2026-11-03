@@ -1,0 +1,11 @@
+{
+  "banner": "ca-app-pub-3940256099942544/9214589741",
+  "interstitial": "ca-app-pub-3940256099942544/1033173712",
+  "native": "ca-app-pub-3940256099942544/2247696110",
+  "rewarded": "ca-app-pub-3940256099942544/5224354917",
+  "rewarded_interstitial": "ca-app-pub-3940256099942544/5354046379",
+  "app_open": "ca-app-pub-3940256099942544/9257395921",
+  "home_feed_after_continue_watching": "ca-app-pub-3940256099942544/2247696110",
+  "library_recently_watched_bottom": "ca-app-pub-3940256099942544/9214589741",
+  "onboarding_step4_notifications_complete": "ca-app-pub-3940256099942544/1033173712"
+}

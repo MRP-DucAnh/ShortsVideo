@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">एपिसोड %1$d अनलॉक करें</string>
+    <string name="ad_unlock_description">इस डिवाइस पर %2$s का एपिसोड %1$d अनलॉक करने के लिए इनाम वाला विज्ञापन देखें।</string>
+    <string name="ad_unlock_watch">विज्ञापन देखें और अनलॉक करें</string>
+    <string name="ad_unlock_not_now">अभी नहीं</string>
+    <string name="ad_unlock_loading">विज्ञापन लोड हो रहा है…</string>
+    <string name="ad_unlock_unavailable">अभी इनाम वाला विज्ञापन उपलब्ध नहीं है। थोड़ी देर में प्रयास करें।</string>
+    <string name="ad_unlock_not_earned">इनाम नहीं मिला। एपिसोड अनलॉक करने के लिए विज्ञापन पूरा देखें।</string>
+    <string name="ad_unlock_save_failed">इनाम मिला, लेकिन सेव नहीं हुआ। दूसरा विज्ञापन देखे बिना फिर प्रयास करें।</string>
+    <string name="ad_unlock_retry">फिर प्रयास करें</string>
+    <string name="ad_unlock_saving">इनाम सेव हो रहा है…</string>
+</resources>

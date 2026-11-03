@@ -14,6 +14,7 @@ data class AppState(
 )
 
 class AppViewModel(private val container: AppContainer) : ViewModel() {
+    val episodeUnlock = EpisodeUnlockCoordinator(container.preferences, viewModelScope)
     private val mutable = MutableStateFlow(AppState())
     val state = mutable.asStateFlow()
     val preferences = container.preferences.preferences

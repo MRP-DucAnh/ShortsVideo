@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">தேடல்</string>
+    <string name="home_notifications">அறிவிப்புகள்</string>
+    <string name="home_morning">காலை நேரம்</string>
+    <string name="home_lunch">மதிய இடைவேளை</string>
+    <string name="home_night">இரவுப் பொழுது</string>
+    <string name="home_morning_detail">நாளைத் தொடங்க ஒரு சிறு நாடகம்</string>
+    <string name="home_lunch_detail">சிறிய கதை, இனிய இடைவேளை</string>
+    <string name="home_night_detail">நீண்ட அத்தியாயங்கள், விளக்குகள் அணைந்தன</string>
+    <string name="home_morning_pick">காலைத் தேர்வு</string>
+    <string name="home_lunch_pick">மதியத் தேர்வு</string>
+    <string name="home_night_pick">இன்றிரவுத் தேர்வு</string>
+    <string name="home_morning_card">07:00 · காலை நேரம்</string>
+    <string name="home_morning_card_detail">பார்த்த கதையின் 2 நிமிடச் சுருக்கம்</string>
+    <string name="home_lunch_card">12:30 · மதிய இடைவேளை</string>
+    <string name="home_lunch_card_detail">20 நிமிடங்களில் ஒரு சிறிய கதை</string>
+    <string name="home_also_flowing">இன்றிரவு மேலும் கதைகள்</string>
+    <string name="home_see_all">அனைத்தையும் காண்க</string>
+    <string name="home_continue_watching">தொடர்ந்து பார்க்கவும்</string>
+    <string name="home_episode_count">%1$d அத்தியாயங்கள்</string>
+    <string name="home_completed">நிறைவடைந்தது</string>
+    <string name="home_ongoing">தொடர்கிறது</string>
+    <string name="home_ad_attribution">விளம்பரம் · ஆதரவு பெற்றது</string>
+</resources>

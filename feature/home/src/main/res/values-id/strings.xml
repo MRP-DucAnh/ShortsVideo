@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_search">Cari</string>
+    <string name="home_notifications">Notifikasi</string>
+    <string name="home_morning">Sesap pagi</string>
+    <string name="home_lunch">Rehat siang</string>
+    <string name="home_night">Alur malam</string>
+    <string name="home_morning_detail">sedikit drama untuk memulai hari</string>
+    <string name="home_lunch_detail">cerita singkat untuk rehat sempurna</string>
+    <string name="home_night_detail">episode panjang, lampu padam</string>
+    <string name="home_morning_pick">PILIHAN PAGI</string>
+    <string name="home_lunch_pick">PILIHAN SIANG</string>
+    <string name="home_night_pick">PILIHAN MALAM INI</string>
+    <string name="home_morning_card">07:00 · SESAP PAGI</string>
+    <string name="home_morning_card_detail">Rangkuman 2 menit dari tontonanmu</string>
+    <string name="home_lunch_card">12:30 · REHAT SIANG</string>
+    <string name="home_lunch_card_detail">Cerita singkat · cukup 20 menit</string>
+    <string name="home_also_flowing">Cerita lainnya malam ini</string>
+    <string name="home_see_all">Lihat semua</string>
+    <string name="home_continue_watching">Lanjutkan menonton</string>
+    <string name="home_episode_count">%1$d episode</string>
+    <string name="home_completed">Tamat</string>
+    <string name="home_ongoing">Berlangsung</string>
+    <string name="home_ad_attribution">Iklan · Bersponsor</string>
+</resources>

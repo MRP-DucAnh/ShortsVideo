@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaults>
+    <entry>
+        <key>ads_config</key>
+        <value>{
+            "enable": true,
+            "disabled_versions": [],
+            "placements": {}
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>ad_unit_ids</key>
+        <value>{}</value>
+    </entry>
+    <entry>
+        <key>banner_native_ad_places</key>
+        <value>[
+  {
+    "place_name": "home_feed_after_continue_watching",
+    "ad_id_key": "home_feed_after_continue_watching",
+    "ad_type": "native",
+    "is_enable": true,
+    "native_template_size": "small_cta_bottom",
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "banner_size": "anchored",
+    "is_collapsible": false,
+    "background_color": "#241812",
+    "background_full_color": "#160F0A",
+    "primary_text_color": "#FFFFFF",
+    "body_text_color": "#C9BCAE",
+    "background_cta": "#FF7A3C",
+    "cta_text_color": "#1A0E05",
+    "cta_border_color": "#FF7A3C",
+    "border_color": "#4A3325",
+    "media_background_color": "#160F0A",
+    "background_radius": 16,
+    "cta_radius_dp": 24
+  },
+  {
+    "place_name": "library_recently_watched_bottom",
+    "ad_id_key": "library_recently_watched_bottom",
+    "ad_type": "banner",
+    "is_enable": true,
+    "banner_size": "anchored",
+    "is_collapsible": false,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "native_template_size": "small_cta_bottom",
+    "background_color": "#241812",
+    "background_full_color": "#160F0A",
+    "primary_text_color": "#FFFFFF",
+    "body_text_color": "#C9BCAE",
+    "background_cta": "#FF7A3C",
+    "cta_text_color": "#1A0E05",
+    "cta_border_color": "#FF7A3C",
+    "border_color": "#4A3325",
+    "media_background_color": "#160F0A",
+    "background_radius": 16,
+    "cta_radius_dp": 24
+  }
+]</value>
+    </entry>
+    <entry>
+        <key>banner_native_ad_places_2</key>
+        <value>[]</value>
+    </entry>
+    <entry>
+        <key>rewarded_and_inter_ad_places</key>
+        <value>[
+  {
+    "place_name": "onboarding_step4_notifications_complete",
+    "ad_id_key": "onboarding_step4_notifications_complete",
+    "ad_type": "interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false
+  },
+  {
+    "place_name": "detail_episode_unlock_rewarded",
+    "ad_id_key": "rewarded",
+    "ad_type": "rewarded",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false
+  },
+  {
+    "place_name": "detail_episode_unlock_rewarded_interstitial",
+    "ad_id_key": "rewarded_interstitial",
+    "ad_type": "rewarded_interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false
+  },
+  {
+    "place_name": "player_exit_to_previous_screen",
+    "ad_id_key": "interstitial",
+    "ad_type": "interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": true,
+    "is_ignore_interval": false
+  },
+  {
+    "place_name": "player_episode_picker_unlock_rewarded",
+    "ad_id_key": "rewarded",
+    "ad_type": "rewarded",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": true,
+    "is_ignore_interval": false
+  }
+]</value>
+    </entry>
+    <entry>
+        <key>app_open_ad_places</key>
+        <value>[
+  {
+    "place_name": "splash_app_open",
+    "ad_id_key": "app_open",
+    "ad_type": "app_open",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true
+  }
+]</value>
+    </entry>
+    <entry>
+        <key>banner_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>native_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>interstitial_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ],
+            "time_interval": 15,
+            "ads_per_session": 5,
+            "time_per_session": 600
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>rewarded_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>rewarded_interstitial_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>app_open_ad_config</key>
+        <value>{
+            "is_enable_retry": true,
+            "max_retry_count": 2,
+            "retry_interval_second_list": [
+            1,
+            2,
+            3
+            ],
+            "time_interval": 15
+            }
+        </value>
+    </entry>
+</defaults>

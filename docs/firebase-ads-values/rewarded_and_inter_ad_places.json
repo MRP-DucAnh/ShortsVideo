@@ -1,0 +1,52 @@
+[
+  {
+    "place_name": "onboarding_step4_notifications_complete",
+    "ad_type": "interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false,
+    "ad_id": "ca-app-pub-3940256099942544/1033173712"
+  },
+  {
+    "place_name": "detail_episode_unlock_rewarded",
+    "ad_type": "rewarded",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false,
+    "ad_id": "ca-app-pub-3940256099942544/5224354917"
+  },
+  {
+    "place_name": "detail_episode_unlock_rewarded_interstitial",
+    "ad_type": "rewarded_interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": false,
+    "is_ignore_interval": false,
+    "ad_id": "ca-app-pub-3940256099942544/5354046379"
+  },
+  {
+    "place_name": "player_exit_to_previous_screen",
+    "ad_type": "interstitial",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": true,
+    "is_ignore_interval": false,
+    "ad_id": "ca-app-pub-3940256099942544/1033173712"
+  },
+  {
+    "place_name": "player_episode_picker_unlock_rewarded",
+    "ad_type": "rewarded",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "is_auto_load_after_dismiss": true,
+    "is_ignore_interval": false,
+    "ad_id": "ca-app-pub-3940256099942544/5224354917"
+  }
+]

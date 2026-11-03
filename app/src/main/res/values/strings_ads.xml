@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">Unlock episode %1$d</string>
+    <string name="ad_unlock_description">Watch a rewarded ad to unlock episode %1$d of %2$s on this device.</string>
+    <string name="ad_unlock_watch">Watch ad &amp; unlock</string>
+    <string name="ad_unlock_not_now">Not now</string>
+    <string name="ad_unlock_loading">Loading ad…</string>
+    <string name="ad_unlock_unavailable">No rewarded ad is available right now. Try again shortly.</string>
+    <string name="ad_unlock_not_earned">No reward was granted. Finish watching the ad to unlock this episode.</string>
+    <string name="ad_unlock_save_failed">Your reward was earned, but saving failed. Retry without watching another ad.</string>
+    <string name="ad_unlock_retry">Retry</string>
+    <string name="ad_unlock_saving">Saving your reward…</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_unlock_title">Desbloquear episodio %1$d</string>
+    <string name="ad_unlock_description">Mira un anuncio con recompensa para desbloquear el episodio %1$d de %2$s en este dispositivo.</string>
+    <string name="ad_unlock_watch">Ver anuncio y desbloquear</string>
+    <string name="ad_unlock_not_now">Ahora no</string>
+    <string name="ad_unlock_loading">Cargando anuncio…</string>
+    <string name="ad_unlock_unavailable">No hay anuncios con recompensa disponibles. Inténtalo en unos instantes.</string>
+    <string name="ad_unlock_not_earned">No se obtuvo recompensa. Termina de ver el anuncio para desbloquear este episodio.</string>
+    <string name="ad_unlock_save_failed">Recompensa obtenida, pero no se pudo guardar. Reintenta sin ver otro anuncio.</string>
+    <string name="ad_unlock_retry">Reintentar</string>
+    <string name="ad_unlock_saving">Guardando recompensa…</string>
+</resources>

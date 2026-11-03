@@ -1,25 +1,20 @@
 package com.shorts.flowdrama.home
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import com.shorts.flowdrama.ads.*
+import com.shorts.flowdrama.ads.config.AdPlacements
+import com.shorts.flowdrama.ads.compose.*
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
-import java.text.SimpleDateFormat
+import com.shorts.flowdrama.feature.home.R
 import java.util.Calendar
-import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
@@ -32,144 +27,49 @@ fun HomeScreen(
     onBrowse: () -> Unit,
     onNotifications: () -> Unit,
 ) {
-    var hour by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            delay(60_000)
-        }
-    }
-    val daypart = DaypartResolver().resolve(hour)
+    val feedAd = rememberInlineAdState(ads, AdPlacements.HomeFeed)
+    val now = rememberHomeTime()
+    val daypart = DaypartResolver().resolve(
+        Calendar.getInstance().apply { timeInMillis = now }.get(Calendar.HOUR_OF_DAY)
+    )
     val rails = remember(catalog) { BuildHomeRails()(catalog) }
-    val hero = catalog.shows.find { it.id == catalog.heroShowId } ?: catalog.shows.firstOrNull()
-    LazyColumn(contentPadding = PaddingValues(bottom = 20.dp)) {
+    val hero = catalog.homeHero()
+    val continueWatching = remember(catalog, history) {
+        val shows = catalog.shows.associateBy { it.id }
+        history.mapNotNull { shows[it.showId] }.distinctBy { it.id }
+    }
+    LazyColumn(modifier = Modifier.clipToBounds().testTag("home:feed"), contentPadding = PaddingValues(bottom = 20.dp)) {
         item(key = "header", contentType = "header") {
-            Row(
-                Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Wordmark(Modifier.weight(1f))
-                Glyph(Icons.Outlined.Search, "Search", onSearch)
-                Glyph(Icons.Outlined.NotificationsNone, "Notifications", onNotifications)
-            }
-            Text(
-                tr(daypart.title),
-                Modifier.padding(start = 16.dp, top = 8.dp),
-                fontSize = 25.sp,
-                fontWeight = FontWeight.ExtraBold,
-            )
-            Text(
-                SimpleDateFormat("HH:mm", Locale.getDefault()).format(java.util.Date()) +
-                    " · " +
-                    daypart.subtitle,
-                Modifier.padding(start = 16.dp, top = 4.dp, bottom = 12.dp),
-                fontSize = 12.sp,
-                color = Sunset.Text3,
-            )
+            HomeHeader(daypart, now, onSearch, onNotifications)
         }
-        if (hero != null)
-            item(key = "hero", contentType = "hero") {
-                Box(
-                    Modifier.padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .height(238.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(artwork(hero.id))
-                        .clickable { onShow(hero.id) }
-                ) {
-                    AsyncImage(
-                        hero.posterUrl,
-                        showTitle(hero),
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                    )
-                    Box(Modifier.fillMaxSize().background(Sunset.Scrim))
-                    Text(
-                        daypart.badge,
-                        Modifier.padding(12.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Sunset.Gradient)
-                            .padding(horizontal = 9.dp, vertical = 5.dp),
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Sunset.OnAccent,
-                    )
-                    Column(Modifier.align(Alignment.BottomStart).padding(16.dp)) {
-                        Text(
-                            showTitle(hero),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Sunset.Text,
-                        )
-                        Text(
-                            "${hero.episodeCount} eps · ${hero.status} · ${hero.tagIds.take(2).joinToString(" · ")}",
-                            fontSize = 11.sp,
-                            color = Sunset.Text2,
-                        )
-                    }
-                }
-            }
-        item(key = "dayparts", contentType = "cards") {
-            Row(
-                Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(9.dp),
-            ) {
-                listOf(
-                        "07:00 · MORNING SIP" to "2-min recaps of what you watched",
-                        "12:30 · LUNCH SPLASH" to "One short arc · fits in 20 min",
-                    )
-                    .forEach { (title, subtitle) ->
-                        Column(
-                            Modifier.weight(1f)
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(MaterialTheme.colorScheme.surface)
-                                .border(1.dp, Sunset.Border, RoundedCornerShape(14.dp))
-                                .padding(12.dp)
-                        ) {
-                            Text(
-                                title,
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Sunset.Text3,
-                            )
-                            Text(
-                                subtitle,
-                                Modifier.padding(top = 4.dp),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
-                    }
-            }
+        if (hero != null) item(key = "hero", contentType = "hero") {
+            HomeHero(hero, daypart, catalog.tags, onShow)
         }
+        item(key = "dayparts", contentType = "cards") { HomeDaypartCards() }
         item(key = "tonight", contentType = "rail") {
-            SectionTitle("Also flowing tonight", "See all", onBrowse)
-            PosterRail(catalog.shows, onShow)
+            SectionTitle(homeString(R.string.home_also_flowing), homeString(R.string.home_see_all), onBrowse)
+            HomePosterRail(catalog.shows, onShow)
         }
-        if (history.isNotEmpty())
-            item(key = "continue", contentType = "rail") {
-                SectionTitle("Continue watching")
-                PosterRail(
-                    history.mapNotNull { p -> catalog.shows.find { it.id == p.showId } },
-                    onShow,
-                )
-            }
-        item(key = "ad", contentType = "ad") { HomeNative(ads) }
+        if (continueWatching.isNotEmpty()) item(key = "continue", contentType = "rail") {
+            SectionTitle(homeString(R.string.home_continue_watching))
+            HomePosterRail(continueWatching, onShow)
+        }
+        item(key = "ad", contentType = "ad") { InlineAdSlot(feedAd, homeString(R.string.home_ad_attribution)) }
         items(rails, key = { "rail:${it.tag.id}" }, contentType = { "rail" }) { rail ->
             SectionTitle(LocalizedTextResolver().resolve(rail.tag.name, LocalLanguage.current))
-            PosterRail(rail.shows, onShow)
+            HomePosterRail(rail.shows, onShow)
         }
     }
 }
 
 @Composable
-private fun PosterRail(shows: List<Show>, onShow: (String) -> Unit) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(9.dp),
-    ) {
-        items(shows, key = { it.id }, contentType = { "poster" }) { show ->
-            Poster(show, Modifier.size(104.dp, 138.dp)) { onShow(show.id) }
+private fun rememberHomeTime(): Long {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            now = System.currentTimeMillis()
+            delay(60_000)
         }
     }
+    return now
 }
