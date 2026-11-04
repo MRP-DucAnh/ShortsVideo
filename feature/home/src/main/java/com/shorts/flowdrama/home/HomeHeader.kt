@@ -19,14 +19,7 @@ import java.util.Locale
 
 @Composable
 internal fun HomeHeader(daypart: Daypart, now: Long, onSearch: () -> Unit, onNotifications: () -> Unit) {
-    Row(
-        Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Wordmark(Modifier.weight(1f))
-        Glyph(Icons.Outlined.Search, homeString(R.string.home_search), onSearch)
-        Glyph(Icons.Outlined.NotificationsNone, homeString(R.string.home_notifications), onNotifications)
-    }
+    HomeTopBar(onSearch, onNotifications)
     Text(
         homeString(daypart.titleResource()),
         Modifier.padding(start = 16.dp, top = 8.dp),
@@ -41,4 +34,17 @@ internal fun HomeHeader(daypart: Daypart, now: Long, onSearch: () -> Unit, onNot
         fontSize = 12.sp,
         color = Sunset.Text3,
     )
+}
+
+/** Shared app bar, without the online feed's daypart title and clock. */
+@Composable
+internal fun HomeTopBar(onSearch: () -> Unit, onNotifications: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Wordmark(Modifier.weight(1f))
+        Glyph(Icons.Outlined.Search, homeString(R.string.home_search), onSearch)
+        Glyph(Icons.Outlined.NotificationsNone, homeString(R.string.home_notifications), onNotifications)
+    }
 }

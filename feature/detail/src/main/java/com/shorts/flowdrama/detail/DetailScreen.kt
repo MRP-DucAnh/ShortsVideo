@@ -9,11 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
-
 @Composable
 fun DetailScreen(
     show: Show,
@@ -27,11 +27,14 @@ fun DetailScreen(
     onPlay: (Int) -> Unit,
     onLocked: (Episode) -> Unit,
     watched: Set<Int> = emptySet(),
+    tags: List<Tag> = emptyList(),
 ) {
+    val online by com.shorts.flowdrama.network.rememberOnline()
+    LaunchedEffect(online) { if (online && error) onRetry() }
     var expanded by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.fillMaxWidth().height(250.dp)) {
-            AsyncImage(
+            LoadingImage(
                 show.posterUrl,
                 null,
                 contentScale = ContentScale.Crop,
@@ -55,7 +58,8 @@ fun DetailScreen(
                     color = Sunset.Text,
                 )
                 Text(
-                    show.tagIds.take(3).joinToString("  ·  "),
+                    show.tagIds.mapNotNull { id -> tags.find { it.id == id } }.take(3)
+                        .map { LocalizedTextResolver().resolve(it.name, LocalLanguage.current) }.joinToString("  ·  "),
                     fontSize = 12.sp,
                     color = Sunset.Text2,
                 )
@@ -70,15 +74,19 @@ fun DetailScreen(
                     compactCount(show.viewCount, LocalLanguage.current),
                     fontWeight = FontWeight.Bold,
                 )
-                Text("Views", fontSize = 11.sp, color = Sunset.Text3)
+                Text(tr("Views"), fontSize = 11.sp, color = Sunset.Text3)
             }
             Column {
                 Text((episodes?.size ?: show.episodeCount).toString(), fontWeight = FontWeight.Bold)
                 Text(tr("Episodes"), fontSize = 11.sp, color = Sunset.Text3)
             }
             Column {
-                Text(show.status, fontWeight = FontWeight.Bold)
-                Text("Status", fontSize = 11.sp, color = Sunset.Text3)
+                Text(tr(when (show.status.lowercase()) {
+                    "completed", "complete" -> "Completed"
+                    "airing", "ongoing" -> "Airing"
+                    else -> show.status
+                }), fontWeight = FontWeight.Bold)
+                Text(tr("Status"), fontSize = 11.sp, color = Sunset.Text3)
             }
         }
         Text(
@@ -102,8 +110,9 @@ fun DetailScreen(
         }
         SectionTitle("Episodes")
         when {
-            error -> TextButton(onClick = onRetry) { Text(tr("Try again")) }
-            episodes == null -> LinearProgressIndicator(Modifier.fillMaxWidth())
+            !online && episodes == null -> NetworkErrorState(onRetry)
+            error -> BlankState("Unable to load episodes", "Please try again.", "Try again", onClick = onRetry)
+            episodes == null -> EpisodeGridSkeleton()
             else ->
                 EpisodeGrid(episodes, progress?.episodeNumber, watched, Modifier.weight(1f)) {
                     if (it.isFree) onPlay(it.number) else onLocked(it)

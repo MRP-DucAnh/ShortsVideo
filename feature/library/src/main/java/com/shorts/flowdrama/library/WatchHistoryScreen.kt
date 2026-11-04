@@ -53,7 +53,17 @@ fun HistoryScreen(catalog: Catalog, history: List<Progress>?, onBack: () -> Unit
             }
         }
         if (history == null) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                repeat(5) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Skeleton(Modifier.size(98.dp, 64.dp))
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Skeleton(Modifier.fillMaxWidth(.8f).height(16.dp))
+                            Skeleton(Modifier.fillMaxWidth(.55f).height(12.dp))
+                        }
+                    }
+                }
+            }
         } else if (filtered.isEmpty()) {
             val title = if (entries.isEmpty()) R.string.library_history_empty else R.string.library_no_results
             val message = when {

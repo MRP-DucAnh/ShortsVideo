@@ -1,101 +1,138 @@
 package com.shorts.flowdrama.designsystem
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
+import com.shorts.flowdrama.core.designsystem.R
+import java.util.Locale
 
-/**
- * User-facing translations live outside feature logic. Content localization is resolved separately.
- */
-private val arabic =
-    mapOf(
-        "Home" to "الرئيسية",
-        "Reels" to "مقاطع",
-        "Browse" to "استكشاف",
-        "Library" to "المكتبة",
-        "Settings" to "الإعدادات",
-        "Back" to "رجوع",
-        "Search" to "بحث",
-        "Saved" to "المحفوظات",
-        "Watch history" to "سجل المشاهدة",
-        "Language" to "اللغة",
-        "App language" to "لغة التطبيق",
-        "Appearance" to "المظهر",
-        "Dark" to "داكن",
-        "Light" to "فاتح",
-        "Policies" to "السياسات",
-        "Terms of Use" to "شروط الاستخدام",
-        "Privacy Policy" to "سياسة الخصوصية",
-        "Open-source licenses" to "تراخيص البرامج",
-        "Match device language" to "مطابقة لغة الجهاز",
-        "Continue" to "متابعة",
-        "Skip" to "تخطي",
-        "Step into the flow" to "ابدأ المشاهدة",
-        "Turn on notifications" to "تفعيل الإشعارات",
-        "Not now" to "ليس الآن",
-        "Play" to "تشغيل",
-        "Play Ep 1" to "شغّل الحلقة الأولى",
-        "Resume" to "متابعة",
-        "Episodes" to "الحلقات",
-        "Playback options" to "خيارات التشغيل",
-        "Speed" to "السرعة",
-        "Quality" to "الجودة",
-        "Audio language" to "لغة الصوت",
-        "Auto" to "تلقائي",
-        "All" to "الكل",
-        "New" to "جديد",
-        "Watching" to "قيد المشاهدة",
-        "Finished" to "مكتمل",
-        "Clear history" to "مسح السجل",
-        "Cancel" to "إلغاء",
-        "Clear" to "مسح",
-        "Remove" to "إزالة",
-        "Save" to "حفظ",
-        "Try again" to "حاول مجددًا",
-        "You're offline" to "أنت غير متصل",
-        "Check Wi-Fi or mobile data - the river will still be here." to
-            "تحقق من اتصال الإنترنت ثم حاول مجددًا.",
-        "Your watchlist is empty" to "قائمة المشاهدة فارغة",
-        "Find your next flow" to "ابحث عن مسلسل",
-        "No results" to "لا توجد نتائج",
-        "Try another title or genre." to "جرّب عنوانًا أو نوعًا آخر.",
-        "Search dramas" to "ابحث عن مسلسل",
-        "Trending searches" to "عمليات البحث الرائجة",
-        "Matches" to "النتائج",
-        "Recently watched" to "شاهدت مؤخرًا",
-        "Continue watching" to "متابعة المشاهدة",
-        "Night flow" to "مشاهدة ليلية",
-        "Morning sip" to "مشاهدة صباحية",
-        "Lunch splash" to "استراحة الظهيرة",
-        "Also flowing tonight" to "مسلسلات أخرى الليلة",
-        "See all" to "عرض الكل",
-        "Episode locked" to "الحلقة مقفلة",
-        "This episode is currently locked. Unlocking is not available in this version." to
-            "هذه الحلقة مقفلة حاليًا. فتح الحلقات غير متاح في هذا الإصدار.",
-        "OK" to "حسنًا",
-        "Loading…" to "جارٍ التحميل…",
-        "Saved to your Library" to "تم الحفظ في المكتبة",
-        "Removed from your Library" to "تمت الإزالة من المكتبة",
-        "No watch history yet" to "لا يوجد سجل مشاهدة",
-        "Start a drama and pick up where you left off." to "ابدأ مسلسلًا وتابع من حيث توقفت.",
-        "Preview on Wi-Fi only" to "معاينة عبر Wi-Fi فقط",
-        "Choose your language" to "اختر لغتك",
-        "Choose manually" to "اختر يدويًا",
-        "Close" to "إغلاق",
-        "Notifications" to "الإشعارات",
-        "Pause" to "إيقاف مؤقت",
-        "Tap a poster · preview changes above" to "اضغط على الملصق لتغيير المعاينة",
-        "Your flow runs three times a day" to "لحظاتك ثلاث مرات يوميًا",
-        "How should tonight feel?" to "ما مزاجك الليلة؟",
-        "Rage" to "انتقام",
-        "Swoon" to "رومانسية",
-        "Cry" to "دراما مؤثرة",
-        "Thrill" to "تشويق",
-        "Watch a whole world unfold" to "شاهد عالمًا من القصص",
-        "Short episodes. Big feelings. Your next story starts here." to
-            "حلقات قصيرة ومشاعر كبيرة. قصتك التالية تبدأ هنا.",
-    )
+private val sharedStringIds = mapOf(
+    "Airing" to R.string.ui_airing_6b3a6f,
+    "All" to R.string.ui_all_6a7208,
+    "Also flowing tonight" to R.string.ui_also_flowing_tonight_7bed53,
+    "App language" to R.string.ui_app_language_01e178,
+    "Appearance" to R.string.ui_appearance_41def7,
+    "Audio language" to R.string.ui_audio_language_3bb89c,
+    "Auto" to R.string.ui_auto_c614ba,
+    "Back" to R.string.ui_back_b52b36,
+    "Browse" to R.string.ui_browse_2f3b5c,
+    "Cancel" to R.string.ui_cancel_77dfd2,
+    "Check Wi-Fi or mobile data - the river will still be here." to R.string.ui_check_wi_fi_or_mobile_data_the_river_will_still_be_here_c36b27,
+    "Choose manually" to R.string.ui_choose_manually_dc4598,
+    "Choose your language" to R.string.ui_choose_your_language_1ee9cc,
+    "Clear" to R.string.ui_clear_719ea3,
+    "Clear history" to R.string.ui_clear_history_53b515,
+    "Close" to R.string.ui_close_bbfa77,
+    "Completed" to R.string.ui_completed_1798b3,
+    "Continue" to R.string.ui_continue_2e0262,
+    "Continue watching" to R.string.ui_continue_watching_8fca30,
+    "Cry" to R.string.ui_cry_1ce449,
+    "Dark" to R.string.ui_dark_ae1ef0,
+    "Episode locked" to R.string.ui_episode_locked_ebeaeb,
+    "Episodes" to R.string.ui_episodes_49d641,
+    "Find your next flow" to R.string.ui_find_your_next_flow_92b01e,
+    "Finished" to R.string.ui_finished_355bcc,
+    "Home" to R.string.ui_home_70f8bb,
+    "How should tonight feel?" to R.string.ui_how_should_tonight_feel_647bc1,
+    "Language" to R.string.ui_language_89b86a,
+    "Legal policy is not published for this build. Viewing history and preferences are stored anonymously on this device. This app uses Firebase Remote Config and Google test ads." to R.string.ui_legal_policy_is_not_published_for_this_build_viewing_hi_43cef6,
+    "Library" to R.string.ui_library_b8100f,
+    "Light" to R.string.ui_light_a36ef8,
+    "Like" to R.string.ui_like_c7e02c,
+    "Loading…" to R.string.ui_loading_33ce41,
+    "Lunch splash" to R.string.ui_lunch_splash_ea7e10,
+    "Match device language" to R.string.ui_match_device_language_cc432b,
+    "Matches" to R.string.ui_matches_ee2dbd,
+    "Morning sip" to R.string.ui_morning_sip_ea11e6,
+    "New" to R.string.ui_new_6403f2,
+    "New episode reminders are managed in Android notification settings." to R.string.ui_new_episode_reminders_are_managed_in_android_notificati_e05216,
+    "Night flow" to R.string.ui_night_flow_dc926c,
+    "No results" to R.string.ui_no_results_b993b0,
+    "No watch history yet" to R.string.ui_no_watch_history_yet_bf4bcd,
+    "Not now" to R.string.ui_not_now_e45714,
+    "Notifications" to R.string.ui_notifications_753a22,
+    "OK" to R.string.ui_ok_9ce3bd,
+    "Open network settings" to R.string.ui_open_network_settings_be306d,
+    "Open-source licenses" to R.string.ui_open_source_licenses_30dced,
+    "Open-source software: Kotlin, AndroidX / Jetpack Compose, Media3, OkHttp and Coil (Apache 2.0). Firebase and Google Mobile Ads are covered by Google SDK terms. License details: docs/licenses.md." to R.string.ui_open_source_software_kotlin_androidx_jetpack_compose_me_36887f,
+    "Pause" to R.string.ui_pause_781961,
+    "Play" to R.string.ui_play_5d12bd,
+    "Play Ep 1" to R.string.ui_play_ep_1_2c64c8,
+    "Playback options" to R.string.ui_playback_options_75eab2,
+    "Please try again." to R.string.ui_please_try_again_83a6fd,
+    "Policies" to R.string.ui_policies_8d6118,
+    "Preview on Wi-Fi only" to R.string.ui_preview_on_wi_fi_only_d9f970,
+    "Privacy Policy" to R.string.ui_privacy_policy_9db108,
+    "Quality" to R.string.ui_quality_a60f2c,
+    "Rage" to R.string.ui_rage_513564,
+    "Recently watched" to R.string.ui_recently_watched_de23e7,
+    "Reels" to R.string.ui_reels_61e340,
+    "Remove" to R.string.ui_remove_e96390,
+    "Removed from your Library" to R.string.ui_removed_from_your_library_cc92bc,
+    "Resume" to R.string.ui_resume_b3bd0b,
+    "Save" to R.string.ui_save_efc007,
+    "Saved" to R.string.ui_saved_c0ae8f,
+    "Saved to your Library" to R.string.ui_saved_to_your_library_4c857d,
+    "Search" to R.string.ui_search_bce064,
+    "Search dramas" to R.string.ui_search_dramas_3d2a80,
+    "See all" to R.string.ui_see_all_2941c5,
+    "Settings" to R.string.ui_settings_c7f73b,
+    "Short episodes. Big feelings. Your next story starts here." to R.string.ui_short_episodes_big_feelings_your_next_story_starts_here_e8c4a8,
+    "Skip" to R.string.ui_skip_3da474,
+    "Slow network — playing at 480p or lower" to R.string.ui_slow_network_playing_at_480p_or_lower_0cf6cf,
+    "Slow network — trying a lower quality to keep playing" to R.string.ui_slow_network_trying_a_lower_quality_to_keep_playing_2308bd,
+    "Speed" to R.string.ui_speed_2d2cb0,
+    "Start a drama and pick up where you left off." to R.string.ui_start_a_drama_and_pick_up_where_you_left_off_5a3fb2,
+    "Status" to R.string.ui_status_bae7d5,
+    "Step into the flow" to R.string.ui_step_into_the_flow_1ec54f,
+    "Switch back to HD" to R.string.ui_switch_back_to_hd_acd18e,
+    "Swoon" to R.string.ui_swoon_5abd67,
+    "Tap a poster · preview changes above" to R.string.ui_tap_a_poster_preview_changes_above_05de87,
+    "Terms of Use" to R.string.ui_terms_of_use_977384,
+    "This episode is currently locked. Unlocking is not available in this version." to R.string.ui_this_episode_is_currently_locked_unlocking_is_not_avail_f7d12a,
+    "Thrill" to R.string.ui_thrill_f0b792,
+    "Trending searches" to R.string.ui_trending_searches_525b27,
+    "Try again" to R.string.ui_try_again_042c86,
+    "Try another title or genre." to R.string.ui_try_another_title_or_genre_bda53d,
+    "Turn on notifications" to R.string.ui_turn_on_notifications_5ab087,
+    "Unable to load episodes" to R.string.ui_unable_to_load_episodes_ee00cf,
+    "Unable to load your shows" to R.string.ui_unable_to_load_your_shows_ae4e4e,
+    "Unable to save settings" to R.string.ui_unable_to_save_settings_04f7cc,
+    "Unable to save. Try again." to R.string.ui_unable_to_save_try_again_cbb31c,
+    "Video unavailable" to R.string.ui_video_unavailable_d0baed,
+    "Video unavailable. Try again." to R.string.ui_video_unavailable_try_again_a7e8ca,
+    "Views" to R.string.ui_views_24be61,
+    "Watch a whole world unfold" to R.string.ui_watch_a_whole_world_unfold_f6d6b7,
+    "Watch all %1\$d episodes" to R.string.ui_watch_all_1_d_episodes_1ffd5e,
+    "Watch history" to R.string.ui_watch_history_2a8498,
+    "Watching" to R.string.ui_watching_96d9e0,
+    "You're offline" to R.string.ui_you_re_offline_f4d9ce,
+    "Your flow runs three times a day" to R.string.ui_your_flow_runs_three_times_a_day_da00f1,
+    "Your watchlist is empty" to R.string.ui_your_watchlist_is_empty_97f5da,
+    "eps" to R.string.ui_eps_85962f,
+)
+
+/** Resolves UI copy in the app's selected language, independently of the device locale. */
+fun localizedUiText(context: Context, language: String, text: String, vararg args: Any): String {
+    val id = sharedStringIds[text] ?: return text
+    val config = Configuration(context.resources.configuration).apply { setLocale(Locale.forLanguageTag(language)) }
+    return context.createConfigurationContext(config).getString(id, *args)
+}
 
 @Composable
-fun tr(text: String): String = if (LocalLanguage.current == "ar") arabic[text] ?: text else text
+fun tr(text: String, vararg args: Any): String {
+    val context = LocalContext.current
+    val language = LocalLanguage.current
+    val configuration = LocalConfiguration.current
+    val localized = remember(context, language, configuration) {
+        context.createConfigurationContext(Configuration(configuration).apply { setLocale(Locale.forLanguageTag(language)) })
+    }
+    val id = sharedStringIds[text] ?: return text
+    return localized.getString(id, *args)
+}
 
 val launchLanguages =
     listOf(

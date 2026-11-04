@@ -46,7 +46,9 @@ fun FlowDramaApp(container: AppContainer) {
     val reminderWindows by onboardingVm.selectedReminderWindows.collectAsStateWithLifecycle()
     val onboardingSaveError by onboardingVm.saveError.collectAsStateWithLifecycle()
 
+    val online by com.shorts.flowdrama.network.rememberOnline()
     val state by vm.state.collectAsStateWithLifecycle()
+    LaunchedEffect(online) { if (online && state.error) vm.load() }
     val preferences by vm.preferences.collectAsStateWithLifecycle()
     val saved by vm.saved.collectAsStateWithLifecycle()
     val history by vm.history.collectAsStateWithLifecycle()
@@ -131,7 +133,11 @@ fun FlowDramaApp(container: AppContainer) {
     FlowTheme(preferences.language, preferences.lightTheme) {
         val translatorLanguage = LocalLanguage.current
         LaunchedEffect(vm, translatorLanguage) {
-            vm.messages.collect { snackbar.showSnackbar(it, duration = SnackbarDuration.Short) }
+            vm.messages.collect { message ->
+                kotlinx.coroutines.withTimeoutOrNull(2000) {
+                    snackbar.showSnackbar(localizedUiText(context, translatorLanguage, message), duration = SnackbarDuration.Indefinite)
+                }
+            }
         }
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             Box(Modifier.fillMaxSize()) {
@@ -144,16 +150,14 @@ fun FlowDramaApp(container: AppContainer) {
                         NavEntry(route) {
                             val catalog = state.catalog
                             if (route.screen == Destination.Splash) {
-                                if (state.error)
-                                    BlankState(
-                                        "You're offline",
-                                        "Check Wi-Fi or mobile data - the river will still be here.",
-                                        "Try again",
-                                        Icons.Outlined.WifiOff,
-                                        vm::load,
-                                    )
+                                if (state.error && !online) NetworkErrorState(vm::load)
+                                else if (state.error) BlankState("Unable to load your shows", "Please try again.", "Try again", onClick = vm::load)
                                 else SplashScreen()
-                            } else if (catalog == null) LoadingState()
+                            } else if (catalog == null) {
+                                if (!online) NetworkErrorState(vm::load)
+                                else if (state.error) BlankState("Unable to load your shows", "Please try again.", "Try again", onClick = vm::load)
+                                else LoadingState()
+                            }
                             else {
                                 val show = catalog.shows.find { it.id == route.id }
                                 when (route.screen) {
@@ -317,6 +321,7 @@ fun FlowDramaApp(container: AppContainer) {
                                                             )
                                                         },
                                                         { episode -> vm.episodeUnlock.request(show.id, episode.number) },
+                                                        tags = catalog.tags,
                                                         watched = episodeProgress.orEmpty().filter { it.showId == show.id && it.watched }.map { it.episodeNumber }.toSet(),
                                                     )
                                                 }
@@ -341,6 +346,7 @@ fun FlowDramaApp(container: AppContainer) {
                                                     progressReady = episodeProgress != null,
                                                     likedEpisodes = likedEpisodes,
                                                     onLikeEpisode = vm::toggleEpisodeLike,
+                                                    onRetry = { playbackVm.load(show.id, route.number) },
                                                 )
                                         }
                                     Destination.History ->
@@ -380,11 +386,11 @@ fun FlowDramaApp(container: AppContainer) {
                                         Box(Modifier.safeDrawingPadding()) {
                                             Column {
                                                 Heading(route.id, { back() })
-                                                Text(
+                                                Text(tr(
                                                     if (route.id == "Open-source licenses")
-                                                        "Kotlin, AndroidX / Jetpack Compose, Media3 — Apache 2.0\nOkHttp — Apache 2.0\nCoil — Apache 2.0\nFirebase & Google Mobile Ads — Google SDK terms\n\nSee dependency license details in docs/licenses.md."
+                                                        "Open-source software: Kotlin, AndroidX / Jetpack Compose, Media3, OkHttp and Coil (Apache 2.0). Firebase and Google Mobile Ads are covered by Google SDK terms. License details: docs/licenses.md."
                                                     else
-                                                        "This take-home build has no published legal policy URL yet. It uses anonymous local viewing history and preferences, Firebase Remote Config, and Google test ads. No sign-in or payment is implemented.",
+                                                        "Legal policy is not published for this build. Viewing history and preferences are stored anonymously on this device. This app uses Firebase Remote Config and Google test ads."),
                                                     Modifier.padding(24.dp),
                                                 )
                                             }
@@ -418,7 +424,7 @@ fun FlowDramaApp(container: AppContainer) {
             AlertDialog(
                 onDismissRequest = { notice = "" },
                 title = { Text(tr("Notifications")) },
-                text = { Text(notice) },
+                text = { Text(tr(notice)) },
                 confirmButton = { TextButton(onClick = { notice = "" }) { Text(tr("OK")) } },
             )
     }

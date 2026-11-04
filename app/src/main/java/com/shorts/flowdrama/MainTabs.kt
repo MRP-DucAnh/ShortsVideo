@@ -48,6 +48,7 @@ internal fun MainTabs(
     push: (Route) -> Unit,
     onNotifications: () -> Unit,
 ) {
+    val online by com.shorts.flowdrama.network.rememberOnline()
     val likedShows by vm.likedShows.collectAsStateWithLifecycle()
     var selected by rememberSaveable { mutableIntStateOf(initialTab) }
     val holder = rememberSaveableStateHolder()
@@ -80,8 +81,7 @@ internal fun MainTabs(
         Box(Modifier.fillMaxSize().padding(padding)) {
             holder.SaveableStateProvider(selected) {
                 when (selected) {
-                    0 ->
-                        HomeScreen(
+                    0 -> HomeScreen(
                             catalog,
                             history,
                             container.ads,
@@ -89,6 +89,8 @@ internal fun MainTabs(
                             { push(Route(Destination.Search)) },
                             { selected = 2 },
                             onNotifications,
+                            online = online,
+                            onRetry = vm::load,
                         )
                     1 ->
                         ReelsScreen(

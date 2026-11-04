@@ -55,3 +55,5 @@ include(":feature:playback")
 include(":feature:library")
 
 include(":feature:settings")
+
+include(":core:network")

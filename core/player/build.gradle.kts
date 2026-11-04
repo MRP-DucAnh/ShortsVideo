@@ -15,6 +15,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
+    api(project(":core:network"))
     implementation(project(":core:domain"))
     implementation(libs.coroutines.android)
     implementation(platform(libs.androidx.compose.bom))

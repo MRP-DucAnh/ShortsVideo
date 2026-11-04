@@ -27,7 +27,7 @@
   <string name="library_history_empty_message">Start a drama and pick up where you left off.</string>
   <string name="library_finished_empty">No finished episodes yet.</string>
   <string name="library_saved_empty">Your watchlist is empty</string>
-  <string name="library_saved_empty_message">Save a show to find it here later.</string>
+  <string name="library_saved_empty_message">Found something you’ll want back? Tap ＋ and it’ll wait right here, out of the current.</string>
   <string name="library_browse">Browse</string>
   <string name="library_no_results">No results</string>
   <string name="library_back">Back</string>

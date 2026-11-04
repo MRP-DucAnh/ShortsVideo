@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
 import com.shorts.flowdrama.feature.browse.R
@@ -105,7 +104,7 @@ private fun PreviewDock(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.background(artwork(show.id))) {
-        AsyncImage(show.posterUrl, null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        LoadingImage(show.posterUrl, null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
         if (previewUrl != null) {
             VideoSurface(previewUrl, true, Modifier.fillMaxSize(), muted = true, loop = true)
         }

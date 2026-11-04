@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import com.shorts.flowdrama.domain.*
 import java.text.NumberFormat
 import java.util.Locale
@@ -133,7 +132,7 @@ fun Poster(
             .background(artwork(show.id))
             .clickable(onClick = onClick)
     ) {
-        AsyncImage(
+        LoadingImage(
             show.posterUrl,
             showTitle(show),
             contentScale = ContentScale.Crop,
@@ -231,33 +230,19 @@ fun BlankState(
 
 @Composable
 fun LoadingState() {
-    Column(
-        Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Wordmark()
-        Box(
-            Modifier.fillMaxWidth()
-                .height(238.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-        )
-        Box(
-            Modifier.width(160.dp)
-                .height(18.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-        )
+        Skeleton(Modifier.fillMaxWidth().height(238.dp))
+        Skeleton(Modifier.width(160.dp).height(19.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             repeat(3) {
-                Box(
-                    Modifier.weight(1f)
-                        .height(148.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Skeleton(Modifier.fillMaxWidth().height(148.dp))
+                    Skeleton(Modifier.fillMaxWidth(.8f).height(12.dp))
+                    Skeleton(Modifier.fillMaxWidth(.55f).height(10.dp))
+                }
             }
         }
-        LinearProgressIndicator(Modifier.fillMaxWidth(), color = Sunset.Accent)
     }
 }
 

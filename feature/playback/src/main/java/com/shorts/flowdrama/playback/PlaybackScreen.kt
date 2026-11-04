@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontWeight
@@ -26,7 +27,6 @@ import com.shorts.flowdrama.player.*
 import com.shorts.flowdrama.feature.playback.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
-import coil3.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -51,7 +51,10 @@ fun PlaybackScreen(
     progressReady: Boolean = true,
     likedEpisodes: Set<EpisodeKey> = emptySet(),
     onLikeEpisode: (String, Int) -> Unit = { _, _ -> },
+    onRetry: () -> Unit = {},
 ) {
+    val online by com.shorts.flowdrama.network.rememberOnline()
+    LaunchedEffect(online) { if (online && state.error) onRetry() }
     var sheet by rememberSaveable { mutableStateOf("") }
     var playing by rememberSaveable { mutableStateOf(true) }
 
@@ -104,9 +107,11 @@ fun PlaybackScreen(
             val active = page == pager.settledPage && episode.number == state.current?.number && episode.isFree
             val liked = EpisodeKey(show.id, episode.number) in likedEpisodes
             val source = PlaybackSourceResolver().resolve(episode, preferences.language, defaultLanguage, preferences.quality)
+            val playDescription = playbackString(if (playing) R.string.player_pause else R.string.player_play)
+            var waiting by remember(episode.number) { mutableStateOf(false) }
             var player by remember(episode.number) { mutableStateOf<ExoPlayer?>(null) }
             Box(Modifier.fillMaxSize().background(Color.Black)) {
-                AsyncImage(show.posterUrl, null, Modifier.fillMaxSize().background(artwork(show.id)), contentScale = ContentScale.Crop)
+                LoadingImage(show.posterUrl, null, Modifier.fillMaxSize().background(artwork(show.id)), contentScale = ContentScale.Crop)
                 if (source != null && active && progressReady)
                     key(show.id, episode.number, source.url) {
                         val start = remember {
@@ -127,7 +132,15 @@ fun PlaybackScreen(
                         VideoSurface(
                             source.url,
                             playing && !blockedByAd,
-                            Modifier.fillMaxSize(),
+                            Modifier.fillMaxSize().testTag("playback:video-surface")
+                                .semantics { contentDescription = playDescription },
+                            onVideoTap = {
+                                if (!blockedByAd) {
+                                    playing = !playing
+                                    feedback = playing
+                                    feedbackCount++
+                                }
+                            },
                             speed = preferences.speed,
                             nextUrl = nextUrl,
                             startPosition = start,
@@ -135,6 +148,12 @@ fun PlaybackScreen(
                                 onProgress(episode.number, position, duration)
                             },
                             onPlayer = { player = it },
+                            onWaiting = { waiting = it },
+                            lowQualityUrl = episode.sources[source.language]?.entries
+                                ?.filter { (quality, url) ->
+                                    (quality.filter(Char::isDigit).toIntOrNull() ?: Int.MAX_VALUE) <= minOf(480, source.quality.filter(Char::isDigit).toIntOrNull() ?: 480) && url.startsWith("https://")
+                                }?.maxByOrNull { it.key.filter(Char::isDigit).toIntOrNull() ?: 0 }?.value,
+
                             onCheckpoint = { p, d -> onCheckpoint(episode.number, p, d) },
                             loop = true,
                             onLoop = { duration ->
@@ -142,16 +161,6 @@ fun PlaybackScreen(
                             },
                         )
                     }
-                val playDescription = playbackString(if (playing) R.string.player_pause else R.string.player_play)
-                Box(
-                    Modifier.fillMaxSize()
-                        .then(if (active) Modifier.testTag("playback:video-surface") else Modifier)
-                        .clickable(enabled = source != null && active && progressReady && !blockedByAd) {
-                            playing = !playing
-                            feedback = playing
-                            feedbackCount++
-                        }.semantics { contentDescription = playDescription }
-                )
                 feedback?.let { isPlaying ->
                     Icon(
                         if (isPlaying) Icons.Outlined.PlayArrow else Icons.Outlined.Pause,
@@ -257,7 +266,7 @@ fun PlaybackScreen(
                                 }
                             }
                         }
-                    player?.let { PlaybackTimeline(it) }
+                    player?.let { PlaybackTimeline(it, waiting) }
                     Box(
                         Modifier.padding(start = 16.dp, top = 4.dp, bottom = 8.dp)
                             .heightIn(min = 48.dp)
@@ -287,8 +296,9 @@ fun PlaybackScreen(
                     )
             }
         }
-        if (state.loading || !progressReady)
-            CircularProgressIndicator(Modifier.align(Alignment.Center), color = Sunset.Accent)
+        if (!online && state.current == null) MediaNetworkErrorState(onRetry)
+        else if (state.error) BlankState("Unable to load episodes", "Please try again.", "Try again", onClick = onRetry)
+        else if (state.loading || !progressReady) Skeleton(Modifier.fillMaxSize())
     }
     if (sheet == "episodes") {
         EpisodePickerSheet(
@@ -358,7 +368,7 @@ fun PlaybackScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlaybackTimeline(player: ExoPlayer) {
+private fun PlaybackTimeline(player: ExoPlayer, waiting: Boolean) {
     var position by remember(player) { mutableLongStateOf(0) }
     var duration by remember(player) { mutableLongStateOf(0) }
     var dragging by remember(player) { mutableStateOf(false) }
@@ -370,12 +380,12 @@ private fun PlaybackTimeline(player: ExoPlayer) {
             delay(100)
         }
     }
-    Column(Modifier.fillMaxWidth().padding(horizontal = 2.dp)) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 2.dp).alpha(if (waiting) .45f else 1f)) {
         PlaybackSeekSlider(
             value = if (dragging) scrub else if (duration > 0) (position.toFloat() / duration).coerceIn(0f, 1f) else 0f,
             onValueChange = { dragging = true; scrub = it; position = (it * duration).toLong() },
             onValueChangeFinished = { player.seekTo((scrub * duration).toLong()); dragging = false },
-            enabled = duration > 0,
+            enabled = duration > 0 && !waiting,
         )
         PlaybackTimeLabels(position, duration)
     }

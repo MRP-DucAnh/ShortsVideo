@@ -12,7 +12,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
 
@@ -27,7 +26,7 @@ internal fun HomeHero(hero: Show, daypart: Daypart, tags: List<Tag>, onShow: (St
             .background(artwork(hero.id))
             .clickable { onShow(hero.id) }
     ) {
-        AsyncImage(
+        LoadingImage(
             remember(context, hero.posterUrl) { homeHeroRequest(context, hero.posterUrl) },
             showTitle(hero),
             modifier = Modifier.fillMaxSize(),

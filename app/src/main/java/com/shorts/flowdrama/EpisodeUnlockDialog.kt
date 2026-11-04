@@ -75,8 +75,9 @@ internal fun EpisodeUnlockDialog(
 internal fun appString(@StringRes id: Int, vararg args: Any): String {
     val context = LocalContext.current
     val language = LocalLanguage.current
-    val localized = remember(context, language) {
-        val config = Configuration(context.resources.configuration)
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val localized = remember(context, language, configuration) {
+        val config = Configuration(configuration)
         config.setLocales(LocaleList(Locale.forLanguageTag(language)))
         context.createConfigurationContext(config)
     }

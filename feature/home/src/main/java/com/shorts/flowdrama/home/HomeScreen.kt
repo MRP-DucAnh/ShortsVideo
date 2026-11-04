@@ -1,6 +1,6 @@
 package com.shorts.flowdrama.home
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
@@ -26,12 +26,22 @@ fun HomeScreen(
     onSearch: () -> Unit,
     onBrowse: () -> Unit,
     onNotifications: () -> Unit,
+    online: Boolean = true,
+    onRetry: () -> Unit = {},
 ) {
-    val feedAd = rememberInlineAdState(ads, AdPlacements.HomeFeed)
     val now = rememberHomeTime()
     val daypart = DaypartResolver().resolve(
         Calendar.getInstance().apply { timeInMillis = now }.get(Calendar.HOUR_OF_DAY)
     )
+    if (!online) {
+        // Scaffold already applies system insets; offline keeps only the shared app bar.
+        Column(Modifier.fillMaxSize()) {
+            HomeTopBar(onSearch, onNotifications)
+            Box(Modifier.weight(1f).fillMaxWidth()) { NetworkErrorState(onRetry) }
+        }
+        return
+    }
+    val feedAd = rememberInlineAdState(ads, AdPlacements.HomeFeed)
     val rails = remember(catalog) { BuildHomeRails()(catalog) }
     val hero = catalog.homeHero()
     val continueWatching = remember(catalog, history) {

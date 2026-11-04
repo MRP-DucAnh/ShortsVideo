@@ -3,6 +3,7 @@ package com.shorts.flowdrama.library
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
@@ -38,7 +39,8 @@ fun SavedScreen(catalog: Catalog, saved: Set<String>, onBack: () -> Unit, onShow
             }
         }
         if (saved.isEmpty()) {
-            LibraryEmpty(libraryString(R.string.library_saved_empty), libraryString(R.string.library_saved_empty_message), onBrowse)
+            BlankState(libraryString(R.string.library_saved_empty), libraryString(R.string.library_saved_empty_message),
+                "Find your next flow", androidx.compose.material.icons.Icons.Outlined.FavoriteBorder, onBrowse)
         } else {
             Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {

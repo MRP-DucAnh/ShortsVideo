@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
@@ -60,7 +59,7 @@ internal fun LibraryShowRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
         val displayedProgress = if (detailProgress && progress?.watched == true) 1f else progress?.let(::fraction) ?: 0f
         Box(Modifier.size(98.dp, 60.dp).clip(RoundedCornerShape(8.dp)).background(artwork(show.id))) {
-            AsyncImage(show.posterUrl, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+            LoadingImage(show.posterUrl, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             if (progress != null) {
                 Box(Modifier.align(Alignment.BottomStart).fillMaxWidth().height(3.dp).background(Color.Black.copy(alpha = .45f))) {
                     Box(Modifier.fillMaxWidth(displayedProgress).fillMaxHeight().background(Sunset.Gradient))

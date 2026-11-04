@@ -2,6 +2,8 @@ package com.shorts.flowdrama.reels
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.compose.foundation.pager.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -15,7 +17,6 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlinx.coroutines.CancellationException
 import androidx.compose.ui.unit.*
-import coil3.compose.AsyncImage
 import com.shorts.flowdrama.designsystem.*
 import com.shorts.flowdrama.domain.*
 import com.shorts.flowdrama.player.*
@@ -32,15 +33,21 @@ fun ReelsScreen(
     likedShows: Set<String>,
     onLike: (String) -> Unit,
 ) {
+    val online by com.shorts.flowdrama.network.rememberOnline()
+    var playerOffline by remember { mutableStateOf(false) }
+    var currentPlayer by remember { mutableStateOf<ExoPlayer?>(null) }
+    var retry by remember { mutableIntStateOf(0) }
+    var failures by remember { mutableStateOf<Set<String>>(emptySet()) }
     val pager = rememberPagerState(pageCount = { catalog.shows.size })
     var episodes by remember { mutableStateOf<Map<String, Episode>>(emptyMap()) }
     var episodeLikes by remember(catalog) { mutableStateOf<Map<String, Long>>(emptyMap()) }
-    LaunchedEffect(pager.settledPage, catalog, repository) {
+    LaunchedEffect(pager.settledPage, catalog, repository, online, retry) {
         // Metadata for the next page is prepared ahead. Only the active page owns a decoder.
         listOf(pager.settledPage, pager.settledPage + 1).forEach { index ->
             catalog.shows.getOrNull(index)?.let { show ->
                 if (show.id !in episodeLikes) {
                     try {
+                        failures = failures - show.id
                         val loaded = repository.episodes(show.id)
                         loaded.firstOrNull { it.isFree }?.let {
                             episodes = episodes + (show.id to it)
@@ -49,106 +56,137 @@ fun ReelsScreen(
                     } catch (cancelled: CancellationException) {
                         throw cancelled
                     } catch (_: Exception) {
-                        // Keep the poster visible when episode metadata is unavailable.
+                        failures = failures + show.id
                     }
                 }
             }
         }
     }
-    VerticalPager(
-        state = pager,
-        key = { catalog.shows[it].id },
-        modifier = Modifier.fillMaxSize(),
-    ) { index ->
-        val show = catalog.shows[index]
-        val episode = episodes[show.id]
-        val source = episode?.let {
-            PlaybackSourceResolver()
-                .resolve(it, preferences.language, catalog.defaultLanguage, preferences.quality)
-        }
-        val liked = show.id in likedShows
-        Box(Modifier.fillMaxSize().background(Color.Black)) {
-            AsyncImage(
-                show.posterUrl,
-                null,
-                Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-            )
-            val nextShow = catalog.shows.getOrNull(index + 1)
-            val nextUrl =
-                nextShow
-                    ?.let { episodes[it.id] }
-                    ?.let {
-                        PlaybackSourceResolver()
-                            .resolve(
-                                it,
-                                preferences.audioLanguage ?: preferences.language,
-                                catalog.defaultLanguage,
-                                preferences.quality,
-                            )
-                            ?.url
-                    }
-            if (index == pager.settledPage && source != null)
-                VideoSurface(
-                    source.url,
-                    true,
-                    Modifier.fillMaxSize(),
-                    speed = preferences.speed,
-                    nextUrl = nextUrl,
-                    loop = true,
-                )
-            Box(
-                Modifier.fillMaxWidth()
-                    .height(260.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(Sunset.Scrim)
-            )
-            Column(Modifier.align(Alignment.BottomStart).padding(16.dp).fillMaxWidth(.80f)) {
-                Text(
-                    episode?.displayTitle(showTitle(show)) ?: showTitle(show),
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.White,
-                )
-                Text(
-                    LocalizedTextResolver().resolve(show.hook, preferences.language),
-                    color = Sunset.Text2,
-                    fontSize = 13.sp,
-                    maxLines = 2,
-                )
-                Spacer(Modifier.height(14.dp))
-                ActionButton("Watch all ${show.episodeCount} episodes", { onShow(show.id) })
+    val missingMetadataOffline = !online && catalog.shows.getOrNull(pager.settledPage)?.id !in episodes
+    var metadataOfflineVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(missingMetadataOffline, online) {
+        if (missingMetadataOffline) metadataOfflineVisible = true
+        else if (online) metadataOfflineVisible = false
+    }
+    val showOffline = playerOffline || missingMetadataOffline || metadataOfflineVisible
+    Box(Modifier.fillMaxSize()) {
+        VerticalPager(
+            state = pager,
+            userScrollEnabled = !showOffline,
+            key = { catalog.shows[it].id },
+            modifier = Modifier.fillMaxSize(),
+        ) { index ->
+            val show = catalog.shows[index]
+            val episode = episodes[show.id]
+            val source = episode?.let {
+                PlaybackSourceResolver()
+                    .resolve(it, preferences.language, catalog.defaultLanguage, preferences.quality)
             }
-            Column(
-                Modifier.align(Alignment.BottomEnd).padding(end = 8.dp, bottom = 120.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Glyph(
-                    if (liked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    "Like",
-                    { onLike(show.id) },
-                    if (liked) Sunset.Accent else Color.White,
+            val liked = show.id in likedShows
+            Box(Modifier.fillMaxSize().background(Color.Black)) {
+                LoadingImage(
+                    show.posterUrl,
+                    null,
+                    Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
                 )
-                val likes = show.likeCount?.takeIf { it > 0 }
-                    ?.let { it + if (liked) 1 else 0 }
-                    ?: episodeLikes[show.id]?.takeIf { it > 0 }
-                if (likes != null) {
-                    Text(formatLikes(likes, preferences.language), color = Sunset.Text,
-                        fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                val nextShow = catalog.shows.getOrNull(index + 1)
+                val nextUrl =
+                    nextShow
+                        ?.let { episodes[it.id] }
+                        ?.let {
+                            PlaybackSourceResolver()
+                                .resolve(
+                                    it,
+                                    preferences.audioLanguage ?: preferences.language,
+                                    catalog.defaultLanguage,
+                                    preferences.quality,
+                                )
+                                ?.url
+                        }
+                if (index == pager.settledPage && source != null)
+                    VideoSurface(
+                        source.url,
+                        true,
+                        Modifier.fillMaxSize(),
+                        speed = preferences.speed,
+                        nextUrl = nextUrl,
+                        loop = true,
+                        showOfflineOverlay = false,
+                        onOfflineChanged = { playerOffline = it },
+                        onPlayer = { currentPlayer = it },
+                    )
+                if (index == pager.settledPage && source == null) {
+                    when {
+                        !online -> Unit // The screen-level overlay covers video and all controls.
+                        show.id in failures -> BlankState("Unable to load episodes", "Please try again.", "Try again", onClick = { retry++ })
+                        show.id !in episodeLikes -> Skeleton(Modifier.fillMaxSize())
+                        else -> Text(tr("Video unavailable"), Modifier.align(Alignment.Center), color = Color.White)
+                    }
                 }
-                Spacer(Modifier.height(16.dp))
-                Column(Modifier.clickable(onClick = onSpeed).padding(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    val speed = if (preferences.speed % 1f == 0f) preferences.speed.toInt().toString()
-                        else preferences.speed.toString()
-                    Text("${speed}×", color = Sunset.Text, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
-                    Text(tr("Speed"), color = Sunset.Text, fontSize = 12.sp)
+                Box(
+                    Modifier.fillMaxWidth()
+                        .height(260.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(Sunset.Scrim)
+                )
+                Column(Modifier.align(Alignment.BottomStart).padding(16.dp).fillMaxWidth(.80f)) {
+                    Text(
+                        episode?.displayTitle(showTitle(show)) ?: showTitle(show),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White,
+                    )
+                    Text(
+                        LocalizedTextResolver().resolve(show.hook, preferences.language),
+                        color = Sunset.Text2,
+                        fontSize = 13.sp,
+                        maxLines = 2,
+                    )
+                    Spacer(Modifier.height(14.dp))
+                    ActionButton(tr("Watch all %1\$d episodes", show.episodeCount), { onShow(show.id) })
                 }
-                Spacer(Modifier.height(16.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Glyph(if (show.id in saved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
-                        if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, Sunset.Text)
-                    Text(tr(if (show.id in saved) "Saved" else "Save"), color = Sunset.Text, fontSize = 12.sp)
+                Column(
+                    Modifier.align(Alignment.BottomEnd).padding(end = 8.dp, bottom = 120.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Glyph(
+                        if (liked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        "Like",
+                        { onLike(show.id) },
+                        if (liked) Sunset.Accent else Color.White,
+                    )
+                    val likes = show.likeCount?.takeIf { it > 0 }
+                        ?.let { it + if (liked) 1 else 0 }
+                        ?: episodeLikes[show.id]?.takeIf { it > 0 }
+                    if (likes != null) {
+                        Text(formatLikes(likes, preferences.language), color = Sunset.Text,
+                            fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    Column(Modifier.clickable(onClick = onSpeed).padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        val speed = if (preferences.speed % 1f == 0f) preferences.speed.toInt().toString()
+                            else preferences.speed.toString()
+                        Text("${speed}×", color = Sunset.Text, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
+                        Text(tr("Speed"), color = Sunset.Text, fontSize = 12.sp)
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Glyph(if (show.id in saved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
+                            if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, Sunset.Text)
+                        Text(tr(if (show.id in saved) "Saved" else "Save"), color = Sunset.Text, fontSize = 12.sp)
+                    }
+                }
+            }
+        }
+        // Last sibling: dim and cover the video, captions and every Reels action together.
+        if (showOffline) {
+            Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .68f))
+                .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = {})) {
+                MediaNetworkErrorState {
+                    val player = currentPlayer
+                    if (player != null) player.prepare() else retry++
                 }
             }
         }
