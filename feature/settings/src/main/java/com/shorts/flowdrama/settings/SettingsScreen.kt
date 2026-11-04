@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -89,8 +88,12 @@ private fun SettingsRow(
         if (value.isNotEmpty()) Text(value, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.widthIn(max = 150.dp))
         if (selected == true) Icon(FlowIcons.Check, null, Modifier.size(18.dp), tint = Sunset.Accent)
-        if (showChevron) Text(if (LocalLayoutDirection.current == LayoutDirection.Rtl) "‹" else "›",
-            fontSize = 20.sp, lineHeight = 20.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (showChevron) Icon(
+            FlowIcons.ChevronRight,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

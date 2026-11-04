@@ -43,7 +43,7 @@ fun HomeScreen(
     }
     val feedAd = rememberInlineAdState(ads, AdPlacements.HomeFeed)
     val rails = remember(catalog) { BuildHomeRails()(catalog) }
-    val hero = catalog.homeHero()
+    val hero = catalog.homeHero(now)
     val continueWatching = remember(catalog, history) {
         val shows = catalog.shows.associateBy { it.id }
         history.mapNotNull { shows[it.showId] }.distinctBy { it.id }

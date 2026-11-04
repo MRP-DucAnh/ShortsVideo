@@ -5,8 +5,22 @@ import coil3.SingletonImageLoader
 import coil3.size.Scale
 import coil3.request.ImageRequest
 import com.shorts.flowdrama.domain.Catalog
+import com.shorts.flowdrama.domain.DaypartResolver
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
-internal fun Catalog.homeHero() = shows.find { it.id == heroShowId } ?: shows.firstOrNull()
+/** Rotate through the catalog once per local daypart; recomposition keeps the same pick. */
+internal fun Catalog.homeHero(now: Long = System.currentTimeMillis()): com.shorts.flowdrama.domain.Show? {
+    val candidates = shows.distinctBy { it.id }.sortedWith(
+        compareBy<com.shorts.flowdrama.domain.Show> { it.id != heroShowId }.thenBy { it.id }
+    )
+    if (candidates.isEmpty()) return null
+    val calendar = Calendar.getInstance().apply { timeInMillis = now }
+    val localDay = TimeUnit.MILLISECONDS.toDays(now + calendar.timeZone.getOffset(now))
+    val daypart = DaypartResolver().resolve(calendar.get(Calendar.HOUR_OF_DAY))
+    val slot = localDay * 3 + daypart.ordinal
+    return candidates[Math.floorMod(slot, candidates.size.toLong()).toInt()]
+}
 
 /** Use identical dimensions for preloading and display so the decoded image can be reused. */
 internal fun homeHeroRequest(context: Context, url: String): ImageRequest {

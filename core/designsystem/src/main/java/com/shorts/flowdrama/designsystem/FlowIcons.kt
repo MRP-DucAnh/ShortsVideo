@@ -42,6 +42,7 @@ object FlowIcons {
     val ArrowBack by lazy { icon("ArrowBack", 2f,
             "M19 12H5",
             "m11 18-6-6 6-6",
+        autoMirror = true,
     ) }
     val Search by lazy { icon("Search", 1.8f,
             "M4.0,11.0a7.0,7.0 0 1,0 14.0,0a7.0,7.0 0 1,0 -14.0,0",
@@ -86,14 +87,15 @@ object FlowIcons {
     val Add by lazy { icon("Add", 1.7f, "M12 5v14M5 12h14") }
     val Close by lazy { icon("Close", 1.7f, "M6 6l12 12M18 6L6 18") }
     val Check by lazy { icon("Check", 1.7f, "M5 12l4 4L19 6") }
-    val ChevronRight by lazy { icon("ChevronRight", 1.7f, "M9 6l6 6-6 6") }
+    val ChevronRight by lazy { icon("ChevronRight", 1.7f, "M9 6l6 6-6 6", autoMirror = true) }
+    val SuggestionArrow by lazy { icon("SuggestionArrow", 1.8f, "M18 18L6 6M6 14V6h8", autoMirror = true) }
     val ExpandMore by lazy { icon("ExpandMore", 1.7f, "M6 9l6 6 6-6") }
     val ExpandLess by lazy { icon("ExpandLess", 1.7f, "M6 15l6-6 6 6") }
     val Menu by lazy { icon("Menu", 1.7f, "M4 6h16M4 12h16M4 18h16") }
     val MoreHoriz by lazy { icon("MoreHoriz", 3f, "M5 12h.01M12 12h.01M19 12h.01") }
 
-    private fun icon(name: String, width: Float, vararg paths: String, filled: Boolean = false): ImageVector =
-        ImageVector.Builder(name, 24.dp, 24.dp, 24f, 24f).apply {
+    private fun icon(name: String, width: Float, vararg paths: String, filled: Boolean = false, autoMirror: Boolean = false): ImageVector =
+        ImageVector.Builder(name, 24.dp, 24.dp, 24f, 24f, autoMirror = autoMirror).apply {
             paths.forEachIndexed { index, data ->
                 addPath(
                     pathData = PathParser().parsePathString(data).toNodes(),

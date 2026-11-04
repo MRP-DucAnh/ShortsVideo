@@ -10,6 +10,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import com.shorts.flowdrama.ads.*
@@ -53,7 +54,7 @@ fun LibraryScreen(catalog: Catalog, history: List<Progress>, saved: Set<String>,
                 Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 10.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text(libraryString(R.string.library_recent), Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 17.sp)
-                    Text(libraryString(R.string.library_see_all) + " ›", Modifier.clickable(onClick = onHistory), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
+                    Text(libraryString(R.string.library_see_all) + if (LocalLayoutDirection.current == LayoutDirection.Rtl) " ‹" else " ›", Modifier.clickable(onClick = onHistory), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
                 }
             }
             items(recent, key = { it.first.showId }) { (progress, show) ->

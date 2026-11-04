@@ -28,10 +28,11 @@ internal fun OnboardingPage(
     actionEnabled: Boolean = true,
     bottomAlignedContent: Boolean = false,
     saveError: Boolean = false,
+    background: @Composable () -> Unit = { OnboardingBackground() },
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Box(Modifier.fillMaxSize().testTag(tag)) {
-        OnboardingBackground()
+        background()
         Column(
             Modifier.fillMaxSize()
                 .safeDrawingPadding()

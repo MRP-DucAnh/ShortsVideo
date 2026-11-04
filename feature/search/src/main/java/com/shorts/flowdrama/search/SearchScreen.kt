@@ -106,7 +106,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
                     }
                     Text(highlighted, Modifier.weight(1f), color = Sunset.Text2, fontSize = 14.sp,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text("↖", color = Sunset.Text4, fontSize = 15.sp)
+                    Icon(FlowIcons.SuggestionArrow, null, Modifier.size(15.dp), tint = Sunset.Text4)
                 }
             }
             if (ready) {

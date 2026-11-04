@@ -64,7 +64,7 @@ fun FlowTheme(language: String, light: Boolean = false, content: @Composable () 
     CompositionLocalProvider(
         LocalLanguage provides language,
         LocalLayoutDirection provides
-            if (language == "ar") LayoutDirection.Rtl else LayoutDirection.Ltr,
+            if (android.text.TextUtils.getLayoutDirectionFromLocale(java.util.Locale.forLanguageTag(language)) == android.view.View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr,
     ) {
         MaterialTheme(colorScheme = scheme, content = content)
     }
