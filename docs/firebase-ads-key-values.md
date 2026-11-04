@@ -165,6 +165,14 @@ Value:
     "is_tracking_click": true,
     "is_tracking_show": true,
     "ad_id": "ca-app-pub-3940256099942544/9257395921"
+  },
+  {
+    "place_name": "resume_app_open",
+    "ad_type": "app_open",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true,
+    "ad_id": "ca-app-pub-3940256099942544/9257395921"
   }
 ]
 ```

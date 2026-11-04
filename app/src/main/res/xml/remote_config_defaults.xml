@@ -131,6 +131,14 @@
     "is_enable": true,
     "is_tracking_click": true,
     "is_tracking_show": true
+  },
+  {
+    "place_name": "resume_app_open",
+    "ad_id_key": "app_open",
+    "ad_type": "app_open",
+    "is_enable": true,
+    "is_tracking_click": true,
+    "is_tracking_show": true
   }
 ]</value>
     </entry>

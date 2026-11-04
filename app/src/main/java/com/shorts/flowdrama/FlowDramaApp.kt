@@ -15,11 +15,14 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
 import com.shorts.flowdrama.ads.compose.PreloadAdEffect
+import com.shorts.flowdrama.ads.compose.AppOpenAdEffect
 import com.shorts.flowdrama.ads.config.AdPlacements
 import com.shorts.flowdrama.browse.*
 import com.shorts.flowdrama.data.DataStorePreferences
@@ -35,6 +38,9 @@ import com.shorts.flowdrama.search.*
 import com.shorts.flowdrama.settings.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 @Composable
 fun FlowDramaApp(container: AppContainer) {
@@ -76,6 +82,24 @@ fun FlowDramaApp(container: AppContainer) {
         state.catalog?.let { preloadHomeHero(context.applicationContext, it) }
     }
     val activity = context as Activity
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val latestPreferences by rememberUpdatedState(preferences)
+    val latestOnline by rememberUpdatedState(online)
+    var splashAppOpenAttempted by rememberSaveable { mutableStateOf(false) }
+    if (backStack.lastOrNull() == Route(Destination.Splash) && preferences.onboardingDone) {
+        PreloadAdEffect(container.ads, AdPlacements.SplashAppOpen)
+    }
+    if (preferences.onboardingDone) {
+        val screen = (backStack.lastOrNull() as? Route)?.screen
+        AppOpenAdEffect(
+            controller = container.ads,
+            activity = activity,
+            placement = AdPlacements.ResumeAppOpen,
+            enabled = screen != null && screen !in setOf(
+                Destination.Splash, Destination.LanguageOnboard, Destination.Intro, Destination.Player,
+            ) && unlockState.target == null && !pendingPlayerExitAd,
+        )
+    }
     LaunchedEffect(pendingPlayerExitAd) {
         if (pendingPlayerExitAd) {
             pendingPlayerExitAd = false
@@ -121,10 +145,27 @@ fun FlowDramaApp(container: AppContainer) {
     }
     LaunchedEffect(state.ready, state.error, splashMinimumElapsed) {
         if (splashMinimumElapsed && state.ready && backStack.lastOrNull() == Route(Destination.Splash) && !state.error) {
+            // Only show from Splash while foregrounded, never after the main content appears.
+            lifecycle.currentStateFlow.first { it.isAtLeast(Lifecycle.State.RESUMED) }
+            if (backStack.lastOrNull() != Route(Destination.Splash)) return@LaunchedEffect
+            if (!splashAppOpenAttempted) {
+                splashAppOpenAttempted = true
+                if (latestPreferences.onboardingDone && latestOnline) {
+                    suspendCancellableCoroutine<Unit> { continuation ->
+                        container.ads.showAppOpen(activity, AdPlacements.SplashAppOpen) {
+                            if (continuation.isActive) continuation.resume(Unit)
+                        }
+                    }
+                }
+            } else {
+                // An Activity recreation must not show the same startup ad a second time.
+                container.ads.isFullscreenShowing.first { !it }
+            }
+            if (backStack.lastOrNull() != Route(Destination.Splash)) return@LaunchedEffect
             backStack.clear()
             backStack.add(
                 Route(
-                    if (preferences.onboardingDone) Destination.Main
+                    if (latestPreferences.onboardingDone) Destination.Main
                     else Destination.LanguageOnboard
                 )
             )

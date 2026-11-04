@@ -24,16 +24,31 @@ fun PreloadAdEffect(controller: AdsController, placement: String) {
 
 /** Opt-in foreground hook. Caller supplies eligibility (for example, only on its loading screen). */
 @Composable
-fun AppOpenAdEffect(controller: AdsController, activity: Activity, placement: String, enabled: Boolean) {
+fun AppOpenAdEffect(
+    controller: AdsController,
+    activity: Activity,
+    placement: String,
+    enabled: Boolean,
+    minimumBackgroundMillis: Long = 30_000L,
+) {
     PreloadAdEffect(controller, placement)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val eligible by rememberUpdatedState(enabled)
-    DisposableEffect(controller, activity, lifecycle, placement) {
+    DisposableEffect(controller, activity, lifecycle, placement, minimumBackgroundMillis) {
         var returningFromFullscreenAd = false
+        var stoppedAt: Long? = null
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) returningFromFullscreenAd = controller.isFullscreenShowing.value
-            if (event == Lifecycle.Event.ON_START) {
-                if (eligible && !returningFromFullscreenAd) controller.showAppOpen(activity, placement)
+            if (event == Lifecycle.Event.ON_STOP) {
+                stoppedAt = android.os.SystemClock.elapsedRealtime()
+                returningFromFullscreenAd = controller.isFullscreenShowing.value
+            }
+            if (event == Lifecycle.Event.ON_RESUME) {
+                val backgroundDuration = stoppedAt?.let { android.os.SystemClock.elapsedRealtime() - it }
+                stoppedAt = null
+                if (backgroundDuration != null && backgroundDuration >= minimumBackgroundMillis &&
+                    eligible && !returningFromFullscreenAd && !controller.isFullscreenShowing.value) {
+                    controller.showAppOpen(activity, placement)
+                }
                 returningFromFullscreenAd = false
             }
         }

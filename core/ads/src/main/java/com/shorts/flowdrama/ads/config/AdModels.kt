@@ -123,4 +123,5 @@ object AdPlacements {
     const val DetailEpisodeUnlockRewarded = "detail_episode_unlock_rewarded"
     const val DetailEpisodeUnlockRewardedInterstitial = "detail_episode_unlock_rewarded_interstitial"
     const val SplashAppOpen = "splash_app_open"
+    const val ResumeAppOpen = "resume_app_open"
 }

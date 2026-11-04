@@ -32,7 +32,7 @@
     },
     "app_open_ad_places": {
       "defaultValue": {
-        "value": "[\n  {\n    \"place_name\": \"splash_app_open\",\n    \"ad_type\": \"app_open\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"ad_id\": \"ca-app-pub-3940256099942544/9257395921\"\n  }\n]"
+        "value": "[\n  {\n    \"place_name\": \"splash_app_open\",\n    \"ad_type\": \"app_open\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"ad_id\": \"ca-app-pub-3940256099942544/9257395921\"\n  },\n  {\n    \"place_name\": \"resume_app_open\",\n    \"ad_type\": \"app_open\",\n    \"is_enable\": true,\n    \"is_tracking_click\": true,\n    \"is_tracking_show\": true,\n    \"ad_id\": \"ca-app-pub-3940256099942544/9257395921\"\n  }\n]"
       },
       "valueType": "STRING"
     },

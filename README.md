@@ -46,6 +46,8 @@ Module ads Compose hỗ trợ banner, native (19 templates), interstitial, rewar
 
 Firebase Console chưa được chỉnh/publish bởi assistant. Round-trip đổi cấu hình thật vẫn cần xác minh, dù policy đã có unit tests.
 
+Hiện em đang gắn thử một ads native màn home, một inter ads khi back về ở màn Play video, một rewarded ads khi mở khóa tập mới (từ tập 6), và một Banner màn Library
+
 ## Kiểm chứng và AI
 
 Đã dùng Codex để phân tích đề, nghiên cứu android/skills, xây dựng code và kiểm thử. Những quyết định khác thiết kế/đề được ghi trong tài liệu thay vì coi là spec gốc. Thời gian: đợt triển khai đầu trong phiên làm việc ngày 11h sáng 02/11/2026.
