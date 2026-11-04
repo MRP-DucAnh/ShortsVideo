@@ -6,9 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +28,7 @@ fun HistoryScreen(catalog: Catalog, history: List<Progress>?, onBack: () -> Unit
         .sortedByDescending { it.updatedAt }
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Glyph(Icons.AutoMirrored.Outlined.ArrowBack, libraryString(R.string.library_back), onBack)
+            Glyph(FlowIcons.ArrowBack, libraryString(R.string.library_back), onBack)
             Text(libraryString(R.string.library_watch_history), Modifier.weight(1f), fontSize = 19.sp, fontWeight = FontWeight.Bold)
             if (editing) TextButton(onClick = { confirm = true }, enabled = entries.isNotEmpty()) {
                 Text(libraryString(R.string.library_clear), color = Sunset.Text3)

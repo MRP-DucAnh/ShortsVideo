@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -58,7 +55,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Glyph(Icons.AutoMirrored.Outlined.ArrowBack, "Back", onBack)
+            Glyph(FlowIcons.ArrowBack, "Back", onBack)
             BasicTextField(
                 value = query,
                 onValueChange = { query = it },
@@ -73,7 +70,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
                 decorationBox = { field ->
                     Row(Modifier.fillMaxSize().padding(start = 14.dp),
                         verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.Search, null, Modifier.size(18.dp), tint = Sunset.Text3)
+                        Icon(FlowIcons.Search, null, Modifier.size(18.dp), tint = Sunset.Text3)
                         Spacer(Modifier.width(10.dp))
                         Box(Modifier.weight(1f)) {
                             if (query.isEmpty()) Text(tr("Search dramas"), color = Sunset.Text3,
@@ -82,7 +79,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
                         }
                         if (query.isNotEmpty()) {
                             IconButton(onClick = { query = "" }, modifier = Modifier.size(44.dp)) {
-                                Icon(Icons.Outlined.Close, tr("Clear"), Modifier.size(18.dp), tint = Sunset.Text3)
+                                Icon(FlowIcons.Close, tr("Clear"), Modifier.size(18.dp), tint = Sunset.Text3)
                             }
                         } else Spacer(Modifier.width(14.dp))
                     }
@@ -98,7 +95,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Icon(Icons.Outlined.Search, null, Modifier.size(17.dp), tint = Sunset.Text3)
+                    Icon(FlowIcons.Search, null, Modifier.size(17.dp), tint = Sunset.Text3)
                     val highlighted = buildAnnotatedString {
                         append(suggestion)
                         val start = suggestion.indexOf(term, ignoreCase = true)
@@ -115,7 +112,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
             if (ready) {
                 item { SectionTitle("Matches") }
                 if (results.isEmpty()) item {
-                    BlankState("No results", "Try another title or genre.", "Clear", Icons.Outlined.Search) {
+                    BlankState("No results", "Try another title or genre.", "Clear", FlowIcons.Search) {
                         query = ""
                     }
                 }
@@ -140,7 +137,7 @@ fun SearchScreen(catalog: Catalog, onBack: () -> Unit, onShow: (String) -> Unit)
                             Text(subtitle, fontSize = 12.sp, color = Sunset.Text3,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, false))
                         }
-                        Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp), tint = Sunset.Text3)
+                        Icon(FlowIcons.ChevronRight, null, Modifier.size(20.dp), tint = Sunset.Text3)
                     }
                 }
             }

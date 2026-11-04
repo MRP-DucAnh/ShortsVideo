@@ -55,24 +55,7 @@ fun SplashScreen() {
 
 @Composable
 private fun SplashAppMark() {
-    Canvas(Modifier.size(78.dp)) {
-        val rear =
-            Path().apply {
-                moveTo(size.width * .46f, size.height * .27f)
-                lineTo(size.width * .84f, size.height * .50f)
-                lineTo(size.width * .46f, size.height * .73f)
-                close()
-            }
-        val front =
-            Path().apply {
-                moveTo(size.width * .18f, size.height * .31f)
-                lineTo(size.width * .52f, size.height * .50f)
-                lineTo(size.width * .18f, size.height * .69f)
-                close()
-            }
-        drawPath(rear, Sunset.Gradient)
-        drawPath(front, Color.White)
-    }
+    com.shorts.flowdrama.designsystem.AppMark(Modifier.size(78.dp))
 }
 
 @Composable

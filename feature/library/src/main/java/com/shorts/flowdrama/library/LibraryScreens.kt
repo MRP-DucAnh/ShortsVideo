@@ -4,8 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -41,9 +39,9 @@ fun LibraryScreen(catalog: Catalog, history: List<Progress>, saved: Set<String>,
             }
             Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
                 .clip(RoundedCornerShape(12.dp)).background(Sunset.Surface)) {
-                NavigationRow(Icons.Outlined.History, libraryString(R.string.library_history), history.size, onHistory)
+                NavigationRow(FlowIcons.History, libraryString(R.string.library_history), history.size, onHistory)
                 HorizontalDivider(color = Sunset.Border, thickness = 1.dp)
-                NavigationRow(Icons.Outlined.BookmarkBorder, libraryString(R.string.library_saved), saved.size, onSaved)
+                NavigationRow(FlowIcons.Bookmark, libraryString(R.string.library_saved), saved.size, onSaved)
             }
             Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically) {
@@ -75,6 +73,6 @@ private fun NavigationRow(icon: ImageVector, label: String, count: Int, onClick:
         Icon(icon, null, Modifier.size(20.dp), tint = Sunset.Text2)
         Text(label, Modifier.weight(1f), fontSize = 14.sp, maxLines = 1)
         Text(count.toString(), color = Sunset.Text3, fontSize = 13.sp)
-        Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp), tint = Sunset.Text4)
+        Icon(FlowIcons.ChevronRight, null, Modifier.size(20.dp), tint = Sunset.Text4)
     }
 }

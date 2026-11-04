@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.compose.foundation.pager.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -151,10 +149,11 @@ fun ReelsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Glyph(
-                        if (liked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        if (liked) FlowIcons.HeartFilled else FlowIcons.Heart,
                         "Like",
                         { onLike(show.id) },
                         if (liked) Sunset.Accent else Color.White,
+                        size = 29.dp,
                     )
                     val likes = show.likeCount?.takeIf { it > 0 }
                         ?.let { it + if (liked) 1 else 0 }
@@ -173,8 +172,8 @@ fun ReelsScreen(
                     }
                     Spacer(Modifier.height(16.dp))
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Glyph(if (show.id in saved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
-                            if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, Sunset.Text)
+                        Glyph(if (show.id in saved) FlowIcons.BookmarkFilled else FlowIcons.Bookmark,
+                            if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, Sunset.Text, size = 29.dp)
                         Text(tr(if (show.id in saved) "Saved" else "Save"), color = Sunset.Text, fontSize = 12.sp)
                     }
                 }

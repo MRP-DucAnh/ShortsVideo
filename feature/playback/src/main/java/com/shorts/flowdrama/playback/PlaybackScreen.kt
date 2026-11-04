@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -168,7 +165,7 @@ fun PlaybackScreen(
                     }
                 feedback?.let { isPlaying ->
                     Icon(
-                        if (isPlaying) Icons.Outlined.PlayArrow else Icons.Outlined.Pause,
+                        if (isPlaying) FlowIcons.Play else FlowIcons.Pause,
                         null,
                         Modifier.align(Alignment.Center).size(64.dp)
                             .background(Color.Black.copy(alpha = .35f), CircleShape).padding(16.dp),
@@ -189,7 +186,7 @@ fun PlaybackScreen(
                         Modifier.fillMaxWidth().heightIn(min = 56.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Glyph(Icons.AutoMirrored.Outlined.ArrowBack, "Back", onBack, Color.White)
+                        Glyph(FlowIcons.ArrowBack, "Back", onBack, Color.White)
                         Column(Modifier.weight(1f).padding(end = 16.dp)) {
                             Text(
                                 showTitle(show),
@@ -228,10 +225,11 @@ fun PlaybackScreen(
                             }
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Glyph(
-                                    if (liked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                                    if (liked) FlowIcons.HeartFilled else FlowIcons.Heart,
                                     "Like",
                                     { onLikeEpisode(show.id, episode.number) },
                                     if (liked) Sunset.Accent else Color.White,
+                        size = 29.dp,
                                 )
                                 Text(
                                     compactCount(
@@ -264,8 +262,9 @@ fun PlaybackScreen(
                                 }
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Glyph(
-                                        if (saved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
+                                        if (saved) FlowIcons.BookmarkFilled else FlowIcons.Bookmark,
                                         if (saved) "Remove" else "Save", onSave, Color.White,
+                                        size = 29.dp,
                                     )
                                     Text(playbackString(if (saved) R.string.player_saved else R.string.player_save), color = Color.White, fontSize = 11.sp)
                                 }
@@ -287,7 +286,7 @@ fun PlaybackScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(7.dp),
                         ) {
-                            Icon(Icons.Outlined.Menu, null, Modifier.size(16.dp), tint = Color.White)
+                            Icon(FlowIcons.Menu, null, Modifier.size(16.dp), tint = Color.White)
                             Text(playbackString(R.string.player_episodes), color = Color.White, fontSize = 13.sp,
                                 fontWeight = FontWeight.SemiBold, maxLines = 1)
                         }

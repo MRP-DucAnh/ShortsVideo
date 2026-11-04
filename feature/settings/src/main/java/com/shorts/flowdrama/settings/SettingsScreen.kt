@@ -6,8 +6,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
@@ -90,7 +88,7 @@ private fun SettingsRow(
         Text(tr(title), Modifier.weight(1f), fontSize = 14.sp, lineHeight = 18.sp)
         if (value.isNotEmpty()) Text(value, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.widthIn(max = 150.dp))
-        if (selected == true) Icon(Icons.Outlined.Check, null, Modifier.size(18.dp), tint = Sunset.Accent)
+        if (selected == true) Icon(FlowIcons.Check, null, Modifier.size(18.dp), tint = Sunset.Accent)
         if (showChevron) Text(if (LocalLayoutDirection.current == LayoutDirection.Rtl) "‹" else "›",
             fontSize = 20.sp, lineHeight = 20.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

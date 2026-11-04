@@ -3,9 +3,6 @@ package com.shorts.flowdrama.library
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,7 +29,7 @@ fun SavedScreen(catalog: Catalog, saved: Set<String>, onBack: () -> Unit, onShow
     }
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Glyph(Icons.AutoMirrored.Outlined.ArrowBack, libraryString(R.string.library_back), onBack)
+            Glyph(FlowIcons.ArrowBack, libraryString(R.string.library_back), onBack)
             Text(libraryString(R.string.library_saved), Modifier.weight(1f), fontSize = 19.sp, fontWeight = FontWeight.Bold)
             TextButton(onClick = { editing = !editing }, enabled = saved.isNotEmpty()) {
                 Text(libraryString(if (editing) R.string.library_done else R.string.library_edit), color = Sunset.Text3)
@@ -40,7 +37,7 @@ fun SavedScreen(catalog: Catalog, saved: Set<String>, onBack: () -> Unit, onShow
         }
         if (saved.isEmpty()) {
             BlankState(libraryString(R.string.library_saved_empty), libraryString(R.string.library_saved_empty_message),
-                "Find your next flow", androidx.compose.material.icons.Icons.Outlined.FavoriteBorder, onBrowse)
+                "Find your next flow", FlowIcons.Heart, onBrowse)
         } else {
             Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {

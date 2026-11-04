@@ -3,9 +3,6 @@ package com.shorts.flowdrama.detail
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -92,7 +89,7 @@ private fun DetailHero(show: Show, tags: List<Tag>, onBack: () -> Unit) {
             Brush.verticalGradient(listOf(Color.Black.copy(alpha = .55f), Color.Transparent))))
         Box(Modifier.fillMaxWidth().height(170.dp).align(Alignment.BottomCenter).background(
             Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = .88f)))))
-        Glyph(Icons.AutoMirrored.Outlined.ArrowBack, "Back", onBack, Color.White)
+        Glyph(FlowIcons.ArrowBack, "Back", onBack, Color.White)
         Column(Modifier.align(Alignment.BottomStart).fillMaxWidth().padding(16.dp)) {
             Text(showTitle(show), color = Color.White, fontSize = 22.sp, lineHeight = 26.sp,
                 fontWeight = FontWeight.ExtraBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -155,7 +152,7 @@ private fun DetailActions(number: Int, saved: Boolean, enabled: Boolean, onSave:
             .background(Sunset.Gradient).clickable(enabled = enabled, onClick = onContinue)
             .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Outlined.PlayArrow, null, tint = Sunset.OnAccent, modifier = Modifier.size(21.dp))
+            Icon(FlowIcons.Play, null, tint = Sunset.OnAccent, modifier = Modifier.size(21.dp))
             Spacer(Modifier.width(8.dp))
             Text(tr("Continue Ep. %1\$d", number), color = Sunset.OnAccent,
                 fontSize = 14.sp, fontWeight = FontWeight.Bold)
@@ -163,7 +160,7 @@ private fun DetailActions(number: Int, saved: Boolean, enabled: Boolean, onSave:
         IconButton(onClick = onSave, modifier = Modifier.size(54.dp, 48.dp)
             .clip(RoundedCornerShape(999.dp)).background(MaterialTheme.colorScheme.surfaceVariant)
             .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = .4f), RoundedCornerShape(999.dp))) {
-            Icon(if (saved) Icons.Outlined.Bookmark else Icons.Outlined.Add,
+            Icon(if (saved) FlowIcons.BookmarkFilled else FlowIcons.Add,
                 tr(if (saved) "Remove" else "Save"), tint = if (saved) Sunset.Accent else MaterialTheme.colorScheme.onSurface)
         }
     }
@@ -175,7 +172,7 @@ private fun DetailEpisodesHeader(lastNumber: Int, enabled: Boolean, expanded: Bo
         Text(tr("Episodes"), Modifier.weight(1f), fontSize = 17.sp, fontWeight = FontWeight.Bold)
         TextButton(onClick = onExpand, enabled = enabled, modifier = Modifier.testTag("detail:episode-picker")) {
             Text("1–$lastNumber", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Icon(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null,
+            Icon(if (expanded) FlowIcons.ExpandLess else FlowIcons.ExpandMore, null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }

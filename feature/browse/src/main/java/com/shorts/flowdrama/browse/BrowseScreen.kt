@@ -5,8 +5,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -171,7 +169,7 @@ private fun PreviewActions(saved: Boolean, onPlay: () -> Unit, onSave: () -> Uni
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
-            Icon(Icons.Outlined.PlayArrow, null, Modifier.size(20.dp), tint = Sunset.OnAccent)
+            Icon(FlowIcons.Play, null, Modifier.size(20.dp), tint = Sunset.OnAccent)
             Spacer(Modifier.width(8.dp))
             Text(browseString(R.string.browse_play), fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold, color = Sunset.OnAccent,
@@ -184,7 +182,7 @@ private fun PreviewActions(saved: Boolean, onPlay: () -> Unit, onSave: () -> Uni
             Box(Modifier.size(42.dp).background(Color.White.copy(alpha = .12f), RoundedCornerShape(12.dp))
                 .border(1.dp, Color.White.copy(alpha = .18f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center) {
-                Icon(if (saved) Icons.Outlined.Bookmark else Icons.Outlined.Add,
+                Icon(if (saved) FlowIcons.BookmarkFilled else FlowIcons.Add,
                     browseString(if (saved) R.string.browse_remove_saved else R.string.browse_save),
                     Modifier.size(20.dp), tint = Sunset.Text)
             }

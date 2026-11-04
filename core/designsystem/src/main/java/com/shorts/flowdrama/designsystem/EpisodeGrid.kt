@@ -4,8 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
@@ -59,7 +57,7 @@ fun EpisodeGrid(
                 )
                 if (!episode.isFree)
                     Icon(
-                        Icons.Outlined.Lock,
+                        FlowIcons.Lock,
                         tr("Episode locked"),
                         Modifier.align(Alignment.TopEnd).padding(4.dp).size(11.dp),
                         tint = Sunset.Gold,

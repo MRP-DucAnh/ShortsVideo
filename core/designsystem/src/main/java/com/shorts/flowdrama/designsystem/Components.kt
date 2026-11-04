@@ -3,9 +3,6 @@ package com.shorts.flowdrama.designsystem
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -46,9 +43,14 @@ fun Glyph(
     description: String,
     onClick: () -> Unit,
     tint: Color = MaterialTheme.colorScheme.onSurface,
+    size: Dp = when (icon.name) {
+        "ArrowBack" -> 22.dp
+        "Search", "Notifications" -> 21.dp
+        else -> 24.dp
+    },
 ) {
     IconButton(onClick = onClick, modifier = Modifier.size(48.dp)) {
-        Icon(icon, tr(description), tint = tint, modifier = Modifier.size(24.dp))
+        Icon(icon, tr(description), tint = tint, modifier = Modifier.size(size))
     }
 }
 
@@ -62,7 +64,7 @@ fun Heading(
         Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (back != null) Glyph(Icons.AutoMirrored.Outlined.ArrowBack, "Back", back)
+        if (back != null) Glyph(FlowIcons.ArrowBack, "Back", back)
         Text(
             tr(title),
             fontSize = 20.sp,
@@ -73,27 +75,20 @@ fun Heading(
     }
 }
 
+/** The SVG mark is shared by headers and the splash screen. */
+@Composable
+fun AppMark(modifier: Modifier = Modifier) {
+    Image(
+        painter = androidx.compose.ui.res.painterResource(com.shorts.flowdrama.core.designsystem.R.drawable.flow_app_mark),
+        contentDescription = null,
+        modifier = modifier,
+    )
+}
+
 @Composable
 fun Wordmark(modifier: Modifier = Modifier, size: Int = 21) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        androidx.compose.foundation.Canvas(Modifier.size((size + 7).dp)) {
-            val rear =
-                Path().apply {
-                    moveTo(this@Canvas.size.width * .43f, this@Canvas.size.height * .2f)
-                    lineTo(this@Canvas.size.width * .94f, this@Canvas.size.height * .5f)
-                    lineTo(this@Canvas.size.width * .43f, this@Canvas.size.height * .8f)
-                    close()
-                }
-            drawPath(rear, Sunset.Gradient)
-            val front =
-                Path().apply {
-                    moveTo(this@Canvas.size.width * .08f, this@Canvas.size.height * .25f)
-                    lineTo(this@Canvas.size.width * .56f, this@Canvas.size.height * .55f)
-                    lineTo(this@Canvas.size.width * .08f, this@Canvas.size.height * .85f)
-                    close()
-                }
-            drawPath(front, Color.White)
-        }
+        AppMark(Modifier.size((size + 7).dp))
         Spacer(Modifier.width(7.dp))
         Text(
             "FLOW",
@@ -195,7 +190,7 @@ fun ShowRow(
             Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (trailing != null) trailing()
-        else Icon(Icons.Outlined.ChevronRight, null, tint = Sunset.Text3)
+        else Icon(FlowIcons.ChevronRight, null, tint = Sunset.Text3)
     }
 }
 
@@ -204,7 +199,7 @@ fun BlankState(
     title: String,
     message: String,
     action: String,
-    icon: ImageVector = Icons.Outlined.BookmarkBorder,
+    icon: ImageVector = FlowIcons.Bookmark,
     onClick: () -> Unit,
 ) {
     Column(

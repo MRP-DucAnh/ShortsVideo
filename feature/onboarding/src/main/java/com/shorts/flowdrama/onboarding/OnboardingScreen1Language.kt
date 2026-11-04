@@ -4,8 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -155,7 +153,7 @@ private fun SettingsLanguageContent(
     Column(Modifier.fillMaxSize().safeDrawingPadding()) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Outlined.ArrowBack, onboardingString(R.string.ob_back))
+                Icon(FlowIcons.ArrowBack, onboardingString(R.string.ob_back))
             }
             Text(
                 onboardingString(R.string.ob_settings_language_title),

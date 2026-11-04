@@ -2,8 +2,6 @@ package com.shorts.flowdrama
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
@@ -29,11 +27,11 @@ private data class Tab(val name: String, val icon: ImageVector)
 
 private val tabs =
     listOf(
-        Tab("Home", Icons.Outlined.Home),
-        Tab("Reels", Icons.Outlined.SmartDisplay),
-        Tab("Browse", Icons.Outlined.GridView),
-        Tab("Library", Icons.Outlined.BookmarkBorder),
-        Tab("Settings", Icons.Outlined.Settings),
+        Tab("Home", FlowIcons.Home),
+        Tab("Reels", FlowIcons.Reels),
+        Tab("Browse", FlowIcons.Browse),
+        Tab("Library", FlowIcons.Bookmark),
+        Tab("Settings", FlowIcons.Settings),
     )
 
 @Composable
@@ -62,7 +60,7 @@ internal fun MainTabs(
                     NavigationBarItem(
                         selected = selected == index,
                         onClick = { selected = index },
-                        icon = { Icon(tab.icon, tr(tab.name)) },
+                        icon = { Icon(tab.icon, tr(tab.name), Modifier.size(23.dp)) },
                         label = { Text(tr(tab.name)) },
                         colors =
                             NavigationBarItemDefaults.colors(

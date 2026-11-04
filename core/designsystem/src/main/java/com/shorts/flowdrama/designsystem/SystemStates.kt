@@ -5,8 +5,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -63,7 +61,7 @@ fun NetworkErrorState(onRetry: () -> Unit) {
     Column(Modifier.fillMaxSize().testTag("SCR-0603").padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Surface(shape = androidx.compose.foundation.shape.CircleShape, color = MaterialTheme.colorScheme.surfaceVariant) {
-            Icon(Icons.Outlined.WifiOff, null, Modifier.padding(24.dp).size(40.dp), tint = Sunset.Text3)
+            Icon(FlowIcons.WifiOff, null, Modifier.padding(24.dp).size(40.dp), tint = Sunset.Text3)
         }
         Spacer(Modifier.height(24.dp))
         Text(tr("You're offline"), fontSize = 22.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)

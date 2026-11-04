@@ -1,9 +1,6 @@
 package com.shorts.flowdrama.home
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,7 +41,7 @@ internal fun HomeTopBar(onSearch: () -> Unit, onNotifications: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Wordmark(Modifier.weight(1f))
-        Glyph(Icons.Outlined.Search, homeString(R.string.home_search), onSearch)
-        Glyph(Icons.Outlined.NotificationsNone, homeString(R.string.home_notifications), onNotifications)
+        Glyph(FlowIcons.Search, homeString(R.string.home_search), onSearch)
+        Glyph(FlowIcons.Notifications, homeString(R.string.home_notifications), onNotifications)
     }
 }

@@ -4,8 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -84,18 +82,18 @@ internal fun LibraryShowRow(
             var expanded by remember { mutableStateOf(false) }
             if (editing) {
                 IconButton(onClick = onRemove, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Outlined.Close, libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove), tint = Sunset.Text3)
+                    Icon(FlowIcons.Close, libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove), tint = Sunset.Text3)
                 }
             } else Box {
                 IconButton(onClick = { expanded = true }, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Outlined.MoreHoriz, libraryString(com.shorts.flowdrama.feature.library.R.string.library_more), tint = Sunset.Text3)
+                    Icon(FlowIcons.MoreHoriz, libraryString(com.shorts.flowdrama.feature.library.R.string.library_more), tint = Sunset.Text3)
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(text = { Text(libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove)) },
                         onClick = { expanded = false; onRemove() })
                 }
             }
-        } else Icon(Icons.Outlined.ChevronRight, null, Modifier.size(24.dp), tint = Sunset.Text3)
+        } else Icon(FlowIcons.ChevronRight, null, Modifier.size(24.dp), tint = Sunset.Text3)
     }
 }
 
