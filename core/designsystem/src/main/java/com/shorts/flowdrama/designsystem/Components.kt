@@ -77,9 +77,12 @@ fun Heading(
 
 /** The SVG mark is shared by headers and the splash screen. */
 @Composable
-fun AppMark(modifier: Modifier = Modifier) {
+fun AppMark(modifier: Modifier = Modifier, lightSurface: Boolean = false) {
     Image(
-        painter = androidx.compose.ui.res.painterResource(com.shorts.flowdrama.core.designsystem.R.drawable.flow_app_mark),
+        painter = androidx.compose.ui.res.painterResource(
+            if (lightSurface) com.shorts.flowdrama.core.designsystem.R.drawable.flow_app_mark_light
+            else com.shorts.flowdrama.core.designsystem.R.drawable.flow_app_mark,
+        ),
         contentDescription = null,
         modifier = modifier,
     )
@@ -88,15 +91,19 @@ fun AppMark(modifier: Modifier = Modifier) {
 @Composable
 fun Wordmark(modifier: Modifier = Modifier, size: Int = 21) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        AppMark(Modifier.size((size + 7).dp))
+        AppMark(
+            Modifier.size((size + 7).dp),
+            lightSurface = MaterialTheme.colorScheme.background.luminance() > .5f,
+        )
         Spacer(Modifier.width(7.dp))
         Text(
             "FLOW",
             fontSize = size.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             letterSpacing = 2.sp,
         )
+        Spacer(Modifier.width(5.dp))
         Text(
             "DRAMA",
             style =

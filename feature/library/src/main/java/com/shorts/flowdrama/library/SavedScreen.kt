@@ -32,7 +32,7 @@ fun SavedScreen(catalog: Catalog, saved: Set<String>, onBack: () -> Unit, onShow
             Glyph(FlowIcons.ArrowBack, libraryString(R.string.library_back), onBack)
             Text(libraryString(R.string.library_saved), Modifier.weight(1f), fontSize = 19.sp, fontWeight = FontWeight.Bold)
             TextButton(onClick = { editing = !editing }, enabled = saved.isNotEmpty()) {
-                Text(libraryString(if (editing) R.string.library_done else R.string.library_edit), color = Sunset.Text3)
+                Text(libraryString(if (editing) R.string.library_done else R.string.library_edit), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         if (saved.isEmpty()) {
@@ -50,7 +50,7 @@ fun SavedScreen(catalog: Catalog, saved: Set<String>, onBack: () -> Unit, onShow
                     TagChip(label, filter == status) { filter = status }
                 }
             }
-            if (shows.isEmpty()) Text(libraryString(R.string.library_no_results), Modifier.padding(16.dp), color = Sunset.Text3)
+            if (shows.isEmpty()) Text(libraryString(R.string.library_no_results), Modifier.padding(16.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
             LazyColumn {
                 items(shows, key = { it.id }) { show ->
                     LibraryShowRow(show, libraryMetadata(show, catalog), { onShow(show.id) },
@@ -67,7 +67,7 @@ internal fun LibraryEmpty(title: String, message: String, onBrowse: () -> Unit) 
         verticalArrangement = Arrangement.Center) {
         Text(title, fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(12.dp))
-        Text(message, color = Sunset.Text3)
+        Text(message, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(24.dp))
         Button(onClick = onBrowse) { Text(libraryString(R.string.library_browse)) }
     }

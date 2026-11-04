@@ -71,7 +71,7 @@ fun BrowseScreen(
     val source = preview?.let {
         PlaybackSourceResolver().resolve(it, preferences.language, catalog.defaultLanguage, "Auto")
     }
-    Column(Modifier.fillMaxSize().background(Sunset.Background)) {
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         if (selected != null) {
             PreviewDock(
                 selected, catalog, source?.url?.takeIf { previewAllowed }, previewAllowed,
@@ -84,7 +84,7 @@ fun BrowseScreen(
             browseString(R.string.browse_poster_hint).uppercase(Locale.forLanguageTag(LocalLanguage.current)),
             Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 8.dp),
             fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = .66.sp,
-            color = Sunset.Text3,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         PosterGrid(filtered, selectedId, { selectedId = it }, Modifier.weight(.47f))
     }
@@ -104,7 +104,7 @@ private fun PreviewDock(
     Box(modifier.background(artwork(show.id))) {
         LoadingImage(show.posterUrl, null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
         if (previewUrl != null) {
-            VideoSurface(previewUrl, true, Modifier.fillMaxSize(), muted = true, loop = true)
+            VideoSurface(previewUrl, true, Modifier.fillMaxSize(), muted = true, loop = true, backgroundColor = MaterialTheme.colorScheme.background)
         }
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(
             0f to Sunset.Background.copy(alpha = .35f),
@@ -119,19 +119,19 @@ private fun PreviewDock(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(browseString(R.string.browse_title), fontSize = 19.sp,
-                fontWeight = FontWeight.ExtraBold, color = Sunset.Text)
+                fontWeight = FontWeight.ExtraBold, color = Color.White)
             Text(
                 browseString(if (previewAllowed) R.string.browse_preview_auto else R.string.browse_preview_wifi),
                 Modifier.background(Color.White.copy(alpha = .14f), RoundedCornerShape(6.dp))
-                    .border(1.dp, Color.White.copy(alpha = .20f), RoundedCornerShape(6.dp))
+                    .border(1.dp, Color.White.copy(alpha = .2f), RoundedCornerShape(6.dp))
                     .padding(horizontal = 9.dp, vertical = 4.dp),
                 fontSize = 10.sp, fontWeight = FontWeight.ExtraBold,
-                letterSpacing = .6.sp, color = Sunset.Text,
+                letterSpacing = .6.sp, color = Color.White,
             )
         }
         Column(Modifier.align(Alignment.BottomStart).padding(start = 16.dp, end = 16.dp, bottom = 14.dp)) {
             Text(showTitle(show), fontSize = 19.sp, fontWeight = FontWeight.ExtraBold,
-                color = Sunset.Text, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(
                 showMetadata(show, catalog), Modifier.padding(top = 3.dp),
                 fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Sunset.Text2,
@@ -184,7 +184,7 @@ private fun PreviewActions(saved: Boolean, onPlay: () -> Unit, onSave: () -> Uni
                 contentAlignment = Alignment.Center) {
                 Icon(if (saved) FlowIcons.BookmarkFilled else FlowIcons.Add,
                     browseString(if (saved) R.string.browse_remove_saved else R.string.browse_save),
-                    Modifier.size(20.dp), tint = Sunset.Text)
+                    Modifier.size(20.dp), tint = Color.White)
             }
         }
     }
@@ -209,10 +209,10 @@ private fun BrowseFilters(catalog: Catalog, filter: String, onFilter: (String) -
 @Composable
 private fun BrowseChip(label: String, selected: Boolean, onClick: () -> Unit) {
     val shape = RoundedCornerShape(999.dp)
-    Text(label, Modifier.clip(shape).background(if (selected) Sunset.Surface3 else Color.Transparent)
-        .then(if (selected) Modifier else Modifier.border(1.dp, Sunset.Border, shape))
+    Text(label, Modifier.clip(shape).background(if (selected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
+        .then(if (selected) Modifier else Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape))
         .clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 6.dp),
-        color = if (selected) Sunset.Text else Sunset.Text2,
+        color = if (selected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 11.5.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold)
 }
 
@@ -225,8 +225,7 @@ private fun PosterGrid(shows: List<Show>, selectedId: String, onSelect: (String)
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {
         items(shows, key = { it.id }, contentType = { "poster" }) { show ->
-            Poster(show, Modifier.fillMaxWidth().aspectRatio(2f / 3f)
-                .alpha(if (show.id == selectedId) 1f else .72f), selected = show.id == selectedId) {
+            Poster(show, Modifier.fillMaxWidth().aspectRatio(2f / 3f), selected = show.id == selectedId) {
                 onSelect(show.id)
             }
         }

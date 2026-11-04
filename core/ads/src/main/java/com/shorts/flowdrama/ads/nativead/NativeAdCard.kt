@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
@@ -16,7 +19,8 @@ import com.shorts.flowdrama.ads.config.*
 /** Keep this item in the feed while loading/failing so its measured height stays stable. */
 @Composable
 fun NativeAdCard(state: NativeAdState, attribution: String, modifier: Modifier = Modifier) {
-    val place = state.placement ?: return
+    val configuredPlace = state.placement ?: return
+    val place = configuredPlace.copy(style = themedNativeAdStyle(configuredPlace.style))
     if (!state.enabled) return
     Box(modifier.fillMaxWidth().height((place.template.heightDp + 32).dp)
         .clipToBounds().background(Color(android.graphics.Color.parseColor(place.style.fullBackground)))
@@ -48,12 +52,29 @@ private fun NativePlaceholder(place: AdPlacement) {
 @Composable
 fun NativeAdPreview(template: NativeTemplate, attribution: String, modifier: Modifier = Modifier,
     style: NativeAdStyle = NativeAdStyle(), creative: NativePreviewCreative = NativePreviewCreative()) {
-    val place = remember(template, style) { AdPlacement("preview", AdFormat.Native, template = template, style = style) }
-    key(template, style, creative, attribution) {
+    val themedStyle = themedNativeAdStyle(style)
+    val place = remember(template, themedStyle) { AdPlacement("preview", AdFormat.Native, template = template, style = themedStyle) }
+    key(template, themedStyle, creative, attribution) {
         AndroidView(
             modifier = modifier.fillMaxWidth().height(template.heightDp.dp).clipToBounds(),
             factory = { nativeTemplateView(it, place, null, attribution, creative) },
             onRelease = { it.destroy() },
         )
     }
+}
+
+/** Native Android views must receive Compose's active palette explicitly. */
+@Composable
+private fun themedNativeAdStyle(style: NativeAdStyle): NativeAdStyle {
+    val colors = MaterialTheme.colorScheme
+    if (colors.background.luminance() < .5f) return style
+    fun Color.hex() = "#%08X".format(java.util.Locale.ROOT, toArgb())
+    return style.copy(
+        background = colors.surface.hex(),
+        headline = colors.onSurface.hex(),
+        body = colors.onSurfaceVariant.hex(),
+        border = colors.outline.hex(),
+        fullBackground = colors.background.hex(),
+        mediaBackground = colors.surfaceVariant.hex(),
+    )
 }

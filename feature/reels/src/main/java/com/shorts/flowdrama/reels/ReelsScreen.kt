@@ -67,7 +67,7 @@ fun ReelsScreen(
         else if (online) metadataOfflineVisible = false
     }
     val showOffline = playerOffline || missingMetadataOffline || metadataOfflineVisible
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         VerticalPager(
             state = pager,
             userScrollEnabled = !showOffline,
@@ -81,7 +81,7 @@ fun ReelsScreen(
                     .resolve(it, preferences.language, catalog.defaultLanguage, preferences.quality)
             }
             val liked = show.id in likedShows
-            Box(Modifier.fillMaxSize().background(Color.Black)) {
+            Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                 LoadingImage(
                     show.posterUrl,
                     null,
@@ -113,6 +113,7 @@ fun ReelsScreen(
                         showOfflineOverlay = false,
                         onOfflineChanged = { playerOffline = it },
                         onPlayer = { currentPlayer = it },
+                        backgroundColor = MaterialTheme.colorScheme.background,
                     )
                 if (index == pager.settledPage && source == null) {
                     when {
@@ -126,18 +127,20 @@ fun ReelsScreen(
                     Modifier.fillMaxWidth()
                         .height(260.dp)
                         .align(Alignment.BottomCenter)
-                        .background(Sunset.Scrim)
+                        .background(androidx.compose.ui.graphics.Brush.verticalGradient(
+                            listOf(Color.Transparent, MaterialTheme.colorScheme.background.copy(alpha = .65f), MaterialTheme.colorScheme.background)
+                        ))
                 )
                 Column(Modifier.align(Alignment.BottomStart).padding(16.dp).fillMaxWidth(.80f)) {
                     Text(
                         episode?.displayTitle(showTitle(show)) ?: showTitle(show),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                     Text(
                         LocalizedTextResolver().resolve(show.hook, preferences.language),
-                        color = Sunset.Text2,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 13.sp,
                         maxLines = 2,
                     )
@@ -145,21 +148,25 @@ fun ReelsScreen(
                     ActionButton(tr("Watch all %1\$d episodes", show.episodeCount), { onShow(show.id) })
                 }
                 Column(
-                    Modifier.align(Alignment.BottomEnd).padding(end = 8.dp, bottom = 120.dp),
+                    Modifier.align(Alignment.BottomEnd).padding(end = 8.dp, bottom = 120.dp)
+                        .background(
+                            if (preferences.lightTheme) MaterialTheme.colorScheme.surface.copy(alpha = .9f) else Color.Transparent,
+                            androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Glyph(
                         if (liked) FlowIcons.HeartFilled else FlowIcons.Heart,
                         "Like",
                         { onLike(show.id) },
-                        if (liked) Sunset.Accent else Color.White,
+                        if (liked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                         size = 29.dp,
                     )
                     val likes = show.likeCount?.takeIf { it > 0 }
                         ?.let { it + if (liked) 1 else 0 }
                         ?: episodeLikes[show.id]?.takeIf { it > 0 }
                     if (likes != null) {
-                        Text(formatLikes(likes, preferences.language), color = Sunset.Text,
+                        Text(formatLikes(likes, preferences.language), color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                     Spacer(Modifier.height(16.dp))
@@ -167,14 +174,14 @@ fun ReelsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         val speed = if (preferences.speed % 1f == 0f) preferences.speed.toInt().toString()
                             else preferences.speed.toString()
-                        Text("${speed}×", color = Sunset.Text, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
-                        Text(tr("Speed"), color = Sunset.Text, fontSize = 12.sp)
+                        Text("${speed}×", color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
+                        Text(tr("Speed"), color = MaterialTheme.colorScheme.onSurface, fontSize = 12.sp)
                     }
                     Spacer(Modifier.height(16.dp))
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Glyph(if (show.id in saved) FlowIcons.BookmarkFilled else FlowIcons.Bookmark,
-                            if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, Sunset.Text, size = 29.dp)
-                        Text(tr(if (show.id in saved) "Saved" else "Save"), color = Sunset.Text, fontSize = 12.sp)
+                            if (show.id in saved) "Remove" else "Save", { onSave(show.id) }, MaterialTheme.colorScheme.onSurface, size = 29.dp)
+                        Text(tr(if (show.id in saved) "Saved" else "Save"), color = MaterialTheme.colorScheme.onSurface, fontSize = 12.sp)
                     }
                 }
             }

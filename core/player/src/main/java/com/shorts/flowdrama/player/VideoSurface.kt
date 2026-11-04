@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -67,6 +68,7 @@ fun VideoSurface(
     onVideoTap: (() -> Unit)? = null,
     showOfflineOverlay: Boolean = true,
     onOfflineChanged: (Boolean) -> Unit = {},
+    backgroundColor: Color = Color.Black,
 ) {
     val observedOnline by rememberOnline()
     var online by remember { mutableStateOf(true) }
@@ -247,7 +249,7 @@ fun VideoSurface(
         }
         slow = false
     }
-    Box(modifier.background(Color.Black)) {
+    Box(modifier.background(backgroundColor)) {
         AndroidView(
             factory = {
                 PlayerView(it).apply {
@@ -257,6 +259,8 @@ fun VideoSurface(
             },
             update = {
                 it.player = player
+                it.setBackgroundColor(backgroundColor.toArgb())
+                it.setShutterBackgroundColor(backgroundColor.toArgb())
                 it.keepScreenOn = active
             },
             modifier = Modifier.fillMaxSize(),

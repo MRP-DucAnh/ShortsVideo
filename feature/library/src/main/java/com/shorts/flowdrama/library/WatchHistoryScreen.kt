@@ -31,21 +31,21 @@ fun HistoryScreen(catalog: Catalog, history: List<Progress>?, onBack: () -> Unit
             Glyph(FlowIcons.ArrowBack, libraryString(R.string.library_back), onBack)
             Text(libraryString(R.string.library_watch_history), Modifier.weight(1f), fontSize = 19.sp, fontWeight = FontWeight.Bold)
             if (editing) TextButton(onClick = { confirm = true }, enabled = entries.isNotEmpty()) {
-                Text(libraryString(R.string.library_clear), color = Sunset.Text3)
+                Text(libraryString(R.string.library_clear), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             TextButton(onClick = { editing = !editing }, enabled = entries.isNotEmpty()) {
-                Text(libraryString(if (editing) R.string.library_done else R.string.library_edit), color = Sunset.Text3)
+                Text(libraryString(if (editing) R.string.library_done else R.string.library_edit), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(999.dp)).background(Sunset.Surface2).padding(3.dp)) {
+            .clip(RoundedCornerShape(999.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(3.dp)) {
             listOf(R.string.library_watching, R.string.library_finished).forEachIndexed { index, id ->
                 val selected = finished == (index == 1)
                 Text(libraryString(id), Modifier.weight(1f).clip(RoundedCornerShape(999.dp))
-                    .background(if (selected) Sunset.Surface3 else androidx.compose.ui.graphics.Color.Transparent)
+                    .background(if (selected) MaterialTheme.colorScheme.surfaceVariant else androidx.compose.ui.graphics.Color.Transparent)
                     .clickable { finished = index == 1 }.padding(horizontal = 8.dp, vertical = 8.dp),
                     textAlign = TextAlign.Center, maxLines = 1,
-                    color = if (selected) Sunset.Text else Sunset.Text3,
+                    color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
             }
         }

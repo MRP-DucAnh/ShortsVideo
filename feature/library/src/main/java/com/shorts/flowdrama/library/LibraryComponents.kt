@@ -69,11 +69,11 @@ internal fun LibraryShowRow(
             Text(showTitle(show), fontSize = 14.sp, fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(4.dp))
-            Text(subtitle, fontSize = 12.sp, color = Sunset.Text3,
+            Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (detailProgress && progress != null) {
                 Spacer(Modifier.height(7.dp))
-                Box(Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(99.dp)).background(Sunset.Surface3)) {
+                Box(Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(99.dp)).background(MaterialTheme.colorScheme.surfaceVariant)) {
                     Box(Modifier.fillMaxWidth(displayedProgress).fillMaxHeight().background(Sunset.Accent))
                 }
             }
@@ -82,18 +82,18 @@ internal fun LibraryShowRow(
             var expanded by remember { mutableStateOf(false) }
             if (editing) {
                 IconButton(onClick = onRemove, modifier = Modifier.size(48.dp)) {
-                    Icon(FlowIcons.Close, libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove), tint = Sunset.Text3)
+                    Icon(FlowIcons.Close, libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else Box {
                 IconButton(onClick = { expanded = true }, modifier = Modifier.size(48.dp)) {
-                    Icon(FlowIcons.MoreHoriz, libraryString(com.shorts.flowdrama.feature.library.R.string.library_more), tint = Sunset.Text3)
+                    Icon(FlowIcons.MoreHoriz, libraryString(com.shorts.flowdrama.feature.library.R.string.library_more), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(text = { Text(libraryString(com.shorts.flowdrama.feature.library.R.string.library_remove)) },
                         onClick = { expanded = false; onRemove() })
                 }
             }
-        } else Icon(FlowIcons.ChevronRight, null, Modifier.size(24.dp), tint = Sunset.Text3)
+        } else Icon(FlowIcons.ChevronRight, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
