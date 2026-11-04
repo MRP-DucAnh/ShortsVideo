@@ -1,3 +1,5 @@
+> Nhánh `dev` từ 04/11/2026 đã gỡ source và dependency unit/instrumentation test để phục vụ build ứng dụng. Các kết quả và lệnh test bên dưới là ghi nhận lịch sử, không còn chạy được trực tiếp trên nhánh này. Build APK bằng `./gradlew :app:assembleDebug`.
+
 # Kết quả kiểm chứng — 02/11/2026
 
 | Kiểm tra | Kết quả |

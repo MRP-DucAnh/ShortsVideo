@@ -14,7 +14,6 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     // Language is selected in-app, so every installation needs all translations.
     bundle {
@@ -66,13 +65,5 @@ dependencies {
     implementation(libs.serialization.core)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-    testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.coil.compose)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.test.espresso.api37)
-    androidTestImplementation(libs.test.runner.api37)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

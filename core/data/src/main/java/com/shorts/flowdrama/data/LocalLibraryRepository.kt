@@ -2,8 +2,6 @@ package com.shorts.flowdrama.data
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.shorts.flowdrama.domain.LibraryRepository
 import com.shorts.flowdrama.domain.EpisodeKey
 import com.shorts.flowdrama.domain.Progress
@@ -117,22 +115,15 @@ internal interface LibraryDao {
     suspend fun removeEpisodeHistory(showId: String, episodeNumber: Int)
 }
 
-@Database(entities = [SavedShow::class, EpisodeProgressEntity::class, LikedShow::class, LikedEpisode::class], version = 2, exportSchema = false)
+@Database(entities = [SavedShow::class, EpisodeProgressEntity::class, LikedShow::class, LikedEpisode::class], version = 1, exportSchema = false)
 internal abstract class LibraryDatabase : RoomDatabase() {
     abstract fun libraryDao(): LibraryDao
 }
 
-internal val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS liked_shows (showId TEXT NOT NULL, PRIMARY KEY(showId))")
-        db.execSQL("CREATE TABLE IF NOT EXISTS liked_episodes (showId TEXT NOT NULL, episodeNumber INTEGER NOT NULL, PRIMARY KEY(showId, episodeNumber))")
-    }
-}
-
 /** Stores watch progress per episode; history exposes only the latest episode per show. */
 class LocalLibraryRepository(context: Context, scope: CoroutineScope) : LibraryRepository {
-    // A new database intentionally starts with an empty library; the legacy library.db is untouched.
-    private val database = Room.databaseBuilder(context.applicationContext, LibraryDatabase::class.java, "library_room.db").addMigrations(MIGRATION_1_2).build()
+    // All current entities form the initial schema for fresh installations.
+    private val database = Room.databaseBuilder(context.applicationContext, LibraryDatabase::class.java, "library_room.db").build()
     private val dao = database.libraryDao()
     private val toggleMutex = Mutex()
     override val savedIds: StateFlow<Set<String>> = dao.observeSaved().map { it.toSet() }

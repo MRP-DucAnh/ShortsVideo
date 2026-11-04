@@ -8,7 +8,6 @@ android {
     compileSdk = 37
     defaultConfig {
         minSdk = 24
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -24,7 +23,4 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.test.runner.api37)
-    androidTestImplementation(libs.coroutines.android)
 }

@@ -26,6 +26,4 @@ dependencies {
     implementation(libs.google.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.config)
-    testImplementation(libs.junit)
-    testImplementation("org.json:json:20240303")
 }
