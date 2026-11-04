@@ -9,6 +9,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation3.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shorts.flowdrama.browse.*
@@ -61,7 +62,14 @@ internal fun MainTabs(
                         selected = selected == index,
                         onClick = { selected = index },
                         icon = { Icon(tab.icon, tr(tab.name), Modifier.size(23.dp)) },
-                        label = { Text(tr(tab.name)) },
+                        label = {
+                            Text(
+                                tr(tab.name),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        },
                         colors =
                             NavigationBarItemDefaults.colors(
                                 selectedIconColor = Sunset.Accent,

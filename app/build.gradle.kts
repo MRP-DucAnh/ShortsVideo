@@ -1,3 +1,10 @@
+import com.android.build.api.artifact.SingleArtifact
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import org.gradle.api.provider.ValueSource
+import org.gradle.api.provider.ValueSourceParameters
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -66,4 +73,44 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+// ValueSource is rechecked when reusing the configuration cache, including across midnight.
+abstract class BuildDateSource : ValueSource<String, ValueSourceParameters.None> {
+    override fun obtain(): String = LocalDate.now(ZoneId.of("Asia/Ho_Chi_Minh"))
+        .format(DateTimeFormatter.BASIC_ISO_DATE)
+}
+
+@CacheableTask
+abstract class NameBundle : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val inputBundle: RegularFileProperty
+
+    @get:OutputFile
+    abstract val outputBundle: RegularFileProperty
+
+    @TaskAction
+    fun copyBundle() {
+        val target = outputBundle.get().asFile
+        target.parentFile.mkdirs()
+        inputBundle.get().asFile.copyTo(target, overwrite = true)
+    }
+}
+
+val artifactBuildDate = providers.of(BuildDateSource::class) {}.get()
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        val mainOutput = variant.outputs.first()
+        val artifactName = "FlowDrama-v${mainOutput.versionName.get()}-b${mainOutput.versionCode.get()}-${variant.name}-$artifactBuildDate"
+        variant.outputs.forEach { output ->
+            val split = output.filters.joinToString("-") { it.identifier }
+            output.outputFileName.set("$artifactName${if (split.isEmpty()) "" else "-$split"}.apk")
+        }
+        val nameBundle = tasks.register<NameBundle>("name${variant.name.replaceFirstChar { it.uppercaseChar() }}Bundle")
+        variant.artifacts.use(nameBundle)
+            .wiredWithFiles(NameBundle::inputBundle, NameBundle::outputBundle)
+            .withName("$artifactName.aab")
+            .toTransform(SingleArtifact.BUNDLE)
+    }
 }

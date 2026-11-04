@@ -10,17 +10,23 @@ Mở project bằng Android Studio với SDK 37 và JDK phù hợp Gradle wrappe
 # Nếu terminal chưa có Java, trỏ JAVA_HOME đến JBR Android Studio của máy.
 $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
 .\gradlew.bat :app:assembleDebug
-.\gradlew.bat :core:domain:test
-.\gradlew.bat :app:assembleDebugAndroidTest
+.\gradlew.bat :app:assembleRelease
+.\gradlew.bat :app:bundleRelease
 ```
 
-APK debug: `app/build/outputs/apk/debug/app-debug.apk`. Không có ad unit production. Metadata fixtures được bundle nên lần mở đầu không phụ thuộc mạng; video vẫn cần Internet nếu chưa cache.
+Tên APK/AAB: `FlowDrama-v<versionName>-b<versionCode>-<variant>-<yyyyMMdd>.<apk|aab>`, ví dụ `FlowDrama-v1.0.0-b1-release-20261104.aab`. Ngày build dùng múi giờ `Asia/Ho_Chi_Minh`, tự cập nhật khi build qua ngày mới kể cả khi dùng Gradle configuration cache. Tên và mã phiên bản lấy từ cấu hình variant. APK nằm trong `app/build/outputs/apk/<variant>/`; AAB nằm trong `app/build/outputs/bundle/<variant>/`. APK split nếu có sẽ kèm mã split để tránh trùng tên.
+
+APK debug dùng cùng quy tắc tên trên. Không có ad unit production. Metadata fixtures được bundle nên lần mở đầu không phụ thuộc mạng; video vẫn cần Internet nếu chưa cache.
 
 ## Cấu trúc và mức hoàn thiện
 
 - `app`: composition root, ViewModel ứng dụng và Navigation 3.
 - `core/{domain,data,designsystem,player,ads}`: domain thuần Kotlin và các adapter Android độc lập.
 - `feature/{onboarding,home,search,browse,reels,detail,playback,library,settings}`: các luồng UI.
+
+Chưa hoàn thiện:
+- chưa xử lý noti vì chưa nắm rõ ý đồ
+- chưa có state cập nhật video mới ở màn Library
 
 Xem [kiến trúc](docs/architecture.md), [ma trận đầy đủ 23 mục UI](docs/screen-matrix.md), [ads và cách test Remote Config](docs/ads-and-remote-config.md), [thư viện/giấy phép](docs/licenses.md).
 
@@ -42,6 +48,5 @@ Firebase Console chưa được chỉnh/publish bởi assistant. Round-trip đ�
 
 ## Kiểm chứng và AI
 
-Đã dùng Codex để phân tích đề, nghiên cứu android/skills, xây dựng code và kiểm thử. Những quyết định khác thiết kế/đề được ghi trong tài liệu thay vì coi là spec gốc. Thời gian: đợt triển khai đầu trong phiên làm việc ngày 02/11/2026; chưa có số liệu tổng giờ phát triển đáng tin cậy.
+Đã dùng Codex để phân tích đề, nghiên cứu android/skills, xây dựng code và kiểm thử. Những quyết định khác thiết kế/đề được ghi trong tài liệu thay vì coi là spec gốc. Thời gian: đợt triển khai đầu trong phiên làm việc ngày 11h sáng 02/11/2026.
 
-Unit tests tập trung kill switch, exact version, fallback ngôn ngữ/quality, Long và Day Cycle. Instrumentation tests có fixtures edge cases và journey onboarding/discovery/library/settings; test player riêng yêu cầu Internet và onboarding đã hoàn tất. Kết quả chạy thực tế được cập nhật ở [validation](docs/validation.md).
