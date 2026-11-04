@@ -15,6 +15,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontWeight
@@ -66,9 +67,13 @@ fun PlaybackScreen(
             feedback = null
         }
     }
+    val context = LocalContext.current
+    val audioPreferences = remember(context) { PlaybackAudioPreferences(context) }
+    var audioLanguage by remember(audioPreferences) { mutableStateOf(audioPreferences.language) }
+    val videoLanguage = audioLanguage ?: defaultLanguage
     val episode = state.current
     val source = episode?.let {
-        PlaybackSourceResolver().resolve(it, preferences.language, defaultLanguage, preferences.quality)
+        PlaybackSourceResolver().resolve(it, videoLanguage, defaultLanguage, preferences.quality)
     }
     val selectedIndex = state.episodes.indexOfFirst { it.number == episode?.number }
     val pager = rememberPagerState(initialPage = selectedIndex.coerceAtLeast(0), pageCount = { state.episodes.size })
@@ -106,7 +111,7 @@ fun PlaybackScreen(
             val episode = state.episodes[page]
             val active = page == pager.settledPage && episode.number == state.current?.number && episode.isFree
             val liked = EpisodeKey(show.id, episode.number) in likedEpisodes
-            val source = PlaybackSourceResolver().resolve(episode, preferences.language, defaultLanguage, preferences.quality)
+            val source = PlaybackSourceResolver().resolve(episode, videoLanguage, defaultLanguage, preferences.quality)
             val playDescription = playbackString(if (playing) R.string.player_pause else R.string.player_play)
             var waiting by remember(episode.number) { mutableStateOf(false) }
             var player by remember(episode.number) { mutableStateOf<ExoPlayer?>(null) }
@@ -126,7 +131,7 @@ fun PlaybackScreen(
                                 ?.takeIf { it.isFree }
                         val nextUrl = next?.let {
                             PlaybackSourceResolver()
-                                .resolve(it, preferences.language, defaultLanguage, preferences.quality)
+                                .resolve(it, videoLanguage, defaultLanguage, preferences.quality)
                                 ?.url
                         }
                         VideoSurface(
@@ -315,54 +320,17 @@ fun PlaybackScreen(
             },
         )
     } else if (sheet == "options") {
-        ModalBottomSheet(
-            onDismissRequest = { sheet = "" },
-            containerColor = MaterialTheme.colorScheme.surface,
-        ) {
-                Column(Modifier.padding(horizontal = 20.dp).verticalScroll(rememberScrollState())) {
-                    Text(playbackString(R.string.player_options), fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(vertical = 12.dp))
-                    Text(playbackString(R.string.player_speed), fontWeight = FontWeight.Bold)
-                    Row(
-                        Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        listOf(.75f, 1f, 1.25f, 1.5f, 2f).forEach { speed ->
-                            TagChip("${speed}×", preferences.speed == speed) {
-                                onPreferences { it.copy(speed = speed) }
-                            }
-                        }
-                    }
-                    Text(playbackString(R.string.player_quality), Modifier.padding(top = 16.dp), fontWeight = FontWeight.Bold)
-                    val qualities =
-                        listOf("Auto") +
-                            (episode?.sources?.get(source?.language)?.keys?.toList().orEmpty())
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        qualities.forEach { quality ->
-                            TagChip(if (quality == "Auto") playbackString(R.string.player_auto) else quality, preferences.quality == quality) {
-                                onPreferences { it.copy(quality = quality) }
-                            }
-                        }
-                    }
-                    Text(
-                        playbackString(R.string.player_audio),
-                        Modifier.padding(top = 16.dp),
-                        fontWeight = FontWeight.Bold,
-                    )
-                    episode?.sources?.keys?.forEach { code ->
-                        TextButton(
-                            onClick = {
-                                onPreferences { it.copy(audioLanguage = code) }
-                            }
-                        ) {
-                            Text(
-                                (launchLanguages.find { it.first == code }?.second ?: code) +
-                                    if (source?.language == code) "  ✓" else ""
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(24.dp))
-                }
-        }
+        PlaybackOptionsSheet(
+            episode = episode,
+            source = source,
+            preferences = preferences,
+            onDismiss = { sheet = "" },
+            onPreferences = onPreferences,
+            onAudioLanguage = { language ->
+                audioPreferences.language = language
+                audioLanguage = language
+            },
+        )
     }
 }
 
