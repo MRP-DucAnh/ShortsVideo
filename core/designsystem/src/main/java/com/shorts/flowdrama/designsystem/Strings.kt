@@ -10,6 +10,11 @@ import com.shorts.flowdrama.core.designsystem.R
 import java.util.Locale
 
 private val sharedStringIds = mapOf(
+    "Continue Ep. %1\$d" to R.string.detail_continue_episode,
+    "%1\$d eps · %2\$d watched" to R.string.episode_picker_summary,
+    "More" to R.string.detail_more,
+    "Less" to R.string.detail_less,
+
     "Airing" to R.string.ui_airing_6b3a6f,
     "All" to R.string.ui_all_6a7208,
     "Also flowing tonight" to R.string.ui_also_flowing_tonight_7bed53,

@@ -103,4 +103,8 @@
     <string name="ui_your_flow_runs_three_times_a_day_da00f1">आपकी कहानियाँ दिन में तीन बार</string>
     <string name="ui_your_watchlist_is_empty_97f5da">आपकी सूची खाली है</string>
     <string name="ui_eps_85962f">एपिसोड</string>
+    <string name="detail_continue_episode">एपिसोड %1$d जारी रखें</string>
+    <string name="episode_picker_summary">%1$d एपिसोड · %2$d देखे गए</string>
+    <string name="detail_more">और देखें</string>
+    <string name="detail_less">कम दिखाएँ</string>
 </resources>

@@ -103,4 +103,8 @@
     <string name="ui_your_flow_runs_three_times_a_day_da00f1">Günde üç kez hikâye zamanı</string>
     <string name="ui_your_watchlist_is_empty_97f5da">Listen boş</string>
     <string name="ui_eps_85962f">bölüm</string>
+    <string name="detail_continue_episode">%1$d. bölüme devam et</string>
+    <string name="episode_picker_summary">%1$d bölüm · %2$d izlendi</string>
+    <string name="detail_more">Daha fazla</string>
+    <string name="detail_less">Daha az</string>
 </resources>

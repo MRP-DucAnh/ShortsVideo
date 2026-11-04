@@ -103,4 +103,8 @@
     <string name="ui_your_flow_runs_three_times_a_day_da00f1">Seu momento, três vezes ao dia</string>
     <string name="ui_your_watchlist_is_empty_97f5da">Sua lista está vazia</string>
     <string name="ui_eps_85962f">episódios</string>
+    <string name="detail_continue_episode">Continuar ep. %1$d</string>
+    <string name="episode_picker_summary">%1$d episódios · %2$d assistidos</string>
+    <string name="detail_more">Mais</string>
+    <string name="detail_less">Menos</string>
 </resources>

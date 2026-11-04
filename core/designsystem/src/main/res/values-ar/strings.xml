@@ -103,4 +103,8 @@
     <string name="ui_your_flow_runs_three_times_a_day_da00f1">لحظاتك ثلاث مرات يوميًا</string>
     <string name="ui_your_watchlist_is_empty_97f5da">قائمة المشاهدة فارغة</string>
     <string name="ui_eps_85962f">حلقة</string>
+    <string name="detail_continue_episode">متابعة الحلقة %1$d</string>
+    <string name="episode_picker_summary">%1$d حلقة · شاهدت %2$d</string>
+    <string name="detail_more">المزيد</string>
+    <string name="detail_less">أقل</string>
 </resources>

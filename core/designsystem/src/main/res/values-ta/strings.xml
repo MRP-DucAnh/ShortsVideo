@@ -103,4 +103,8 @@
     <string name="ui_your_flow_runs_three_times_a_day_da00f1">உங்கள் கதைகள் தினமும் மூன்று முறை</string>
     <string name="ui_your_watchlist_is_empty_97f5da">பட்டியல் காலியாக உள்ளது</string>
     <string name="ui_eps_85962f">எபிசோடுகள்</string>
+    <string name="detail_continue_episode">எபி. %1$d தொடரவும்</string>
+    <string name="episode_picker_summary">%1$d எபிசோடுகள் · %2$d பார்த்தவை</string>
+    <string name="detail_more">மேலும்</string>
+    <string name="detail_less">சுருக்கு</string>
 </resources>
